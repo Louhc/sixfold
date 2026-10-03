@@ -2,7 +2,7 @@
    脚本是**实时从 editor.html 抽取**的，不存副本，避免测试和源码不同步。
    用法: node test/interaction.js                                   */
 const fs = require('fs'), path = require('path'), vm = require('vm');
-const Cube = require(path.join(__dirname, '..', 'cube.js'));
+const Cube = require(path.join(__dirname, '..', 'js', 'cube.js'));
 
 /* ---------------- 极简 DOM 桩 ---------------- */
 const downloads = [], objectURLs = [];
@@ -958,7 +958,7 @@ mb[0]._ev.click[0]({});
   // 箭头色预设：最后一个是"黄"（夜里那套无色图的箭头色）
   check('箭头色预设六选一，最后一个是黄 #FFE600',
     /PLL_ARROW_COLORS = \[[\s\S]*?key: 'yellow'[\s\S]*?HEX\.yellow[\s\S]*?\];/.test(
-      fs.readFileSync(path.join(__dirname, '..', 'cube.js'), 'utf8')) &&
+      fs.readFileSync(path.join(__dirname, '..', 'js', 'cube.js'), 'utf8')) &&
     Cube.PLL_ARROW_COLORS.length === 6 &&
     Cube.PLL_ARROW_COLORS[5].on === Cube.HEX.yellow, Cube.PLL_ARROW_COLORS[5].key);
   // 恢复默认：倾斜 / 间距回到参考图那套

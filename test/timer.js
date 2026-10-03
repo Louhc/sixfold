@@ -1,6 +1,6 @@
 /* 计时器的纯逻辑测试：打乱、时间格式、平均。
    用法: node test/timer.js */
-const T = require('../timer.js');
+const T = require('../js/timer.js');
 
 let pass = 0, fail = 0;
 const ok = (n, c, x) => { c ? pass++ : fail++; console.log((c ? '  \u2713 ' : '  \u2717 ') + n + (c ? '' : '  -> ' + x)); };
@@ -105,7 +105,7 @@ console.log('\n[4] 计时器页面的按键流程');
   ctx.isSecureContext = true;                 // 页面按 https 走 navigator.clipboard
   ctx.globalThis = ctx;
   vm.createContext(ctx);
-  vm.runInContext(fs.readFileSync(path.join(ROOT, 'timer.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'timer.js'), 'utf8'), ctx);
   const src = fs.readFileSync(path.join(ROOT, 'timer.html'), 'utf8')
     .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('cube-timer-v1')).pop();
@@ -279,7 +279,7 @@ console.log('\n[5] 三阶 / 二阶 / 四阶（打乱 + 成绩分阶）');
   ctx.window = ctx;
   ctx.globalThis = ctx;
   vm.createContext(ctx);
-  vm.runInContext(fs.readFileSync(path.join(ROOT, 'timer.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'timer.js'), 'utf8'), ctx);
   vm.runInContext(page.match(/<script>([\s\S]*?)<\/script>/g)
     .map(x => x.replace(/<\/?script>/g, '')).filter(x => x.includes('cube-timer-v1')).pop(), ctx);
 
@@ -389,7 +389,7 @@ console.log('\n[6] 阶数会记住：打开时是上次离开那一阶，第一�
   ctx.window = ctx;
   ctx.globalThis = ctx;
   vm.createContext(ctx);
-  vm.runInContext(fs.readFileSync(path.join(ROOT, 'timer.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'timer.js'), 'utf8'), ctx);
   vm.runInContext(page.match(/<script>([\s\S]*?)<\/script>/g)
     .map(x => x.replace(/<\/?script>/g, '')).filter(x => x.includes('cube-timer-v1')).pop(), ctx);
   const doc = () => JSON.parse(store['cube-timer-v1']);
@@ -431,7 +431,7 @@ console.log('\n[6] 阶数会记住：打开时是上次离开那一阶，第一�
     ctx2.window = ctx2;
     ctx2.globalThis = ctx2;
     vm.createContext(ctx2);
-    vm.runInContext(fs.readFileSync(path.join(ROOT, 'timer.js'), 'utf8'), ctx2);
+    vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'timer.js'), 'utf8'), ctx2);
     vm.runInContext(page.match(/<script>([\s\S]*?)<\/script>/g)
       .map(x => x.replace(/<\/?script>/g, '')).filter(x => x.includes('cube-timer-v1')).pop(), ctx2);
     ok('第一次打开（还没有存档）：默认三阶、打乱 20 步、↗ 带 @s:',

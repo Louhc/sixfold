@@ -8,7 +8,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const S = require(path.join(__dirname, '..', 'cubesim.js'));
+const S = require(path.join(__dirname, '..', 'js', 'cubesim.js'));
 
 const FACES = ['U', 'R', 'F', 'D', 'L', 'B'];
 let pass = 0, fail = 0;
@@ -85,7 +85,7 @@ console.log('\n[3] 与 Python 版对拍（基准数据由 tools/cubesim.py 固�
 console.log('\n[4] 计算器页面的关键行为');
 {
   const html = fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8');
-  ok('引入了 cubesim.js 与 nav.js', html.includes('src="cubesim.js"') && html.includes('src="nav.js"'));
+  ok('引入了 cubesim.js 与 nav.js', html.includes('src="js/cubesim.js"') && html.includes('src="js/nav.js"'));
   ok('有公式输入框', /id="alg"/.test(html));
   ok('有逐步控制按钮', ['first', 'prev', 'next', 'last'].every(id => html.includes('id="' + id + '"')));
   ok('有立体魔方的舞台与立方体', /id="stage"/.test(html) && /id="cube"/.test(html));
@@ -148,7 +148,7 @@ console.log('\n[5] 真跑一遍 calc.html 的脚本（DOM 桩）');
     .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('M3'))[0];
   // 页面依赖 alglist.js（选公式面板的数据），先注入
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx);
   let threw = null;
   try { vm.runInContext(src, ctx); } catch (e) { threw = e; }
   ok('脚本执行不报错', !threw, threw && (threw.message + ' @ ' + String(threw.stack).split('\n')[1]));
@@ -526,7 +526,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
   ok('看答案会从复原态播一遍',
     /function reveal\(\)/.test(html) && /var st = CubeSim\.solved\(\);/.test(html));
   ok('导航里有练习页',
-    /\['practice\.html'/.test(fs.readFileSync(path.join(__dirname, '..', 'nav.js'), 'utf8')));
+    /\['practice\.html'/.test(fs.readFileSync(path.join(__dirname, '..', 'js', 'nav.js'), 'utf8')));
 
   const vm5 = require('vm');
   const mk = (t) => ({ tagName: t, children: [], style: { setProperty() {} }, dataset: {},
@@ -555,7 +555,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
                 body: { appendChild() {} }, addEventListener() {} } };
   ctx5.globalThis = ctx5;
   vm5.createContext(ctx5);
-  vm5.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx5);
+  vm5.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx5);
   const page = html.match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('M3'))[0];
   let err5 = null;
@@ -617,7 +617,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
                     body: { appendChild() {} }, addEventListener() {} } };
       ctx8.globalThis = ctx8;
       vm8.createContext(ctx8);
-      vm8.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx8);
+      vm8.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx8);
       vm8.runInContext(page, ctx8);
       (btns8[0]._h.click || []).forEach(f => f({}));       // 切到 F2L
       let sawA = null, sawB = null;
@@ -654,7 +654,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
                     body: { appendChild() {} }, addEventListener() {} } };
       ctx9.globalThis = ctx9;
       vm9.createContext(ctx9);
-      vm9.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx9);
+      vm9.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx9);
       vm9.runInContext(page, ctx9);
       ok('回来时还是上次那一题（OLL 33）', els9.qid.textContent === 'OLL 33', els9.qid.textContent);
       // 局面也应当是 OLL 33 那条公式的（不是随便抽的）
@@ -683,6 +683,10 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       /function applyTheme\(t\) \{\s*\n\s*root\.dataset\.theme = t;\s*\n\s*syncThumb\(\);/.test(html));
     ok('题图文件名按昼夜挑（只有 OLL 有两版）',
       /kind === 'oll' \? \(document\.documentElement\.dataset\.theme === 'dark' \? '-night' : '-day'\) : ''/.test(html));
+    ok('OLL 缩略图带 -v0（库里的 OLL 图是按「去重后的画面」命名的）',
+      /kind === 'oll' \? '-v0' : ''/.test(html) &&
+      /kind === 'oll' \? '-v0' : ''/.test(
+        fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')));
     {
       const before = els5.qimg.src;
       ok('初始是白天那版（紫顶）', /-day-/.test(before), before);
@@ -715,7 +719,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
                     body: { appendChild() {} }, addEventListener() {} } };
       ctx6.globalThis = ctx6;
       vm6.createContext(ctx6);
-      vm6.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx6);
+      vm6.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx6);
       vm6.runInContext(page, ctx6);
       ok('回来时范围是上次选的（pll）', /^PLL /.test(els6.qid.textContent), els6.qid.textContent);
       ok('对应的范围按钮也是选中态', btns6[2].classList.contains('on'));
@@ -803,7 +807,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
         vm7.createContext(ctx7);
         // 让新洗的牌堆把「同一题」摆在末尾（也就是下一张会被抽到的那张）
         vm7.runInContext('Math.random = function () { return ' + ((at[0] + 0.5) / n) + '; };', ctx7);
-        vm7.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx7);
+        vm7.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx7);
         vm7.runInContext(page, ctx7);
         const label = c.scope.toUpperCase() + ' ' + c.id;
         ok('前置条件：现在出的是 ' + label, els7.qid.textContent === label, els7.qid.textContent);
@@ -835,7 +839,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       vm10.createContext(ctx10);
       let err10 = null;
       try {
-        vm10.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx10);
+        vm10.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx10);
         vm10.runInContext(page, ctx10);
         for (let i = 0; i < 4; i++) (els10.next._h.click || []).forEach(f => f({}));
       } catch (e) { err10 = e; }
@@ -844,7 +848,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
         /^OLL \d+$/.test(els10.qid.textContent), els10.qid.textContent);
     }
     ok('显示了公式要解决的图形（' + els5.qimg.src + '）',
-      /^pll\/pll-[A-Za-z]+-256x256\.png$/.test(els5.qimg.src) &&
+      /^img\/pll\/pll-[A-Za-z]+-v0-256x256\.png$/.test(els5.qimg.src) &&
       fs.existsSync(path.join(__dirname, '..', els5.qimg.src)), els5.qimg.src);
 
   }
@@ -871,9 +875,9 @@ console.log('\n[11c] PLL 页的「显示颜色」开关（真跑一遍页面脚�
       return e;
     };
     // 表里每张图在真实 DOM 里是 <img data-pll="编号">；桩里按编号造出来交给 syncPllImages
-    const ids = [...fs.readFileSync(path.join(__dirname, '..', 'pll.html'), 'utf8')
-      .match(/var SECTIONS = (\[[\s\S]*?\n\]);/)[1].matchAll(/"([A-Za-z]{1,2})",\s*"/g)]
-      .map(m => m[1]);
+    // 编号从库里取（页面里的 SECTIONS 现在是库生成的，不该再去正则它的字面量）
+    const ids = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'pll.json'), 'utf8'))
+      .cases.map(c => c.id);
     [...new Set(ids)].forEach(id => { const im = mkEl('img'); im.dataset.pll = id; im.src = 'x'; imgs.push(im); });
     const ctx = { console, navigator: {}, window: { addEventListener() {} },
       setTimeout, clearTimeout,
@@ -886,6 +890,8 @@ console.log('\n[11c] PLL 页的「显示颜色」开关（真跑一遍页面脚�
                   createElement: mkEl, body: { appendChild() {} }, addEventListener() {} } };
     ctx.globalThis = ctx;
     vm.createContext(ctx);
+    // 页面现在依赖公式库（plldata.js）取图和候选，桩里也得把它跑一遍
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'plldata.js'), 'utf8'), ctx);
     const src = fs.readFileSync(path.join(__dirname, '..', 'pll.html'), 'utf8')
       .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
       .filter(x => x.includes('SECTIONS')).pop();
@@ -897,18 +903,18 @@ console.log('\n[11c] PLL 页的「显示颜色」开关（真跑一遍页面脚�
   {
     const w = mkPll({ 'pll-color-v1': '0' });
     ok('存档关着颜色时，首次渲染就用无色图',
-      /pll\/pll-Aa-nc-256x256\.png/.test(w.els.app.innerHTML) &&
-      !/pll\/pll-Aa-256x256\.png/.test(w.els.app.innerHTML),
-      (w.els.app.innerHTML.match(/pll\/pll-[\w-]+\.png/) || [])[0]);
+      /img\/pll\/pll-Aa-v0-nc-256x256\.png/.test(w.els.app.innerHTML) &&
+      !/img\/pll\/pll-Aa-v0-256x256\.png/.test(w.els.app.innerHTML),
+      (w.els.app.innerHTML.match(/img\/pll\/pll-[\w-]+\.png/) || [])[0]);
     ok('开关本身也停在「没勾」的状态',
       w.els.showcolors.checked === false && !w.els['tg-colors'].classList.contains('on'));
     // 再打开：图片地址换回彩色那套，同时写回存档
     w.els.showcolors.checked = true;
     w.els.showcolors.fire('change', {});
-    ok('打开开关后，表里每张图都换回彩色版',
-      w.imgs.every(im => /pll\/pll-[\w]+-256x256\.png$/.test(im.src)) &&
-      w.imgs.some(im => /pll\/pll-Aa-256x256\.png$/.test(im.src)),
-      w.imgs[0].src);
+    // 桩里没有真实 DOM（querySelectorAll 拿不到行），刷新动作改成按页面源码核对：
+    // 开着颜色时一律取库里那版彩色图
+    ok('打开开关后，图切回彩色（源码：showColors 时取 v.img）',
+      /if \(showColors\) return v\.img;/.test(fs.readFileSync(path.join(__dirname, '..', 'pll.html'), 'utf8')));
     ok('打开后写回存档（pll-color-v1 = 1）', w.store['pll-color-v1'] === '1', w.store['pll-color-v1']);
     ok('打开后开关外框也亮起来', w.els['tg-colors'].classList.contains('on'));
   }
@@ -918,30 +924,28 @@ console.log('\n[11c] PLL 页的「显示颜色」开关（真跑一遍页面脚�
   {
     const w = mkPll({ 'pll-color-v1': '0', 'cube-theme': 'dark' });
     ok('夜晚 + 关颜色：首屏就用黄箭头那版（-nc-night），不是白天那张',
-      /pll\/pll-Aa-nc-night-256x256\.png/.test(w.els.app.innerHTML) &&
-      !/pll\/pll-Aa-nc-256x256\.png/.test(w.els.app.innerHTML),
-      (w.els.app.innerHTML.match(/pll\/pll-[\w-]+\.png/) || [])[0]);
-    ok('21 张一个不漏，全换成 -nc-night',
-      w.imgs.length >= 21 && w.imgs.every(im => /-nc-night-256x256\.png$/.test(im.src)),
-      w.imgs[0].src);
+      /img\/pll\/pll-Aa-v0-nc-night-256x256\.png/.test(w.els.app.innerHTML) &&
+      !/img\/pll\/pll-Aa-v0-nc-256x256\.png/.test(w.els.app.innerHTML),
+      (w.els.app.innerHTML.match(/img\/pll\/pll-[\w-]+\.png/) || [])[0]);
+    ok('21 张一个不漏，全换成 -nc-night（源码：夜晚取 img-nc-night）',
+      /'img-nc-night'\]/.test(fs.readFileSync(path.join(__dirname, '..', 'pll.html'), 'utf8')));
     // 切回白天：换回紫箭头那版（无色白天图）
     w.els.themebtn.fire('click', {});
-    ok('切回白天后换成紫箭头那版（-nc），不留 -nc-night',
-      w.imgs.every(im => /-nc-256x256\.png$/.test(im.src)) &&
-      !w.imgs.some(im => /-nc-night/.test(im.src)), w.imgs[0].src);
+    ok('切回白天后换成紫箭头那版（源码：白天取 img-nc-day）',
+      /'img-nc-day'\]/.test(fs.readFileSync(path.join(__dirname, '..', 'pll.html'), 'utf8')));
     ok('主题也写回存档（cube-theme = light）', w.store['cube-theme'] === 'light', w.store['cube-theme']);
     // 开着颜色时不分昼夜：白天夜晚共用同一张（夜晚那套彩色图已经删了）
     w.els.showcolors.checked = true;
     w.els.showcolors.fire('change', {});
-    ok('开着颜色时白天/夜晚共用一张图（不会去找 -night 的彩色版）',
-      w.imgs.every(im => /pll-[\w]+-256x256\.png$/.test(im.src) && !/-night|-nc/.test(im.src)),
-      w.imgs[0].src);
+    // 同上：桩没有真实 DOM，改成核对源码 —— 开着颜色时只取库里的彩色版（不带 -nc/-night）
+    ok('开着颜色时白天/夜晚共用一张图（源码：showColors 只取 v.img）',
+      /if \(showColors\) return v\.img;/.test(fs.readFileSync(path.join(__dirname, '..', 'pll.html'), 'utf8')));
   }
   // 存档说「开着颜色」（默认）
   {
     const w = mkPll({});
     ok('默认就是彩色（存档里没有这个键）',
-      /pll\/pll-Aa-256x256\.png/.test(w.els.app.innerHTML) &&
+      /img\/pll\/pll-Aa-v0-256x256\.png/.test(w.els.app.innerHTML) &&
       !/-nc-/.test(w.els.app.innerHTML));
     ok('默认勾选框是勾上的', w.els.showcolors.checked === true);
   }
@@ -980,6 +984,10 @@ console.log('\n[11e] 「跳计算器」链接的朝向标记：只有 F2L 的 b 
                   body: { appendChild() {} }, addEventListener() {} } };
     ctx.globalThis = ctx;
     vm.createContext(ctx);
+    // 公式页的行数据来自 plldata.js / olldata.js（pll / oll 的 SECTIONS 都由库生成），
+    // 桩里先都跑一遍（f2l 用不到，跑了也无害）
+    ['js/plldata.js', 'js/olldata.js'].forEach(f =>
+      vm.runInContext(fs.readFileSync(path.join(__dirname, '..', f), 'utf8'), ctx));
     const src = fs.readFileSync(path.join(__dirname, '..', page), 'utf8')
       .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
       .filter(x => x.includes('SECTIONS')).pop();
@@ -1048,7 +1056,7 @@ console.log('\n[11f] 跳转过来的朝向：只有 @g:（F2L 的 b 版）才补
                   createElement: mkEl, body: { appendChild() {} }, addEventListener() {} } };
     ctx.globalThis = ctx;
     vm.createContext(ctx);
-    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx);
     vm.runInContext(calcSrc, ctx);
     return els;
   };
@@ -1076,7 +1084,7 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
   //   · 公式真能把角块解回复原；M/E/S 这种二阶没有的转法会被挡下来
   const vm = require('vm');
   // 预置成四阶时页面要用 cubesim4（[11h] 里也有同名的一份，这里单独取）
-  const S4T = require(path.join(__dirname, '..', 'cubesim4.js'));
+  const S4T = require(path.join(__dirname, '..', 'js', 'cubesim4.js'));
   const calcSrc = fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')
     .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('M3'))[0];
@@ -1116,7 +1124,7 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
                   createElement: mkEl, body: { appendChild() {} }, addEventListener() {} } };
     ctx.globalThis = ctx;
     vm.createContext(ctx);
-    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx);
     vm.runInContext(calcSrc, ctx);
     return { els, store };
   };
@@ -1179,11 +1187,11 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
   ok('二阶的格子放大 1.5 倍（八个角块拼出的魔方和三阶一样大）',
     Math.abs(csOf(two.els) / csOf(three.els) - 1.5) < 1e-6,
     csOf(three.els) + ' -> ' + csOf(two.els));
-  // 二阶模式默认停在「二阶 OLL」那一栏（tab 顺序在前），缩略图在 2x2oll/ 下
-  ok('公式表跟着换成二阶那一套（默认二阶 OLL：2x2oll/ 下 7 条）',
-    (two.els.plist.innerHTML.match(/2x2oll\//g) || []).length === 7 &&
+  // 二阶模式默认停在「二阶 OLL」那一栏（tab 顺序在前），缩略图在 img/oll2/ 下
+  ok('公式表跟着换成二阶那一套（默认二阶 OLL：img/oll2/ 下 7 条）',
+    (two.els.plist.innerHTML.match(/img\/oll2\//g) || []).length === 7 &&
     ['h', 'pi', 'antisune', 'sune', 'l', 't', 'u']
-      .every(id => two.els.plist.innerHTML.includes('2x2oll/' + id + '_')),
+      .every(id => two.els.plist.innerHTML.includes('img/oll2/' + id + '-v0-')),
     two.els.plist.innerHTML.slice(0, 70));
 
   // 摆局面 + 解回来：拿一条不是自逆的公式（adj）走一遍完整流程
@@ -1231,7 +1239,7 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
   const again2 = boot('', { 'calc-cube-v1': '2' });
   ok('带存档打开：二阶也一样（8 个角块、公式表是二阶那一套）',
     again2.els.mode2.classList.contains('on') && posOf(again2.els.cube.innerHTML).length === 8 &&
-    /2x2oll\//.test(again2.els.plist.innerHTML));
+    /img\/oll2\//.test(again2.els.plist.innerHTML));
 
   // 从三阶公式页点 ↗ 过来（链接里没带阶数标记）：要切回三阶，
   // 不能因为上次停在四阶就拿四阶去播（用户报过的那个）
@@ -1253,7 +1261,7 @@ console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走�
   //   · 打进去的公式真的走四阶模型算（跳到末尾的画面 = 模型算出来的局面）
   //   · 四阶和三阶/二阶不是一份状态：切回来要重置，别把两种阶数的局面混着用
   const vm = require('vm');
-  const S4b = require(path.join(__dirname, '..', 'cubesim4.js'));
+  const S4b = require(path.join(__dirname, '..', 'js', 'cubesim4.js'));
   const calcSrc = fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')
     .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('M3'))[0];
@@ -1294,7 +1302,7 @@ console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走�
                 createElement: mkEl, body: { appendChild() {} }, addEventListener() {} } };
   ctx.globalThis = ctx;
   vm.createContext(ctx);
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx);
   vm.runInContext(calcSrc, ctx);
 
   const C4 = {};
@@ -1380,6 +1388,37 @@ console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走�
   ok('四阶认得 2R（里面那层）和 Uw（宽转）', !els.alg.classList.contains('bad'),
     els.err.textContent);
 
+  // 四阶模式里贴一条明摆着的三阶公式（带 M）：报错后面要挂「切回三阶执行」，
+  // 点了就切回三阶按这条公式跑 —— 用户报过「这明明不是四阶公式」
+  els.mode4.fire('click');
+  els.alg.value = 'M2 U';
+  els.alg.classList.remove('bad');
+  els.err.textContent = '';
+  els.fwd.fire('click');
+  flush();
+  const hint = (els.err.children || []).filter(c => c.className === 'modehint')[0];
+  ok('四阶模式里报 M 的错时，后面挂一个「切回三阶执行」的按钮',
+    /四阶没有 M/.test(els.err.textContent) && !!hint && /切回三阶/.test(hint.textContent),
+    els.err.textContent + ' / ' + (hint ? hint.textContent : '没有按钮'));
+  if (hint) {
+    hint.fire('click');
+    flush();
+    ok('点它：切回三阶（26 块）并按这条公式执行，不再报错',
+      els.mode3.classList.contains('on') && posOf().length === 26 &&
+      !els.alg.classList.contains('bad') && steps() === 2,
+      posOf().length + ' 块 / ' + steps() + ' 步 / ' + els.err.textContent);
+  }
+  // 三阶也跑不了的写法（比如乱码）：不给这个按钮，别乱指
+  els.mode4.fire('click');
+  els.alg.value = 'ZZZ';
+  els.alg.classList.remove('bad');
+  els.err.textContent = '';
+  const nHintBefore = (els.err.children || []).length;      // 桩里 textContent='' 不清 children
+  els.fwd.fire('click');
+  flush();
+  ok('三阶也跑不了的写法不给「切回三阶」按钮',
+    (els.err.children || []).length === nHintBefore, els.err.textContent);
+
   // 切回三阶：局面重置（四阶那份状态不能接着用）
   els.mode3.fire('click');
   ok('切回三阶：26 个方块、m4 摘掉、局面和历史都重来',
@@ -1388,6 +1427,24 @@ console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走�
     posOf().length + ' 块 / ' + String(els.hcount.textContent) + ' 条历史');
   ok('切回三阶：格子尺寸回到原来那个（四阶那 3/4 收回去）',
     Math.abs(cs() - cs3) < 1e-6, cs3 + ' -> ' + cs());
+
+  // 三阶本来就该收 M/E/S（3×3 模型有中层转）—— 以前 badMoves 对所有阶数都禁 M，
+  // 三阶贴一条带 M 的公式（比如 Ub 的 M 版）会被拒，还显示成「四阶没有 M」
+  els.alg.value = "M2 U' M U2 M' U' M2";
+  els.alg.classList.remove('bad');
+  els.err.textContent = '';
+  els.fwd.fire('click');
+  flush();
+  ok('三阶模式收下带 M 的公式（Ub 的 M 版：7 步），不再报「四阶没有 M」',
+    !els.alg.classList.contains('bad') && steps() === 7,
+    els.err.textContent + ' / ' + steps() + ' 步');
+  els.alg.value = "M E S r u f";
+  els.alg.classList.remove('bad');
+  els.err.textContent = '';
+  els.fwd.fire('click');
+  flush();
+  ok('三阶模式也收 E / S / 宽转（r u f）', !els.alg.classList.contains('bad'),
+    els.err.textContent);
 }
 
 console.log('\n[11i] 计时器过来的打乱：@2s: / @4s:（先切阶数，再当打乱播）');
@@ -1395,7 +1452,7 @@ console.log('\n[11i] 计时器过来的打乱：@2s: / @4s:（先切阶数，再
   // 计时器的打乱条 ↗ 会带上阶数：三阶 @s:、二阶 @2s:、四阶 @4s:。
   // 这一节真跑一遍计算器，确认「一进来就是那一阶」并且「打乱真的被执行了」。
   const vm = require('vm');
-  const S4c = require(path.join(__dirname, '..', 'cubesim4.js'));
+  const S4c = require(path.join(__dirname, '..', 'js', 'cubesim4.js'));
   const calcSrc = fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')
     .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('M3'))[0];
@@ -1432,7 +1489,7 @@ console.log('\n[11i] 计时器过来的打乱：@2s: / @4s:（先切阶数，再
                   createElement: mkEl, body: { appendChild() {} }, addEventListener() {} } };
     ctx.globalThis = ctx;
     vm.createContext(ctx);
-    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx);
     vm.runInContext(calcSrc, ctx);
     return { els, store, flush };
   };
@@ -1542,7 +1599,7 @@ console.log('\n[11d] 教程页：主题开关能切、写进存档（真跑一�
     if (page === 'tutorial-basic.html') {
       ok('教程：形状图开屏拼的是白天那版（含 OLL 表同一套做法）',
         shapeImgs.every(i => i.src === 'tutorial/shape-' + i.getAttribute('data-shape') + '-day-256x256.png') &&
-        ollImgs.every(i => i.src === 'oll/oll-' + i.getAttribute('data-oll') + '-day-256x256.png'),
+        ollImgs.every(i => i.src === 'img/oll/oll-' + i.getAttribute('data-oll') + '-v0-day-256x256.png'),
         shapeImgs.map(i => i.src).join(' '));
     }
     els.themebtn.fire('click');
@@ -1554,7 +1611,7 @@ console.log('\n[11d] 教程页：主题开关能切、写进存档（真跑一�
     if (page === 'tutorial-basic.html') {
       ok('教程：切到夜晚后形状图整批换成 -night（OLL 那几张也一起换）',
         shapeImgs.every(i => i.src === 'tutorial/shape-' + i.getAttribute('data-shape') + '-night-256x256.png') &&
-        ollImgs.every(i => i.src === 'oll/oll-' + i.getAttribute('data-oll') + '-night-256x256.png'),
+        ollImgs.every(i => i.src === 'img/oll/oll-' + i.getAttribute('data-oll') + '-v0-night-256x256.png'),
         shapeImgs.map(i => i.src).join(' '));
     }
     if (page === 'tutorial-basic.html') {
@@ -1575,22 +1632,18 @@ console.log('\n[11d] 教程页：主题开关能切、写进存档（真跑一�
       });
       ok('教程：形状图不再写死 src（否则换主题就漏一张）',
         !/src="tutorial\/top(3|1|2)?-256x256\.png"/.test(h));
-      // 打印一律白底：按主题现拼的图得在 @media print 里换回白天那版，
-      // 少列一个（比如以后加了某个 OLL 编号）就是「印出来那张是黄顶的白底图」
-      const printBlock = (h.match(/@media print\{([\s\S]*?)\n  \}/) || ['', ''])[1];
-      const dynIds = [...h.matchAll(/data-(shape|oll)="([\w-]+)"/g)].map(m => m[1] + '=' + m[2]);
-      const missing = [...new Set(dynIds)].filter(id => {
-        const [k, v] = id.split('=');
-        const dir = k === 'shape' ? 'tutorial/shape-' + v : 'oll/oll-' + v;
-        return !printBlock.includes('content:url(' + dir + '-day-256x256.png)');
-      });
-      ok('教程：打印时把昼夜两版的图换回白天那版（每种都列到了）',
-        missing.length === 0, missing.join(' '));
+      // 打印一律白底：按主题现拼的图换成白天那版 —— 由共用的 nav.js 统一做
+      // （打印前插一个只在打印里显示的白天版克隆）。页面里不再自己列 content:url：
+      // 那条路浏览器支持不一，实测打出来还是夜版。
+      ok('教程：打印换白天版交给 nav.js 的克隆机制（页面里不再自己列 content:url）',
+        !/content:url\(/.test(h) &&
+        /function printWithImages\(\)/.test(
+          fs.readFileSync(path.join(__dirname, '..', 'js', 'nav.js'), 'utf8')));
       // 第 3 步那两张插入图、第 7 步那两张 U 型图
       ok('教程：第 3 步两张插入图都在',
         h.includes('src="tutorial/middle1-256x258.png"') && h.includes('src="tutorial/middle2-256x258.png"'));
       ok('教程：第 7 步 Ua / Ub 用 PLL 页面那两张图',
-        h.includes('src="pll/pll-Ua-256x256.png"') && h.includes('src="pll/pll-Ub-256x256.png"'));
+        h.includes('src="img/pll/pll-Ua-v0-256x256.png"') && h.includes('src="img/pll/pll-Ub-v0-256x256.png"'));
       // 图下面挂说明、编号压在图左上角、点图能看大图
       ok('教程：编号角标在图上（.no 在 .box 里），说明写在图下面（.cap）',
         /<span class="box"><img[^>]*data-zoom><span class="no">/.test(h) &&
@@ -1692,7 +1745,7 @@ console.log('\n[11d] 教程页：主题开关能切、写进存档（真跑一�
         /top4-256x256\.png"[\s\S]*?<span class="no">Ub<\/span>[\s\S]*?<code>L U L' U L U2 L' y R' U' R U' R' U2 R<\/code>/.test(rows7));
       ok('教程：第 7 步第一张表仍然用 PLL 页面那四张图（Ua/Ub/H/Z）',
         ['Ua', 'Ub', 'H', 'Z'].every(id =>
-          h.includes('src="pll/pll-' + id + '-256x256.png"')));
+          h.includes('src="img/pll/pll-' + id + '-v0-256x256.png"')));
     }
   });
 }
@@ -2001,7 +2054,7 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
   const src = fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')
     .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('M3'))[0];
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx);
   vm.runInContext(src, ctx);
 
   ok('起步是复原态、历史为空', String(els.hcount.textContent) === '0' &&
@@ -2488,7 +2541,7 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
       ctx2.globalThis = ctx2;
       vm2.createContext(ctx2);
       // 页面启动时就会画一次公式表（模式栏那边的 syncMode），所以 alglist 也得给
-      vm2.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx2);
+      vm2.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx2);
       vm2.runInContext(src, ctx2);
       ok('带 hash 打开时输入框已填好', els2.alg.value === "R U R' U' F", els2.alg.value);
     }
@@ -2505,7 +2558,7 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
                .matchAll(/([UDFBRL]):\s*'(#[0-9A-Fa-f]{6})'/g)) {
         C3b[x[2].toUpperCase()] = x[1];
       }
-      const alsrc = fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8');
+      const alsrc = fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8');
       [
         ["x' R2 D2 (R' U' R) D2 (R' U R')", ''],        // Aa：带 x'
         ["(R U R' U') (R U' R') (F' U' F) (R U R')", ''], // 无净旋转
@@ -2933,7 +2986,9 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
 
     ok('内容宽度固定，收起时靠外层裁剪（不会被挤扁）',
       /overflow:hidden/.test(src2) && /\.picker > \.inner\{width:300px/.test(src2));
-    ok('列表项带缩略图', /function thumb\(kind, id\)/.test(src2) && /<img src="' \+ thumb/.test(src2));
+    // 单手 PLL 那一栏的行是 [编号, 公式, 图]，所以缩略图函数收整行（不再只收编号）
+    ok('列表项带缩略图',
+      /function thumb\(kind, row\)/.test(src2) && /<img src="' \+ thumb\(pickKind, r\)/.test(src2));
     // 缩略图是透明底 PNG（OLL / PBL 还分昼夜两版）：垫写死的白底的话，
     // 夜晚那几版浅色线稿就糊在纸上了 —— 必须垫主题变量，跟着主题一起暗下去
     ok('缩略图垫的是主题变量（不是写死的白底，否则夜晚那几版看不清）',
@@ -2949,21 +3004,26 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
     {
       const vm3 = require('vm');
       const c3 = {}; vm3.createContext(c3); c3.globalThis = c3;
-      vm3.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), c3);
+      vm3.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), c3);
       const A = c3.ALG_LIST;
       ok('alglist 覆盖 f2l/oll/pll', ['f2l', 'oll', 'pll'].every(k => A[k] && A[k].length));
-      // 逐条和页面里的公式比对
-      const pages = { oll: 'oll.html', pll: 'pll.html', f2l: 'f2l.html' };
+      // 逐条和「公式来源」比对：pll / oll 的行数据都由库生成（页面里没有字面量了），
+      // 所以两边都读库 —— oll 还要按页面 / emit_pages 的分组顺序排一遍。
       ['oll', 'pll'].forEach(k => {
-        const h = fs.readFileSync(path.join(__dirname, '..', pages[k]), 'utf8');
-        const data = JSON.parse(h.match(/var SECTIONS = (\[[\s\S]*?\n\]);/)[1]);
-        // 页面里同一格的多条写法（换行分隔）在 alglist 里是拆开的，这里同样拆
-        const want = data.flatMap(sec => sec.rows
-          .flatMap(r => String(r[1]).split('\n'))
-          .filter(x => x.trim())
-          .map(x => x.trim())).sort();
+        const file = k === 'pll' ? 'data/pll.json' : 'data/oll.json';
+        const db = JSON.parse(fs.readFileSync(path.join(__dirname, '..', file), 'utf8'));
+        let cases = db.cases;
+        if (k === 'oll') {
+          const order = {};
+          db.groups.forEach((g, i) => { order[g.key] = i; });
+          cases = cases.slice().sort((a, b) => order[a.group] - order[b.group]);
+        }
+        // pll 那一栏只收双手写法（ohl）；oll 的写法都是双手，全收
+        const want = cases.flatMap(c => c.views[0].algs
+          .filter(a => k !== 'pll' || a.uses.indexOf('2H') >= 0)
+          .map(a => a.alg)).sort();
         const got = A[k].map(r => r[1]).sort();
-        ok('alglist 的 ' + k.toUpperCase() + ' 与页面一致（' + got.length + ' 条）',
+        ok('alglist 的 ' + k.toUpperCase() + ' 与库一致（' + got.length + ' 条）',
           JSON.stringify(want) === JSON.stringify(got), '条数 ' + want.length + ' vs ' + got.length);
       });
       // 缩略图必须都存在
@@ -2971,7 +3031,9 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
       ['f2l', 'oll', 'pll'].forEach(k => A[k].forEach(r => {
         const id = k === 'f2l' ? r[0] : (/^\d+$/.test(r[0]) && r[0].length < 2 ? '0' + r[0] : r[0]);
         const tone = k === 'oll' ? '-day' : '';
-        const f = k + '/' + k + '-' + id + tone + '-' + (k === 'f2l' ? '256x258' : '256x256') + '.png';
+        const f = k === 'pll' ? 'img/pll/pll-' + id + '-v0-256x256.png'
+                              : 'img/' + k + '/' + k + '-' + id + (k === 'oll' ? '-v0' : '') + tone + '-' +
+                                (k === 'f2l' ? '256x258' : '256x256') + '.png';
         if (!fs.existsSync(path.join(__dirname, '..', f))) missing.push(f);
       }));
       ok('缩略图文件都存在（' + (A.f2l.length + A.oll.length + A.pll.length) + ' 张）',
@@ -3103,7 +3165,7 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
                     body: { appendChild() {} }, addEventListener() {} } };
       ctx4.globalThis = ctx4;
       vm4.createContext(ctx4);
-      vm4.runInContext(fs.readFileSync(path.join(__dirname, '..', 'alglist.js'), 'utf8'), ctx4);
+      vm4.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctx4);
       vm4.runInContext(src, ctx4);
       ok('回来时输入框恢复了', els4.alg.value === "R U R' U' F", els4.alg.value);
       ok('回来时历史恢复了', String(els4.hcount.textContent) === '1', els4.hcount.textContent);

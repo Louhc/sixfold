@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>六面 · 单手 PLL 公式合集</title>
+<link rel="icon" type="image/x-icon" href="cube-64x64.ico">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/nav.css">
+<!-- 公式库（tools/emit_pages.py 生成）：图与公式都从它来 -->
+<script src="js/plldata.js"></script>
+<script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
+try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+<style>
+  /* 默认浅色（白底）；点右上角按钮切夜晚。不跟随系统 —— 这是打印/速查用的表。
+     两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font:14px/1.5 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  header{position:relative;padding:22px 20px 8px;text-align:center}
+  h1{margin:0;font-size:20px;letter-spacing:.02em}
+  header p{margin:6px 0 0;color:var(--muted);font-size:12.5px}
+  /* 只管位置 —— 开关本身的样式（尺寸/底色/滑块）在 nav.css 里，七页共用 */
+  .themebtn{position:absolute;right:16px;top:16px}
+  /* 打印：只留按钮，样式交给下面 @media print 里那套白底黑字 */
+  .printbtn{position:absolute;right:80px;top:16px;width:28px;height:28px;padding:0;
+            border-radius:8px;background:var(--field);border:1px solid var(--line);
+            color:var(--muted);cursor:pointer;display:grid;place-items:center;
+            transition:color .12s,border-color .12s}
+  .printbtn:hover{color:var(--accent-text);border-color:var(--accent-text)}
+  .printbtn svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+                stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+  main{max-width:880px;margin:0 auto;padding:10px 16px 60px}
+
+  section{margin:26px 0 0;background:var(--card);border:1px solid var(--line);
+          border-radius:12px;overflow:hidden}
+  section > h2{margin:0;padding:11px 16px;font-size:14px;font-weight:600;
+               background:var(--head-band);border-bottom:1px solid var(--line)}
+  section > h2 .cnt{float:right;color:var(--muted);font-weight:400;font-size:12.5px}
+
+  table{width:100%;border-collapse:collapse;table-layout:fixed}
+  col.pic{width:116px}
+  /* 最右一列：展开键（换一条写法），和 PLL 页一致 */
+  col.pick{width:46px}
+  td.pickCell{padding:6px;text-align:center}
+  td.f{border-right:0}
+  td.f br{display:none}                      /* 纯 CSS 兜底：一行只显示第一条 */
+  td.f code ~ code,td.f a.tocalc ~ a.tocalc{display:none}
+  button.pick{display:inline-flex;align-items:center;justify-content:center;font:inherit;
+              width:32px;height:26px;border-radius:8px;vertical-align:middle;
+              color:var(--text);background:none;border:0;outline-offset:2px;
+              opacity:.62;cursor:pointer;transition:opacity .14s,color .14s,background .14s}
+  button.pick svg{width:19px;height:19px;display:block}
+  tr:hover button.pick,button.pick:hover{opacity:1;color:var(--accent-text)}
+  /* 正在展开：键本身也亮起来（给个底色），收起来时再变回去 */
+  button.pick.on{opacity:1;color:var(--accent-text);background:var(--chip)}
+  button.pick.off{opacity:.22;pointer-events:none;cursor:default}
+  tr:hover button.pick.off{opacity:.22;color:var(--text)}
+  /* 候选面板：开合要能过渡，所以不用 display:none 切换 —— 用透明度/位移把隐藏态演出来 */
+  .pickbox{position:absolute;z-index:9;display:flex;flex-direction:column;gap:2px;padding:6px;
+           max-width:430px;max-height:52vh;overflow:auto;text-align:left;
+           background:var(--panel);border:1px solid var(--line);border-radius:10px;
+           box-shadow:0 12px 30px #00000026;
+           opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);transform-origin:top right;
+           transition:opacity .16s ease,transform .16s ease,visibility .16s}
+  /* 翻到按钮上方时，从下往上长 */
+  .pickbox.up{transform:translateY(6px) scale(.98);transform-origin:bottom right}
+  .pickbox.on{opacity:1;visibility:visible;transform:none}
+  .pickbox button{display:flex;align-items:center;gap:8px;padding:4px 6px;border:0;border-radius:8px;
+                  background:none;color:var(--text);font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;
+                  text-align:left;cursor:pointer}
+  .pickbox button:hover{background:var(--chip)}
+  .pickbox img{width:34px;height:34px;flex:none;border-radius:5px}
+  .pickbox .idx{flex:none;min-width:16px;text-align:right;color:var(--muted);
+                font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+  /* 打印：展开键那一列整列都不印（连单元格和列宽一起去掉，别留个空列） */
+  @media print{.pickbox,button.pick,td.pickCell{display:none}col.pick{width:0}}
+  th{padding:9px 12px;font-size:12.5px;font-weight:600;text-align:left;
+     border-bottom:1px solid var(--line);border-right:1px solid var(--line);background:var(--chip)}
+  th:last-child{border-right:none}
+  td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:middle}
+  td:last-child{border-right:none}
+  tr:last-child td{border-bottom:none}
+  /* 图是透明底 PNG，这一格不铺底色，跟随页面底色 */
+  td.pic{padding:6px;text-align:center}
+  td.pic .box{position:relative;display:inline-block;line-height:0}
+  /* 给图片预留高度：图片是懒加载的，不写 aspect-ratio 的话
+     加载完成前高度为 0，加载后整行会被撑高 —— 也是一次跳动 */
+  td.pic img{width:100px;height:auto;aspect-ratio:1/1;display:block;border-radius:6px}
+  td.pic .no{position:absolute;left:3px;top:1px;font-size:11px;font-weight:600;
+             color:var(--muted);line-height:1;background:var(--badge);padding:1px 3px;border-radius:4px}
+  td.f{padding:11px 14px}
+  td.empty{background:var(--chip)}
+  .todo{color:var(--muted);font-size:12.5px;font-style:italic}
+
+  code{font:13.5px/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+       cursor:pointer;word-break:break-word;border-radius:5px;padding:2px 5px;margin:-2px -5px}
+  code:hover{background:var(--chip)}
+  code.copied{background:var(--accent);color:var(--on-accent, #fff)}
+  /* 「在计算器里打开」：把公式带过去，省得手抄。
+     一列里几十个这种钮，常亮会抢公式的戏 —— 平时只留一个淡淡的计算器图标，
+     指到哪一行（或指到按钮本身）才亮成实心圆钮。 */
+  a.tocalc{flex:none;display:inline-flex;align-items:center;justify-content:center;
+           width:20px;height:20px;margin-left:8px;border-radius:50%;
+           color:var(--muted);background:transparent;border:1px solid transparent;
+           opacity:.55;text-decoration:none;
+           transition:opacity .14s,color .14s,background .14s,border-color .14s,
+                      transform .14s,box-shadow .14s}
+  a.tocalc svg{width:13px;height:13px;display:block}
+  tr:hover a.tocalc,a.tocalc:hover,a.tocalc:focus-visible{opacity:1}
+  a.tocalc:hover,a.tocalc:focus-visible{color:var(--on-accent, #fff);background:var(--accent);
+           border-color:var(--accent);transform:translateY(-1px);box-shadow:0 2px 7px #00000026}
+  @media (hover:none){a.tocalc{opacity:1}}
+  /* 注意：不要在 td 上用 display:flex —— 单元格会不再是 table-cell，
+     行高和列宽随之全乱。让公式和按钮自然内联排即可。 */
+  td.f code{vertical-align:middle}
+  td.f a.tocalc{vertical-align:middle}
+
+  /* 图片点一下看大图：光标（放大镜）和悬停那圈边由 nav.css 的 img[data-zoom] 负责 */
+
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);
+         background:#111c;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;
+         opacity:0;pointer-events:none;transition:.18s}
+  #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (max-width:720px){
+    col.pic{width:86px}
+    td.pic img{width:72px}
+    td.f{padding:8px 10px}
+    code{font-size:12.5px}
+  }
+  @media print{
+    body{background:#fff;color:#000}
+    /* 打印分页：卡片别拦着分页 —— break-inside:avoid + overflow:hidden 会让整张表
+       变成「不可拆分的一块」，这一页装不下就整节推到下一页，标题也跟着单独占一页。
+       现在让表格跨页接着排，只禁止「一行被劈成两半」；标题不落在页尾当孤儿。 */
+    main{padding:0}
+    header{padding:0 0 6px;break-after:avoid}
+    section{break-inside:auto;overflow:visible;border-radius:0;border-color:#999;margin:10px 0 0}
+    section > h2{break-after:avoid;border-radius:0}
+    tr{break-inside:avoid}
+    /* 打印：纸上比屏幕费眼 —— 表格框线加粗、公式文字调大 */
+    table{border:2px solid #333}
+    th,td{border:1px solid #333}
+    th{border-bottom-width:2px}
+    code{font-size:15px;font-weight:600}
+    .themebtn,.printbtn{display:none}
+    a.tocalc{display:none}
+    code:hover{background:none}
+    #toast{display:none}
+  }
+  .opts{position:absolute;right:16px;top:56px;display:flex;justify-content:flex-end}
+  /* 开关（显示颜色 / 跳过动画 / 明暗…）：一条轨道 + 一个滑块，和主题开关同一套语言。
+     真勾选框藏起来（视觉由 .on 决定），但保留键盘可达性：Tab 能走到，:focus-within 给焦点圈。 */
+  .tg{position:relative;display:inline-flex;align-items:center;padding:1px 0 1px 44px;
+      cursor:pointer;color:var(--muted);font-size:12.5px;user-select:none;
+      transition:color .12s ease}
+  .tg input{position:absolute;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+  .tg::before{content:'';position:absolute;left:0;top:50%;width:36px;height:20px;margin-top:-10px;
+              box-sizing:border-box;border-radius:10px;background:var(--line);
+              border:1px solid var(--line-strong);
+              transition:background .15s ease,border-color .15s ease}
+  .tg::after{content:'';position:absolute;left:2px;top:50%;width:16px;height:16px;margin-top:-8px;
+             border-radius:50%;background:var(--panel);box-shadow:0 1px 3px #00000033;
+             transition:transform .18s cubic-bezier(.34,.86,.32,1),background .15s ease}
+  .tg:hover,.tg.on{color:var(--text)}
+  .tg.on::before{background:var(--accent);border-color:var(--accent)}
+  .tg.on::after{transform:translateX(16px);background:var(--on-accent, #fff)}
+</style>
+</head>
+<body>
+<script src="js/nav.js"></script>
+<header>
+  <h1>单手 PLL</h1>
+  <p>One-Handed · Permutation of the Last Layer</p>
+  <button class="themebtn" id="themebtn" type="button" title="切到夜晚"></button>
+  <button class="printbtn" id="printbtn" type="button" title="打印 / 存成 PDF"
+          aria-label="打印"><svg viewBox="0 0 24 24"><path d="M7 10.5V4h10v6.5"/><path
+    d="M7 18.5H5.2A2.2 2.2 0 0 1 3 16.3v-3.6a2.2 2.2 0 0 1 2.2-2.2h13.6A2.2 2.2 0 0 1 21 12.7v3.6a2.2 2.2 0 0 1-2.2 2.2H17"/><path
+    d="M7 14.5h10v6H7z"/></svg></button>
+  <!-- 和 PLL 页一致：开关放在页头里（打印按钮之后），不是表格上方 -->
+  <div class="opts">
+    <label class="tg" id="tg-colors" title="关掉后图上只留描边和箭头">
+      <input type="checkbox" id="showcolors" checked> 显示颜色
+    </label>
+  </div>
+</header>
+<main id="app"></main>
+<div id="toast"></div>
+<script>
+/* 数据：每节若干情况，每条 = [编号, 公式]。公式为空串表示留空。
+   图片来自数据库（img/pll/ 下按角度存）。公式由站主提供，
+   逐条用 tools/verify.py 校验过「照图摆好直接就能用」——
+   注意单手持法的朝向和 PLL 那页不一定相同，这里以本页的图为准。 */
+/* 行数据来自数据库（plldata.js）：单手写法优先，没有就回退到双手那条 */
+var SECTIONS = (function () {
+  var rows = [];
+  ((typeof PLL_DB !== 'undefined' && PLL_DB.cases) || []).forEach(function (c) {
+    var oh = [];
+    (c.views || []).forEach(function (v) {
+      (v.algs || []).forEach(function (a) {
+        if (a.uses.indexOf('OH') >= 0) {
+          oh.push({ alg: a.alg, pref: (a.tags || []).indexOf('ohpll-preferred') >= 0 });
+        }
+      });
+    });
+    if (!oh.length) (c.views[0].algs || []).forEach(function (a) {
+      if (a.uses.indexOf('2H') >= 0) oh.push({ alg: a.alg, pref: false });
+    });
+    // 标了 ohpll-preferred 的排前面（默认显示的那条）
+    oh.sort(function (x, y) { return (y.pref ? 1 : 0) - (x.pref ? 1 : 0); });
+    if (oh.length) rows.push([c.id, oh.map(function (x) { return x.alg; })
+      .join(String.fromCharCode(10))]);
+  });
+  return [{ title: '21 种', cnt: rows.length, rows: rows }];
+})();
+
+/* 显示颜色开关（存档键 ohpll-color-v1）：无色版分昼夜，和 PLL 页一套。
+   必须在建表（IMG 调用）之前读出存档 —— 否则首屏会用错那套图，要等 paint() 再改回来。 */
+var COLOR_KEY = 'ohpll-color-v1';
+var showColors = true;
+try { showColors = localStorage.getItem(COLOR_KEY) !== '0'; } catch (e) {}
+
+var DB_CASE = {};
+((typeof PLL_DB !== 'undefined' && PLL_DB.cases) || []).forEach(function (c) { DB_CASE[c.id] = c; });
+
+/* 图从数据库来（img/pll/ 下按角度存）。单手公式常常不在基准角度
+   （F 在角度3、Ja 在角度2、Na/Z 在角度1），所以按「公式」反查它属于哪个角度。 */
+function viewOf(id, alg) {
+  var c = DB_CASE[id];
+  if (!c) return null;
+  var hit = null;
+  c.views.forEach(function (v) {
+    v.algs.forEach(function (a) { if (!hit && a.alg === alg) hit = v; });
+  });
+  return hit || c.views[0];
+}
+var IMG = function (id, alg) {
+  var v = viewOf(id, alg);
+  if (!v) return '';
+  if (showColors) return v.img;
+  return (document.documentElement.dataset.theme === 'dark' ? v['img-nc-night'] : v['img-nc-day']) || v.img;
+};
+function esc(s) {
+  return String(s).replace(/[&<>]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
+  });
+}
+/* 「在计算器里打开」的小图标：一台计算器（显示屏 + 四个键）。
+   内联 SVG，跟着 currentColor 走，白天/夜晚都不用改。 */
+var PICK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+  '<circle cx="6.4" cy="7" r="2.1" fill="currentColor" stroke="none"/>' +
+  '<circle cx="6.4" cy="12" r="2.1" fill="currentColor" stroke="none"/>' +
+  '<circle cx="6.4" cy="17" r="2.1" fill="currentColor" stroke="none"/>' +
+  '<rect x="10.6" y="5.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/>' +
+  '<rect x="10.6" y="10.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/>' +
+  '<rect x="10.6" y="15.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/></svg>';
+var CALC_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+  '<rect x="4.4" y="2.8" width="15.2" height="18.4" rx="3.2" fill="none" ' +
+  'stroke="currentColor" stroke-width="2.1"/>' +
+  '<path d="M8.1 7.4h7.8" fill="none" stroke="currentColor" stroke-width="2.1" ' +
+  'stroke-linecap="round"/>' +
+  '<circle cx="9.4" cy="12.3" r="1.35" fill="currentColor"/>' +
+  '<circle cx="14.6" cy="12.3" r="1.35" fill="currentColor"/>' +
+  '<circle cx="9.4" cy="16.6" r="1.35" fill="currentColor"/>' +
+  '<circle cx="14.6" cy="16.6" r="1.35" fill="currentColor"/></svg>';
+function toCalc(alg, id) {
+  // 单手这套也是字母编号（Aa / Ab / Ga…），末尾那个 b 只是「第二个变体」，
+  // **不是** F2L 那种「绿色为 F 面」的 b 版 —— 所以链接一律不带 @g:。
+  // 而且这些公式里本来就有 z / x' 这样的转体，计算器照着做就行；
+  // 链接不带阶数标记 = 三阶（计算器那边按链接定阶数）。
+  var green = false;
+  var frag = (green ? '@g:' : '') + encodeURIComponent(alg);
+  var tip = '在计算器里打开这条公式' + (green ? '（绿色为 F 面）' : '');
+  return '<a class="tocalc" href="calc.html#' + frag + '" title="' + tip +
+         '" aria-label="' + tip + '">' + CALC_ICON + '</a>';
+}
+function row(n, alg) {
+  // 一条公式里可能有换行 —— 表示同一格内的多条写法，逐行渲染
+  // 用 fromCharCode(10) 取换行，避免生成器里转义被多吃一层
+  var body = alg ? alg.split(String.fromCharCode(10)).map(function (line) {
+      return '<code>' + esc(line) + '</code>' + toCalc(line, n);
+    }).join('<br>')
+    : '<span class="todo">—</span>';
+  // data-zoom：这张图点一下看大图（放大镜那套在共用的 nav.js / nav.css 里）
+  return '<tr>' +
+         '<td class="pic"><span class="box"><img src="' + IMG(n, alg) + '" data-zoom data-ohpll="' + esc(n) +
+         '" alt="' + n +
+         '" loading="lazy"><span class="no">' + n + '</span></span></td>' +
+         '<td class="f">' + body + '</td>' +
+         '<td class="pickCell"><button class="pick off" type="button" disabled data-pick="' + esc(n) + '" ' +
+         'title="换一条写法" aria-label="换一条写法">' + PICK_ICON + '</button></td></tr>';
+}
+/* 主题在建表之前定下来（页面底色用），图本身不随主题变 */
+var root = document.documentElement, savedTheme = null;
+try { savedTheme = localStorage.getItem('cube-theme'); } catch (e) {}
+root.dataset.theme = savedTheme === 'dark' ? 'dark' : 'light';
+
+var html = '';
+SECTIONS.forEach(function (sec) {
+  html += '<section><h2>' + esc(sec.title) +
+          '<span class="cnt">' + sec.cnt + '</span></h2><table>' +
+          '<colgroup><col class="pic"><col><col class="pick"></colgroup><tbody>';
+  sec.rows.forEach(function (r) { html += row(r[0], r[1]); });
+  html += '</tbody></table></section>';
+});
+document.getElementById('app').innerHTML = html;
+
+/* 夜晚模式 */
+var themeBtn = document.getElementById('themebtn');
+function applyTheme(t) {
+  root.dataset.theme = t;
+  themeBtn.title = t === 'dark' ? '切到白天' : '切到夜晚';
+  try { localStorage.setItem('cube-theme', t); } catch (e) {}
+}
+applyTheme(root.dataset.theme);
+themeBtn.addEventListener('click', function () {
+  applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+});
+
+// 打印：旁边那个按钮直接调浏览器的打印（可以在打印对话框里选「存成 PDF」）
+document.getElementById('printbtn').addEventListener('click', function () { window.print(); });
+
+/* 点公式复制 */
+var toastEl = document.getElementById('toast'), toastTimer = null;
+function toast(msg) {
+  toastEl.textContent = msg; toastEl.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, 1400);
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast(text); }
+  catch (e) { toast('复制失败，请手动选择'); }
+  ta.remove();
+}
+document.getElementById('app').addEventListener('click', function (e) {
+  // 点公式 -> 复制。图片的点击不在这里管：nav.js 统一处理「看大图」
+  var el = e.target.closest ? e.target.closest('code') : null;
+  if (!el) return;
+  var compact = el.textContent.replace(/\s+/g, '');
+  function done() { el.classList.add('copied');
+    setTimeout(function () { el.classList.remove('copied'); }, 600); }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(compact).then(function () { done(); toast(compact); },
+                                                function () { fallbackCopy(compact); done(); });
+  } else { fallbackCopy(compact); done(); }
+});
+
+/* 显示颜色开关（存档键 ohpll-color-v1）：无色版分昼夜，和 PLL 页一套。
+   存档在上面建表之前已经读过（showColors），这里只接线。 */
+(function () {
+  var box = document.getElementById('showcolors'), tg = document.getElementById('tg-colors');
+  if (!box) return;
+  box.checked = showColors;
+  if (tg) tg.classList.toggle('on', showColors);
+  function paint() {
+    Array.prototype.forEach.call(document.querySelectorAll('img[data-ohpll]'), function (im) {
+      var tr = im.parentNode;
+      while (tr && tr.tagName !== 'TR') tr = tr.parentNode;
+      var cd = tr ? tr.querySelector('code') : null;
+      var src = IMG(im.getAttribute('data-ohpll'), cd ? cd.textContent : '');
+      if (src) im.src = src;
+    });
+  }
+  function set(on) {
+    showColors = on;
+    box.checked = on;
+    if (tg) tg.classList.toggle('on', on);
+    try { localStorage.setItem(COLOR_KEY, on ? '1' : '0'); } catch (e) {}
+    paint();
+  }
+  box.addEventListener('change', function () { set(box.checked); });
+  var tb = document.getElementById('themebtn');
+  if (tb) tb.addEventListener('click', function () { setTimeout(paint, 0); });
+  paint();
+})();
+</script>
+
+<script>
+/* 每行的「展开选公式」，和 PLL 页同一套（最右列的按钮）。
+   候选 = 这个情况的其它单手写法：有单手专属就用它，没有就回退到双手那条（Ga–Gd / Ra 这类）；
+   再加上本行本来就有的写法兜底。正在显示的那条不列进去。
+   缩略图用 IMG(编号, 公式)：库里按公式反查角度，所以 F/Ja/Na/Z 会显示各自角度的图。 */
+(function () {
+  'use strict';
+  var KEY = 'cube-pick:oh-pll:';
+  var open = null;
+
+  /* 「同一条公式」的判据：忽略括号和空白（库里带括号、别处可能不带） */
+  function algKey(a) { return String(a).replace(/[()\s]/g, ''); }
+  function load(id) { try { return localStorage.getItem(KEY + id) || ''; } catch (e) { return ''; } }
+  function save(id, v) { try { localStorage.setItem(KEY + id, v); } catch (e) {} }
+  function shown(row) { var cd = row.cell.querySelector('code'); return cd ? cd.textContent : ''; }
+  function ownAlgs(row) {
+    var out = [];
+    Array.prototype.forEach.call(row.cell.querySelectorAll('code'), function (cd) {
+      if (out.indexOf(cd.textContent) < 0) out.push(cd.textContent);
+    });
+    return out;
+  }
+  function candidates(id, own, cur) {
+    var out = [], seen = {}, c = DB_CASE[id];
+    /* 存档/行内的写法可能带不同的括号，比较一律走 algKey；
+       去重的写和读必须是同一个键（这里曾经写成 seen[alg] —— 于是本行那份会再加一遍，
+       Ga–Gd 这种一行两条的展开后就是两个一模一样的候选）。 */
+    function add(alg) {
+      if (!alg || algKey(alg) === algKey(cur) || seen[algKey(alg)]) return;
+      seen[algKey(alg)] = 1;
+      out.push(alg);
+    }
+    if (c) {
+      var oh = [];
+      c.views.forEach(function (v) {
+        v.algs.forEach(function (a) {
+          if (a.uses.indexOf('OH') >= 0) {
+            oh.push({ alg: a.alg, pref: (a.tags || []).indexOf('ohpll-preferred') >= 0 });
+          }
+        });
+      });
+      if (!oh.length) c.views[0].algs.forEach(function (a) {
+        if (a.uses.indexOf('2H') >= 0) oh.push({ alg: a.alg, pref: false });
+      });
+      oh.sort(function (x, y) { return (y.pref ? 1 : 0) - (x.pref ? 1 : 0); });
+      oh.forEach(function (x) { add(x.alg); });
+    }
+    own.forEach(add);
+    return out;
+  }
+  function close() {
+    if (!open) return;
+    open.box.classList.remove('on');
+    open.pick.classList.remove('on');
+    open = null;
+  }
+  /* 点别处收回 —— 但「正在展开的那个键」和面板自己不算别处。
+     否则 capture 阶段会先把 open 清掉，键自己的点击处理就变成「重新打开」，
+     第二次点展开键收不起来（只能点别处）。 */
+  function closeIfOutside(t) {
+    if (!open || !t) return;
+    var p = open.pick, b = open.box;
+    if (t === p || t === b) return;
+    if (p.contains && p.contains(t)) return;
+    if (b.contains && b.contains(t)) return;
+    close();
+  }
+  function apply(row, alg) {
+    row.cell.innerHTML = '';
+    var code = document.createElement('code');
+    code.textContent = alg;
+    row.cell.appendChild(code);
+    if (row.calc) {
+      var a = row.calc.cloneNode(true);
+      a.href = 'calc.html#' + encodeURIComponent(alg);
+      row.cell.appendChild(a);
+    }
+    var src = IMG(row.id, alg);
+    if (src) row.img.src = src;
+    save(row.id, alg);
+  }
+  /* 这条写法在 **case 内的编号**（库里唯一；找不到就退回面板顺序号）。
+     面板上显示它 —— 同一个 case 里不同写法编号一定不同，方便口头指代。 */
+  function noOf(id, alg) {
+    var c = DB_CASE[id];
+    if (!c) return 0;
+    var k = algKey(alg);
+    var views = c.views || [c];
+    for (var i = 0; i < views.length; i++) {
+      var as = views[i].algs || [];
+      for (var j = 0; j < as.length; j++) {
+        if (algKey(as[j].alg) === k) return as[j].no || 0;
+      }
+    }
+    return 0;
+  }
+  /* 这一页能不能显示这条写法：有专属单手写法时只认 OH 那几条，否则回退到双手主写法
+     （和上面 SECTIONS / candidates 同一套规则；存档里的旧数据不能盲信）。 */
+  function usable(id, alg) {
+    var c = DB_CASE[id];
+    if (!c) return false;
+    var k = algKey(alg), oh = [], two = [];
+    (c.views || []).forEach(function (v) {
+      (v.algs || []).forEach(function (a) {
+        if (a.uses.indexOf('OH') >= 0) oh.push(a.alg);
+        else if (a.uses.indexOf('2H') >= 0) two.push(a.alg);
+      });
+    });
+    return (oh.length ? oh : two).some(function (x) { return algKey(x) === k; });
+  }
+  function buildBox(row, cur) {
+    var list = candidates(row.id, ownAlgs(row), cur);
+    row.box.innerHTML = '';
+    list.forEach(function (alg, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.innerHTML = '<img src="' + IMG(row.id, alg) + '" alt="">' +
+        '<b class="idx">' + (noOf(row.id, alg) || (i + 1)) + '</b><span>' + alg + '</span>';
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        apply(row, alg);
+        close();
+      });
+      row.box.appendChild(b);
+    });
+    return list.length;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#app tr'), function (tr) {
+    var img = tr.querySelector('td.pic img'), cell = tr.querySelector('td.f');
+    var pick = tr.querySelector('button.pick');
+    if (!img || !cell || !pick) return;
+    var row = {id: img.getAttribute('data-ohpll'), img: img, cell: cell, pick: pick,
+               calc: cell.querySelector('a.tocalc'), box: document.createElement('div')};
+    if (!row.id) return;
+    row.box.className = 'pickbox';
+
+    var cur = load(row.id);                      // 恢复上次的选择
+    if (cur && usable(row.id, cur) && algKey(cur) !== algKey(shown(row))) apply(row, cur);
+
+    if (candidates(row.id, ownAlgs(row), shown(row)).length < 1) {
+      pick.title = '这个情况只有一条写法';
+      return;
+    }
+    pick.classList.remove('off');
+    pick.disabled = false;
+    pick.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      // 再点同一个键 = 收起（上面 closeIfOutside 不会替我们收，见那里的注释）
+      if (open && open.pick === pick) { close(); return; }
+      close();
+      var n = buildBox(row, shown(row));
+      if (!n) { close(); return; }
+      pick.title = '换一条写法（共 ' + n + ' 条）';
+      pick.classList.add('on');
+      document.body.appendChild(row.box);
+      var r = pick.getBoundingClientRect();
+      var sx = window.pageXOffset || document.documentElement.scrollLeft || 0;
+      var sy = window.pageYOffset || document.documentElement.scrollTop || 0;
+      row.box.style.left = Math.max(8, Math.min(r.left + sx - 380, sx + window.innerWidth - 440)) + 'px';
+      var below = r.bottom + 6, up = false;
+      if (below + row.box.offsetHeight > window.innerHeight) {
+        below = Math.max(8, r.top - row.box.offsetHeight - 6);
+        up = true;
+      }
+      row.box.style.top = (below + sy) + 'px';
+      row.box.classList.toggle('up', up);
+      // 先排一帧再挂 .on：否则首帧没有过渡起点，面板是"蹦"出来的而不是淡入
+      void row.box.offsetWidth;
+      row.box.classList.add('on');
+      open = row;
+    });
+  });
+  document.addEventListener('click', function (e) { closeIfOutside(e.target); }, true);
+  window.addEventListener && window.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  window.addEventListener && window.addEventListener('resize', close);
+})();
+</script>
+</body>
+</html>

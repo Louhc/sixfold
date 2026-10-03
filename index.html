@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>六面魔方工具箱</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/nav.css">
 <style>
   /* 默认浅色；点右上角切夜晚。不跟随系统。
      配色（两套主题的所有颜色变量）都在 theme.css 里，这里只管版式。 */
@@ -92,7 +92,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 <body>
 
 
-<script src="nav.js"></script>
+<script src="js/nav.js"></script>
 <header>
   <h1>
     <span class="mark" data-logo role="img" aria-label="六面"></span>
@@ -113,7 +113,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
       </span>
     </a>
     <a class="card" href="calc.html">
-      <span class="thumb"><img src="f2l/f2l-05a-256x258.png" alt="魔方计算器"></span>
+      <span class="thumb"><img src="img/f2l/f2l-05a-256x258.png" alt="魔方计算器"></span>
       <span>
         <h2>计算器</h2>
       </span>
@@ -130,7 +130,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
       </span>
     </div>
     <a class="card" href="practice.html">
-      <span class="thumb"><img src="pll/pll-T-256x256.png" alt="魔方练习"></span>
+      <span class="thumb"><img src="img/pll/pll-T-v0-256x256.png" alt="魔方练习"></span>
       <span>
         <h2>练习</h2>
       </span>
@@ -146,19 +146,27 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     <div class="card">
       <a class="stretch" href="f2l.html" data-last="f2l.html"
          aria-label="三阶公式（F2L / OLL / PLL）"></a>
-      <span class="thumb"><img src="oll/oll-01-day-256x256.png" alt="三阶公式"
+      <span class="thumb"><img src="img/oll/oll-01-v0-day-256x256.png" alt="三阶公式"
         id="ollthumb"></span>
       <span>
         <h2>三阶 <a href="f2l.html">F2L</a> · <a href="oll.html">OLL</a> ·
           <a href="pll.html">PLL</a></h2>
       </span>
     </div>
+    <!-- 单手公式（目前只有 OH-PLL 一页）：单独一张卡片，和导航条里同一位 ——
+         排在「三阶公式」后面、「二阶公式」前面。图就是 PLL 那套角度图（彩色版） -->
+    <a class="card" href="oh-pll.html">
+      <span class="thumb"><img src="img/pll/pll-Aa-v0-256x256.png" alt="单手公式"></span>
+      <span>
+        <h2>单手 PLL<span class="n">21</span></h2>
+      </span>
+    </a>
     <!-- 二阶那两套公式分两页（左边那条目录互相切），导航 / 卡片合成一个入口 ——
          和「教程」那张同一个做法：整张卡片可点，标题右边两个字各是一个入口 -->
     <div class="card">
       <a class="stretch" href="oll2.html" data-last="oll2.html"
          aria-label="二阶公式（OLL / PBL）"></a>
-      <span class="thumb"><img src="2x2oll/sune_day-256x256.png" alt="二阶公式"
+      <span class="thumb"><img src="img/oll2/sune-v0-day-256x256.png" alt="二阶公式"
         id="x2thumb"></span>
       <span>
         <h2>二阶 <a href="oll2.html">OLL</a> · <a href="pbl2.html">PBL</a></h2>
@@ -177,10 +185,10 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     // 首页那张 OLL 卡片也是 OLL 图，跟着主题换紫/黄顶（别的地方是 SVG/单版图）。
     // 二阶 PBL 那张是线稿图（白天深线、夜晚浅线），也得跟着换，不然夜底上看不见。
     var ot = document.getElementById('ollthumb');
-    if (ot) ot.src = 'oll/oll-01-' + (t === 'dark' ? 'night' : 'day') + '-256x256.png';
+    if (ot) ot.src = 'img/oll/oll-01-v0-' + (t === 'dark' ? 'night' : 'day') + '-256x256.png';
     // 二阶那张也是线稿（白天深线、夜晚浅线），跟着一起换
     var o2 = document.getElementById('x2thumb');
-    if (o2) o2.src = '2x2oll/sune_' + (t === 'dark' ? 'night' : 'day') + '-256x256.png';
+    if (o2) o2.src = 'img/oll2/sune-v0-' + (t === 'dark' ? 'night' : 'day') + '-256x256.png';
     try { localStorage.setItem('cube-theme', t); } catch (e) {}
   }
   var saved = null;

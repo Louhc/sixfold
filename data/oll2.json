@@ -1,0 +1,596 @@
+{
+  "set": "oll2",
+  "v": 1,
+  "cases": [
+    {
+      "id": "h",
+      "no": 1,
+      "label": "H",
+      "name": "H：四个角都拧着",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "sig": [
+            "b",
+            "b",
+            "f",
+            "f"
+          ],
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R2 U2 R' U2 R'2",
+              "moves": [
+                "R2",
+                "U2",
+                "R'",
+                "U2",
+                "R'2"
+              ],
+              "n": 5,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ],
+          "img-day": "img/oll2/h-v0-day-256x256.png",
+          "img-night": "img/oll2/h-v0-night-256x256.png"
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "sig": [
+            "l",
+            "r",
+            "l",
+            "r"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/h-v1-day-256x256.png",
+          "img-night": "img/oll2/h-v1-night-256x256.png"
+        }
+      ]
+    },
+    {
+      "id": "pi",
+      "no": 2,
+      "label": "Pi",
+      "name": "Pi：四个角都拧着",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "sig": [
+            "l",
+            "b",
+            "l",
+            "f"
+          ],
+          "algs": [
+            {
+              "no": 1,
+              "alg": "F R U R' U' R U R' U' F'",
+              "moves": [
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ],
+          "img-day": "img/oll2/pi-v0-day-256x256.png",
+          "img-night": "img/oll2/pi-v0-night-256x256.png"
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "sig": [
+            "b",
+            "b",
+            "l",
+            "r"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/pi-v1-day-256x256.png",
+          "img-night": "img/oll2/pi-v1-night-256x256.png"
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "sig": [
+            "b",
+            "r",
+            "f",
+            "r"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/pi-v2-day-256x256.png",
+          "img-night": "img/oll2/pi-v2-night-256x256.png"
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "sig": [
+            "l",
+            "r",
+            "f",
+            "f"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/pi-v3-day-256x256.png",
+          "img-night": "img/oll2/pi-v3-night-256x256.png"
+        }
+      ]
+    },
+    {
+      "id": "antisune",
+      "no": 3,
+      "label": "AntiSune",
+      "name": "AntiSune：只有一个角朝上",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "sig": [
+            "l",
+            "u",
+            "f",
+            "r"
+          ],
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R U2 R' U' R U' R'",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ],
+          "img-day": "img/oll2/antisune-v0-day-256x256.png",
+          "img-night": "img/oll2/antisune-v0-night-256x256.png"
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "sig": [
+            "l",
+            "b",
+            "f",
+            "u"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/antisune-v1-day-256x256.png",
+          "img-night": "img/oll2/antisune-v1-night-256x256.png"
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "sig": [
+            "l",
+            "b",
+            "u",
+            "r"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/antisune-v2-day-256x256.png",
+          "img-night": "img/oll2/antisune-v2-night-256x256.png"
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "sig": [
+            "u",
+            "b",
+            "f",
+            "r"
+          ],
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R' U' R U' R' U2 R",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向（按画面挂）",
+              "tags": []
+            }
+          ],
+          "img-day": "img/oll2/antisune-v3-day-256x256.png",
+          "img-night": "img/oll2/antisune-v3-night-256x256.png"
+        }
+      ]
+    },
+    {
+      "id": "sune",
+      "no": 4,
+      "label": "Sune",
+      "name": "Sune：只有一个角朝上",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "sig": [
+            "b",
+            "r",
+            "u",
+            "f"
+          ],
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R U R' U R U2 R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ],
+          "img-day": "img/oll2/sune-v0-day-256x256.png",
+          "img-night": "img/oll2/sune-v0-night-256x256.png"
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "sig": [
+            "u",
+            "r",
+            "l",
+            "f"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/sune-v1-day-256x256.png",
+          "img-night": "img/oll2/sune-v1-night-256x256.png"
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "sig": [
+            "b",
+            "u",
+            "l",
+            "f"
+          ],
+          "algs": [
+            {
+              "no": 2,
+              "alg": "L U L' U L U2 L'",
+              "moves": [
+                "L",
+                "U",
+                "L'",
+                "U",
+                "L",
+                "U2",
+                "L'"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向（按画面挂）",
+              "tags": []
+            }
+          ],
+          "img-day": "img/oll2/sune-v2-day-256x256.png",
+          "img-night": "img/oll2/sune-v2-night-256x256.png"
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "sig": [
+            "b",
+            "r",
+            "l",
+            "u"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/sune-v3-day-256x256.png",
+          "img-night": "img/oll2/sune-v3-night-256x256.png"
+        }
+      ]
+    },
+    {
+      "id": "l",
+      "no": 5,
+      "label": "L",
+      "name": "L：两个角朝上",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "sig": [
+            "u",
+            "r",
+            "f",
+            "u"
+          ],
+          "algs": [
+            {
+              "no": 1,
+              "alg": "F R' F' R U R U' R'",
+              "moves": [
+                "F",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 8,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ],
+          "img-day": "img/oll2/l-v0-day-256x256.png",
+          "img-night": "img/oll2/l-v0-night-256x256.png"
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "sig": [
+            "l",
+            "u",
+            "u",
+            "f"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/l-v1-day-256x256.png",
+          "img-night": "img/oll2/l-v1-night-256x256.png"
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "sig": [
+            "u",
+            "b",
+            "l",
+            "u"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/l-v2-day-256x256.png",
+          "img-night": "img/oll2/l-v2-night-256x256.png"
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "sig": [
+            "b",
+            "u",
+            "u",
+            "r"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/l-v3-day-256x256.png",
+          "img-night": "img/oll2/l-v3-night-256x256.png"
+        }
+      ]
+    },
+    {
+      "id": "t",
+      "no": 6,
+      "label": "T",
+      "name": "T：两个角朝上",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "sig": [
+            "b",
+            "u",
+            "f",
+            "u"
+          ],
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R U R' U' R' F R F'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 8,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ],
+          "img-day": "img/oll2/t-v0-day-256x256.png",
+          "img-night": "img/oll2/t-v0-night-256x256.png"
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "sig": [
+            "l",
+            "r",
+            "u",
+            "u"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/t-v1-day-256x256.png",
+          "img-night": "img/oll2/t-v1-night-256x256.png"
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "sig": [
+            "u",
+            "b",
+            "u",
+            "f"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/t-v2-day-256x256.png",
+          "img-night": "img/oll2/t-v2-night-256x256.png"
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "sig": [
+            "u",
+            "u",
+            "l",
+            "r"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/t-v3-day-256x256.png",
+          "img-night": "img/oll2/t-v3-night-256x256.png"
+        }
+      ]
+    },
+    {
+      "id": "u",
+      "no": 7,
+      "label": "U",
+      "name": "U：两个角朝上",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "sig": [
+            "l",
+            "u",
+            "l",
+            "u"
+          ],
+          "algs": [
+            {
+              "no": 1,
+              "alg": "F R U R' U' F'",
+              "moves": [
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 6,
+              "uses": [
+                "2H"
+              ],
+              "verified": "oll2_db.py: 图 ↔ 公式同朝向",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ],
+          "img-day": "img/oll2/u-v0-day-256x256.png",
+          "img-night": "img/oll2/u-v0-night-256x256.png"
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "sig": [
+            "b",
+            "b",
+            "u",
+            "u"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/u-v1-day-256x256.png",
+          "img-night": "img/oll2/u-v1-night-256x256.png"
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "sig": [
+            "u",
+            "r",
+            "u",
+            "r"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/u-v2-day-256x256.png",
+          "img-night": "img/oll2/u-v2-night-256x256.png"
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "sig": [
+            "u",
+            "u",
+            "f",
+            "f"
+          ],
+          "algs": [],
+          "img-day": "img/oll2/u-v3-day-256x256.png",
+          "img-night": "img/oll2/u-v3-night-256x256.png"
+        }
+      ]
+    }
+  ]
+}

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>六面 · 三阶魔方教程 · 初级（层先法）</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/nav.css">
 <style>
   /* 配色（两套主题的所有颜色变量）都在 theme.css 里，这里只管版式。 */
   *{box-sizing:border-box}
@@ -159,20 +159,8 @@
     .shapes img{width:15mm;height:15mm}
     .shapes figcaption{font-size:8.5pt}
     /* 纸上是白底：按主题现拼的图（第 4 步四张形状图 + 第 5 步 OLL 表）
-       打印时统统换回白天那版 —— 夜晚版是配深色卡片的（黄顶 + 浅色壳），
-       印在白纸上几乎看不见。content:url 是拿 CSS 换图，同步生效、不用等加载。
-       不支持这条的浏览器就照原样印（和以前一样），不会更糟。 */
-    img[data-shape="dot"]{content:url(tutorial/shape-dot-day-256x256.png)}
-    img[data-shape="line"]{content:url(tutorial/shape-line-day-256x256.png)}
-    img[data-shape="corner"]{content:url(tutorial/shape-corner-day-256x256.png)}
-    img[data-shape="cross"]{content:url(tutorial/shape-cross-day-256x256.png)}
-    img[data-oll="21"]{content:url(oll/oll-21-day-256x256.png)}
-    img[data-oll="22"]{content:url(oll/oll-22-day-256x256.png)}
-    img[data-oll="23"]{content:url(oll/oll-23-day-256x256.png)}
-    img[data-oll="24"]{content:url(oll/oll-24-day-256x256.png)}
-    img[data-oll="25"]{content:url(oll/oll-25-day-256x256.png)}
-    img[data-oll="26"]{content:url(oll/oll-26-day-256x256.png)}
-    img[data-oll="27"]{content:url(oll/oll-27-day-256x256.png)}
+       打印时换回白天那版 —— 交给共用的 nav.js（printAsDay）：打印前给夜版图
+       插一个只在打印里显示的白天版克隆，屏幕上的图和主题都不动。 */
     .side,.steps,a.tocalc,.themebtn,.printbtn{display:none}
     .tip,.one,figure,tr{break-inside:avoid}
     #toast{display:none}
@@ -182,7 +170,7 @@
 </head>
 <body>
 
-<script src="nav.js"></script>
+<script src="js/nav.js"></script>
 <main>
 <nav class="side" aria-label="教程目录">
     <a class="on" href="tutorial-basic.html">初级 · 层先法</a>
@@ -380,9 +368,9 @@
     <table class="cases">
       <thead><tr><th>情况</th><th>公式</th></tr></thead>
       <tbody>
-        <tr><td class="pic"><span class="box"><img src="pll/pll-Aa-256x256.png" alt="Aa" loading="lazy" data-zoom><span class="no">Aa</span></span></td>
+        <tr><td class="pic"><span class="box"><img src="img/pll/pll-Aa-v0-256x256.png" alt="Aa" loading="lazy" data-zoom><span class="no">Aa</span></span></td>
           <td class="f"><div class="cs"><code>x' R2 D2 (R' U' R) D2 (R' U R')</code><a class="tocalc" href="calc.html#x%27%20R2%20D2%20%28R%27%20U%27%20R%29%20D2%20%28R%27%20U%20R%27%29" target="_blank" rel="noopener"></a></div></td></tr>
-        <tr><td class="pic"><span class="box"><img src="pll/pll-Ab-256x256.png" alt="Ab" loading="lazy" data-zoom><span class="no">Ab</span></span></td>
+        <tr><td class="pic"><span class="box"><img src="img/pll/pll-Ab-v0-256x256.png" alt="Ab" loading="lazy" data-zoom><span class="no">Ab</span></span></td>
           <td class="f"><div class="cs"><code>x' (R U' R) D2 (R' U R) D2 R'2</code><a class="tocalc" href="calc.html#x%27%20%28R%20U%27%20R%29%20D2%20%28R%27%20U%20R%29%20D2%20R%272" target="_blank" rel="noopener"></a></div></td></tr>
       </tbody>
     </table>
@@ -390,7 +378,7 @@
     朝向该侧面的颜色一样。如果有，那么把另外两个角块中的随便一个转动到正确的位置，
     然后对另外三个使用公式转动即可。当然，有时候也会遇到找不到的情况，如下图，
     这说明你需要用两次公式才行，可以先随便用一次然后再看。</p>
-    <div class="one"><img src="pll/pll-V-256x256.png" data-zoom alt="四个角块一个都不在正确位置" style="width:120px"></div>
+    <div class="one"><img src="img/pll/pll-V-v0-256x256.png" data-zoom alt="四个角块一个都不在正确位置" style="width:120px"></div>
   </section>
 
   <section id="s7">
@@ -399,13 +387,13 @@
     <table class="cases">
       <thead><tr><th>情况</th><th>公式</th></tr></thead>
       <tbody>
-        <tr><td class="pic"><span class="box"><img src="pll/pll-Ua-256x256.png" alt="Ua" loading="lazy" data-zoom><span class="no">Ua</span></span></td>
+        <tr><td class="pic"><span class="box"><img src="img/pll/pll-Ua-v0-256x256.png" alt="Ua" loading="lazy" data-zoom><span class="no">Ua</span></span></td>
           <td class="f"><div class="cs"><code>R U' R U R U R U' R' U' R2</code><a class="tocalc" href="calc.html#R%20U%27%20R%20U%20R%20U%20R%20U%27%20R%27%20U%27%20R2" target="_blank" rel="noopener"></a></div></td></tr>
-        <tr><td class="pic"><span class="box"><img src="pll/pll-Ub-256x256.png" alt="Ub" loading="lazy" data-zoom><span class="no">Ub</span></span></td>
+        <tr><td class="pic"><span class="box"><img src="img/pll/pll-Ub-v0-256x256.png" alt="Ub" loading="lazy" data-zoom><span class="no">Ub</span></span></td>
           <td class="f"><div class="cs"><code>R2 U R U R' U' R' U' R' U R'</code><a class="tocalc" href="calc.html#R2%20U%20R%20U%20R%27%20U%27%20R%27%20U%27%20R%27%20U%20R%27" target="_blank" rel="noopener"></a></div></td></tr>
-        <tr><td class="pic"><span class="box"><img src="pll/pll-H-256x256.png" alt="H" loading="lazy" data-zoom><span class="no">H</span></span></td>
+        <tr><td class="pic"><span class="box"><img src="img/pll/pll-H-v0-256x256.png" alt="H" loading="lazy" data-zoom><span class="no">H</span></span></td>
           <td class="f"><div class="cs"><code>R2 U2 R U2 R2 U2 R2 U2 R U2 R2</code><a class="tocalc" href="calc.html#R2%20U2%20R%20U2%20R2%20U2%20R2%20U2%20R%20U2%20R2" target="_blank" rel="noopener"></a></div></td></tr>
-        <tr><td class="pic"><span class="box"><img src="pll/pll-Z-256x256.png" alt="Z" loading="lazy" data-zoom><span class="no">Z</span></span></td>
+        <tr><td class="pic"><span class="box"><img src="img/pll/pll-Z-v0-256x256.png" alt="Z" loading="lazy" data-zoom><span class="no">Z</span></span></td>
           <td class="f"><div class="cs"><code>U (R' U' R U') (R U R U') (R' U R U) (R2 U' R' U)</code><a class="tocalc" href="calc.html#U%20%28R%27%20U%27%20R%20U%27%29%20%28R%20U%20R%20U%27%29%20%28R%27%20U%20R%20U%29%20%28R2%20U%27%20R%27%20U%29" target="_blank" rel="noopener"></a></div></td></tr>
       </tbody>
     </table>
@@ -495,13 +483,13 @@
 
   /* ---------- 分昼夜两版的图：OLL 表 + 第 4 步那四张形状图 ----------
      两类都是「只记名字、src 按当前主题拼出来」，切主题时再同步一次：
-       OLL    <img data-oll="21">     -> oll/oll-21-day|night-256x256.png
+       OLL    <img data-oll="21">     -> img/oll/oll-21-v0-day|night-256x256.png
        形状图 <img data-shape="dot">  -> tutorial/shape-dot-day|night-256x256.png
      形状图白天是紫顶 + 深色壳，夜晚是黄顶 + 浅色壳（深色卡片上紫的几乎看不见）。 */
   function syncThemeImgs() {
     var tone = document.documentElement.dataset.theme === 'dark' ? '-night' : '-day';
     Array.prototype.forEach.call(document.querySelectorAll('img[data-oll]'), function (im) {
-      im.src = 'oll/oll-' + im.getAttribute('data-oll') + tone + '-256x256.png';
+      im.src = 'img/oll/oll-' + im.getAttribute('data-oll') + '-v0' + tone + '-256x256.png';
     });
     Array.prototype.forEach.call(document.querySelectorAll('img[data-shape]'), function (im) {
       im.src = 'tutorial/shape-' + im.getAttribute('data-shape') + tone + '-256x256.png';

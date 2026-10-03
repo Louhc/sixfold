@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>六面 · 魔方计算器</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/nav.css">
 <style>
   /* 两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
   *{box-sizing:border-box}
@@ -524,6 +524,9 @@
   /* 没消息的时候这一行不占高度 —— 不然「公式」和「单步」之间会白空出一行 */
   .err{margin-top:9px;color:#c0392b;font-size:12.5px}
   .err:empty{margin-top:0;min-height:0}
+  /* 报错后面挂的小按钮（「切回三阶执行」）—— 长得像链接，别抢正文的注意力 */
+  .err .modehint{margin-left:6px;padding:0;border:0;background:none;color:inherit;
+                 font:inherit;text-decoration:underline;cursor:pointer}
 
   @media (max-width:760px){
     .app{flex-direction:column}
@@ -549,7 +552,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 <body>
 
 
-<script src="nav.js"></script>
+<script src="js/nav.js"></script>
 <div class="app">
   <main class="stage" id="stage">
     <button class="themebtn" id="themebtn" type="button" title="切到夜晚"></button>
@@ -704,6 +707,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
         <button data-pick="f2l" data-for="3" type="button">F2L</button>
         <button data-pick="oll" data-for="3" type="button">OLL</button>
         <button data-pick="pll" data-for="3" type="button">PLL</button>
+        <button data-pick="ohpll" data-for="3" type="button">OH-PLL</button>
         <button data-pick="oll2" data-for="2" type="button">二阶 OLL</button>
         <button data-pick="pbl2" data-for="2" type="button">二阶 PBL</button>
       </div>
@@ -712,9 +716,9 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   </aside>
 </div>
 
-<script src="cubesim.js"></script>
-<script src="cubesim4.js"></script>
-<script src="alglist.js"></script>
+<script src="js/cubesim.js"></script>
+<script src="js/cubesim4.js"></script>
+<script src="js/alglist.js"></script>
 <script>
 (function () {
   'use strict';
@@ -823,20 +827,27 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   var CS = 46;                           // 小方块边长，随舞台尺寸自适应
 
   // 公式缩略图：和公式表用同一套文件命名
-  function thumb(kind, id) {
-    // 二阶那两套的图各在自己的目录里，命名是 <情况>_<昼夜>-<尺寸>.png
-    // （PBL 是两个 2×2 视图叠着 256x197；OLL 是一张 2×2 俯视图 256x256）
+  function thumb(kind, row) {
+    var id = row[0];
+    // 单手 PLL：这一栏的行自带图（每条写法属于哪个角度，库里写着）
+    if (kind === 'ohpll') return row[2] || '';
+    // 二阶那两套的图各在自己的目录里：
+    //   OLL  <情况>-v<角度>-<昼夜>-<尺寸>.png（按 U^k 去重后的多画面，缩略图用基准画面 v0）
+    //   PBL  <情况>_<昼夜>-<尺寸>.png（只有一张：两层网格 + 箭头，不做旋转图）
     if (kind === 'pbl2' || kind === 'oll2') {
       var t2 = document.documentElement.dataset.theme === 'dark' ? 'night' : 'day';
       var size2 = kind === 'pbl2' ? '256x197' : '256x256';
-      return '2x2' + (kind === 'pbl2' ? 'pbl' : 'oll') + '/' + id + '_' + t2 + '-' + size2 + '.png';
+      return 'img/' + (kind === 'pbl2' ? 'pbl2' : 'oll2') + '/' + id +
+             (kind === 'oll2' ? '-v0-' : '_') + t2 + '-' + size2 + '.png';
     }
     var f = kind === 'f2l' ? id
           : (/^\d+$/.test(id) && id.length < 2 ? '0' + id : id);
+    // PLL 的缩略图也从库里来（img/pll/pll-<编号>-v0-…）：根目录那个 pll/ 之后就删了
+    if (kind === 'pll') return 'img/pll/pll-' + f + '-v0-256x256.png';
     var size = kind === 'f2l' ? '256x258' : '256x256';
     // OLL 有昼夜两版（白天紫顶 / 夜晚黄顶）
     var tone = kind === 'oll' ? (document.documentElement.dataset.theme === 'dark' ? '-night' : '-day') : '';
-    return kind + '/' + kind + '-' + f + tone + '-' + size + '.png';
+    return 'img/' + kind + '/' + kind + '-' + f + (kind === 'oll' ? '-v0' : '') + tone + '-' + size + '.png';
   }
 
   var pickKind = null;
@@ -879,7 +890,10 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
       var w = (s[i + 1] === 'w' || s[i + 1] === 'W') ? 1 : 0;
       i += 1 + w;
       var mv = d ? d + c : (w ? c + 'w' : c);
-      var no = d ? false : 'MES'.indexOf(c.toUpperCase()) >= 0;
+      // 中层转（M/E/S）：**三阶是有的**，只有二阶 / 四阶没有
+      // （以前这里写成 `d ? false : 'MES'…`，等于所有阶数都禁 M —— 三阶模式贴一条带 M 的
+      //   公式会被拒，而且文案只在「二阶 / 其它」之间分，于是显示成「四阶没有 M」，见坑记）
+      var no = (mode === '2' || mode === '4') && 'MES'.indexOf(c.toUpperCase()) >= 0;
       if (mode === '2') no = no || !!d || !!w || WIDE3.indexOf(c) >= 0;
       if (mode === '4' && d && d > '3') no = true;           // 四阶每个方向只有 2R / 3R
       if (no && bad.indexOf(mv) < 0) bad.push(mv);
@@ -903,6 +917,29 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
           '要转里面那层写 2R / 3L 这种');
     }
     return sim().steps(alg);
+  }
+  /* 这条公式三阶跑得了吗？（四阶 / 二阶模式里贴一条三阶公式时要用） */
+  function runnable3(alg) {
+    try { CubeSim.steps(alg); return true; } catch (e) { return false; }
+  }
+  /* 报「这一阶没有这种转法」时，如果三阶其实能跑，就再挂一个「切回三阶执行」的按钮 ——
+     不然对着一条明摆着的三阶公式（比如带 M 的）只能自己猜到是阶数没切回去（用户报过）。
+     切阶数会重置局面，所以必须由用户点，不自动切。 */
+  function showAlgError(msg, alg) {
+    algEl.classList.add('bad');
+    errEl.textContent = msg;
+    errEl.classList.remove('hint');           // 真报错要用红色，别留着粘贴提示的灰
+    if (mode === '3' || !badMoves(alg).length || !runnable3(alg)) return;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'modehint';
+    b.textContent = '切回三阶执行';
+    b.addEventListener('click', function () {
+      setMode('3');
+      algEl.value = alg;
+      submit('alg', false);
+    });
+    errEl.appendChild(b);
   }
 
   var modeBtns = { '3': document.getElementById('mode3'), '2': document.getElementById('mode2'),
@@ -973,7 +1010,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     var rows = pickKind ? (ALG_LIST[pickKind] || []) : [];
     pickEl.innerHTML = rows.length ? rows.map(function (r) {
       return '<div class="p" data-alg="' + esc(r[1]) + '" data-id="' + esc(r[0]) + '">' +
-             '<img src="' + thumb(pickKind, r[0]) + '" alt="" loading="lazy" data-zoom>' +
+             '<img src="' + thumb(pickKind, r) + '" alt="" loading="lazy" data-zoom>' +
              '<b>' + esc(r[0]) + '</b><code>' + esc(r[1]) + '</code></div>';
     }).join('')
     // 四阶还没有现成的公式表（三阶那三套是给三阶写的）—— 说清楚，别让人以为坏了
@@ -1506,9 +1543,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     try {
       list = parseAlg(alg);        // 二阶模式下会挡掉 M/E/S 和宽转
     } catch (e) {
-      algEl.classList.add('bad');
-      errEl.classList.remove('hint');       // 真报错要用红色，别留着粘贴提示的灰
-      errEl.textContent = e.message;
+      showAlgError(e.message, alg);        // 三阶能跑的话，顺手给「切回三阶执行」
       return;
     }
     if (!list.length) return;
@@ -2222,8 +2257,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     } catch (e) {
       if (!e || !e.__done) {                    // 上面那条 throw 只是「这半段做完了」
         // 公式不合法：退回旧行为，只填进输入框，不执行
-        algEl.classList.add('bad');
-        errEl.textContent = e.message;
+        showAlgError(e.message, hashAlg);
       }
     }
   } else (function () {

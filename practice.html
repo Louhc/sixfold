@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>六面 · 魔方练习</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/nav.css">
 <style>
   /* 两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
   *{box-sizing:border-box}
@@ -145,7 +145,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 <body>
 
 
-<script src="nav.js"></script>
+<script src="js/nav.js"></script>
 <div class="app">
   <main class="stage" id="stage">
     <button class="themebtn" id="themebtn" type="button" title="切到夜晚"></button>
@@ -194,8 +194,8 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   </aside>
 </div>
 
-<script src="cubesim.js"></script>
-<script src="alglist.js"></script>
+<script src="js/cubesim.js"></script>
+<script src="js/alglist.js"></script>
 <script>
 (function () {
   'use strict';
@@ -418,14 +418,14 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     try { localStorage.setItem(SCOPE_KEY, scope); } catch (e) {}
   }
 
-  /* 题库：公式页上「一个题号收好几行」（oll.html / pll.html 里第一行是主公式，
-     后面几行是备选写法），这里一个题号只取【第一行】，也就是页面上那条主公式。
-     两行解的是同一个局面（测试里逐条核过：题面、局面完全一样，只有答案不同），
+  /* 题库：一个题号可以收好几条写法（oll.html 里第一行是主公式、后面是备选行；
+     PLL 库里的其它写法则在公式页行尾的展开键里挑），这里一个题号只取【第一行】。
+     这些写法解的是同一个局面（测试里逐条核过：题面、局面完全一样，只有答案不同），
      所以：
        · 练到自己没背过的那条，只会让人怀疑是不是记错了 —— 刷题要的就是对答案；
        · 不去重的话这些题号一轮里会出现两次，抽中概率是别的题的两倍
          （OLL 一轮 62 张而不是 57 张，PLL 29 张而不是 21 张）。
-     备选写法没丢：公式页上照旧写着，计算器的「选公式」面板里也能挑。 */
+     备选写法没丢：OLL 表里照旧写着，PLL 在展开键里，计算器的「选公式」面板里也能挑。 */
   function casesOf(kind) {
     var list = (typeof ALG_LIST !== 'undefined' && ALG_LIST[kind]) || [];
     var seen = {}, out = [];
@@ -468,10 +468,12 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   // 公式表里那张图的文件名
   function thumbOf(kind, id) {
     var f = kind === 'f2l' ? id : (/^\d+$/.test(id) && id.length < 2 ? '0' + id : id);
+    // PLL 的图在 img/pll 下按角度分（题面用基准角度 v0）
+    if (kind === 'pll') return 'img/pll/pll-' + f + '-v0-256x256.png';
     var size = kind === 'f2l' ? '256x258' : '256x256';
     // OLL 有昼夜两版（白天紫顶 / 夜晚黄顶），别的只有一版
     var tone = kind === 'oll' ? (document.documentElement.dataset.theme === 'dark' ? '-night' : '-day') : '';
-    return kind + '/' + kind + '-' + f + tone + '-' + size + '.png';
+    return 'img/' + kind + '/' + kind + '-' + f + (kind === 'oll' ? '-v0' : '') + tone + '-' + size + '.png';
   }
 
   // 本轮进度也要留住 —— 否则切回来重开一轮，"不重复出题"就断了

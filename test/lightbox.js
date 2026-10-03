@@ -4,9 +4,9 @@
    用法: node test/lightbox.js                                        */
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const ROOT = path.join(__dirname, '..');
-const navJs = fs.readFileSync(path.join(ROOT, 'nav.js'), 'utf8');
-const navCss = fs.readFileSync(path.join(ROOT, 'nav.css'), 'utf8');
-const themeCss = fs.readFileSync(path.join(ROOT, 'theme.css'), 'utf8');
+const navJs = fs.readFileSync(path.join(ROOT, 'js', 'nav.js'), 'utf8');
+const navCss = fs.readFileSync(path.join(ROOT, 'css', 'nav.css'), 'utf8');
+const themeCss = fs.readFileSync(path.join(ROOT, 'css', 'theme.css'), 'utf8');
 
 let pass = 0, fail = 0;
 const ok = (name, cond, extra) => {
@@ -66,7 +66,7 @@ console.log('\n[2] 真跑一遍（DOM 桩）');
   const zoomImg = () => {
     const i = mkEl('img');
     i.setAttribute('data-zoom', '');
-    i.src = 'oll/oll-01-day-256x256.png';
+    i.src = 'img/oll/oll-01-v0-day-256x256.png';
     i.alt = 'OLL 01';
     return i;
   };
@@ -109,14 +109,14 @@ console.log('\n[2] 真跑一遍（DOM 桩）');
 
   // ③ 没标 data-zoom 的图：什么都不做（OLL / PLL 表格里那张大图点一下是展开其他写法）
   const plain = mkEl('img');
-  plain.src = 'pll/pll-Aa-256x256.png';
+  plain.src = 'img/pll/pll-Aa-v0-256x256.png';
   const ep = click(plain);
   ok('没标 data-zoom 的图点了完全不插手（不 preventDefault、不弹遮罩）',
     !ep.defaulted && !ep.stopped && !box.classList.contains('on'));
 
   // ④ 已开着的时候按 Esc 之前的那条：主题相关的图取浏览器当前显示的那张
   const b = zoomImg();
-  b.currentSrc = 'oll/oll-01-night-256x256.png';       // 夜晚主题下换成了 night 版
+  b.currentSrc = 'img/oll/oll-01-v0-night-256x256.png';       // 夜晚主题下换成了 night 版
   click(b);
   ok('取 currentSrc（OLL 有昼夜两版，要显示当前这张）',
     box.children[0].src === b.currentSrc, box.children[0].src);
@@ -169,7 +169,7 @@ console.log('\n[3] 样式：遮罩的样子和颜色都在共用文件里');
 console.log('\n[4] 哪些图能点开：能点的都标了，点击有别的用途的没标');
 {
   ok('计算器：公式表里那张 30px 的缩略图标了（整行点击 = 填公式，点图改成看图）',
-    /'<img src="' \+ thumb\(pickKind, r\[0\]\) \+ '" alt="" loading="lazy" data-zoom>'/.test(read('calc.html')));
+    /'<img src="' \+ thumb\(pickKind, r\) \+ '" alt="" loading="lazy" data-zoom>'/.test(read('calc.html')));
   ok('练习页：题目那张图标了',
     /id="qimg" alt="要解决的图形" data-zoom/.test(read('practice.html')));
   ok('F2L 公式表：那一列图标了',
@@ -179,14 +179,14 @@ console.log('\n[4] 哪些图能点开：能点的都标了，点击有别的用�
     // 原来表格里那张图点一下是「展开这一条的其他写法」——那套连数据带代码都没有了
     // （数据里早就只有 [编号, 公式] 两个元素），所以这张图现在也能点开看大图
     ok(p + '：表格里那张公式图标了 data-zoom（看大图）',
-      /class="pic"><span class="box"><img src="' \+ IMG\(n\) \+ '" data-zoom data-(oll|pll)=/.test(h));
+      /class="pic"><span class="box"><img src="' \+ IMG\(n(, view)?\) \+ '" data-zoom data-(oll|pll)=/.test(h));
     ok(p + '：「展开其他写法」那套死代码清干净了（数据里早就没有备选公式）',
       !/has-alts|class="alts"|tr\.open/.test(h) && !/row\(n, alg, alts\)/.test(h) &&
       /forEach\(function \(r\) \{ html \+= row\(r\[0\], r\[1\]\); \}\)/.test(h));
   });
   ok('放大镜那套是共用文件里的（各页只管标 data-zoom，不用各写一遍脚本）',
     ['calc.html', 'practice.html', 'f2l.html', 'oll.html', 'pll.html']
-      .every(p => /src="nav\.js"/.test(read(p))));
+      .every(p => /src="js\/nav\.js"/.test(read(p))));
 }
 
 console.log('\n结果: ' + pass + ' 通过, ' + fail + ' 失败');

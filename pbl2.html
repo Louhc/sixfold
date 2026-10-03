@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>六面 · 二阶 PBL 公式合集</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/nav.css">
 <script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
 try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+<script src="js/pbl2data.js"></script>
 <style>
   /* 默认浅色（白底）；点右上角按钮切夜晚。两套主题的颜色变量都在 theme.css 里。 */
   *{box-sizing:border-box}
@@ -53,6 +54,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   /* 预留高度：图是懒加载的，不写 aspect-ratio 加载完会把行撑高 */
   td.pic img{width:148px;height:auto;aspect-ratio:256/197;display:block;border-radius:6px}
   td.f{padding:11px 14px}
+  td.f{border-right:0}
   td.f .cs{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 
   code{font:13.5px/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -74,6 +76,34 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   /* 注意：别在 td 上用 display:flex —— 单元格会不再是 table-cell，列宽全乱 */
   td.f code{vertical-align:middle}
   td.f a.tocalc{vertical-align:middle}
+  /* 展开键：只有图标，不画框；展开时给个底色，收起来变回去（和 PLL / OLL / 单手那几页同一套） */
+  col.pick{width:46px}
+  td.pickCell{padding:6px;text-align:center}
+  button.pick{display:inline-flex;align-items:center;justify-content:center;font:inherit;
+         width:32px;height:26px;border-radius:8px;vertical-align:middle;
+         color:var(--text);background:none;border:0;outline-offset:2px;
+         opacity:.62;cursor:pointer;transition:opacity .14s,color .14s,background .14s}
+  button.pick svg{width:19px;height:19px;display:block}
+  tr:hover button.pick,button.pick:hover{opacity:1;color:var(--accent-text)}
+  button.pick.on{opacity:1;color:var(--accent-text);background:var(--chip)}
+  button.pick.off{opacity:.22;pointer-events:none;cursor:default}
+  tr:hover button.pick.off{opacity:.22;color:var(--text)}
+  /* 候选面板：开合要能过渡，所以不用 display:none 切换 —— 用透明度/位移把隐藏态演出来 */
+  .pickbox{position:absolute;z-index:9;display:flex;flex-direction:column;gap:2px;padding:6px;
+           max-width:430px;max-height:52vh;overflow:auto;text-align:left;
+           background:var(--panel);border:1px solid var(--line);border-radius:10px;
+           box-shadow:0 12px 30px #00000026;
+           opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);transform-origin:top right;
+           transition:opacity .16s ease,transform .16s ease,visibility .16s}
+  .pickbox.up{transform:translateY(6px) scale(.98);transform-origin:bottom right}
+  .pickbox.on{opacity:1;visibility:visible;transform:none}
+  .pickbox button{display:flex;align-items:center;gap:8px;padding:4px 6px;border:0;border-radius:8px;
+                  background:none;color:var(--text);font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;
+                  text-align:left;cursor:pointer}
+  .pickbox button:hover{background:var(--chip)}
+  .pickbox img{width:34px;height:34px;flex:none;border-radius:5px}
+  .pickbox .idx{flex:none;min-width:16px;text-align:right;color:var(--muted);
+                font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
 
   #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);
          background:#111c;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;
@@ -112,18 +142,15 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     a.tocalc{display:none}
     code:hover{background:none}
     #toast{display:none}
-    /* 纸上是白底：按主题现挑的图在打印时统统用白天那版
-       （夜晚版是配深色卡片的，印在白纸上几乎看不见） */
-    img[data-pbl2="dd"]{content:url(2x2pbl/dd_day-256x197.png)}
-    img[data-pbl2="ad"]{content:url(2x2pbl/ad_day-256x197.png)}
-    img[data-pbl2="aa"]{content:url(2x2pbl/aa_day-256x197.png)}
-    img[data-pbl2="a"]{content:url(2x2pbl/a_day-256x197.png)}
-    img[data-pbl2="d"]{content:url(2x2pbl/d_day-256x197.png)}
+    /* 纸上是白底：按主题现挑的图在打印时统一换回白天版 —— 交给共用的 nav.js
+       （printAsDay），这里不再按 id 硬编码一份。 */
   }
+  /* 打印：展开键那一列整列都不印（连单元格和列宽一起去掉，别留个空列） */
+  @media print{.pickbox,button.pick,td.pickCell{display:none}col.pick{width:0}}
 </style>
 </head>
 <body>
-<script src="nav.js"></script>
+<script src="js/nav.js"></script>
   <nav class="side" aria-label="二阶公式目录">
     <a href="oll2.html">OLL · 7 种</a>
     <a class="on" href="pbl2.html">PBL · 5 种</a>
@@ -138,65 +165,64 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     d="M7 14.5h10v6H7z"/></svg></button>
 </header>
 
-<main>
-  <section>
-    <h2>5 种情况<span class="cnt">5</span></h2>
-    <table>
-      <colgroup><col class="pic"><col></colgroup>
-      <thead><tr><th>图</th><th>公式</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="pic"><span class="box"><img data-pbl2="dd" alt="Diag / Diag：上下两层都是对角换"
-            title="Diag / Diag：上下两层都是对角换"
-            loading="lazy" data-zoom><span class="no">dd</span></span></td>
-          <td class="f"><div class="cs"><code>R2 B2 R2</code><a class="tocalc"
-            href="calc.html#@2:R2%20B2%20R2" target="_blank" rel="noopener"></a></div></td>
-        </tr>
-        <tr>
-          <td class="pic"><span class="box"><img data-pbl2="ad" alt="Adj / Diag：上层邻角换、下层对角换"
-            title="Adj / Diag：上层邻角换、下层对角换"
-            loading="lazy" data-zoom><span class="no">ad</span></span></td>
-          <td class="f"><div class="cs"><code>R' U R' B2 R U' R</code><a class="tocalc"
-            href="calc.html#@2:R%27%20U%20R%27%20B2%20R%20U%27%20R" target="_blank" rel="noopener"></a></div></td>
-        </tr>
-        <tr>
-          <td class="pic"><span class="box"><img data-pbl2="aa" alt="Adj / Adj：上下两层都是邻角换"
-            title="Adj / Adj：上下两层都是邻角换"
-            loading="lazy" data-zoom><span class="no">aa</span></span></td>
-          <td class="f"><div class="cs"><code>R2 U' R2 U2 F2 U' R2</code><a class="tocalc"
-            href="calc.html#@2:R2%20U%27%20R2%20U2%20F2%20U%27%20R2" target="_blank" rel="noopener"></a></div></td>
-        </tr>
-        <tr>
-          <td class="pic"><span class="box"><img data-pbl2="a" alt="Adj：一面已经完成，另一面邻角换"
-            title="Adj：一面已经完成，另一面邻角换"
-            loading="lazy" data-zoom><span class="no">a</span></span></td>
-          <td class="f"><div class="cs"><code>R U2 R' U' R U2 L' U R' U' L</code><a class="tocalc"
-            href="calc.html#@2:R%20U2%20R%27%20U%27%20R%20U2%20L%27%20U%20R%27%20U%27%20L" target="_blank" rel="noopener"></a></div></td>
-        </tr>
-        <tr>
-          <td class="pic"><span class="box"><img data-pbl2="d" alt="Diag：一面已经完成，另一面对角换"
-            title="Diag：一面已经完成，另一面对角换"
-            loading="lazy" data-zoom><span class="no">d</span></span></td>
-          <td class="f"><div class="cs"><code>R U' R' U' F2 U' R U R' U F2</code><a class="tocalc"
-            href="calc.html#@2:R%20U%27%20R%27%20U%27%20F2%20U%27%20R%20U%20R%27%20U%20F2" target="_blank" rel="noopener"></a></div></td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-</main>
+<main id="app"></main>
 
 <div id="toast"></div>
 <script>
 (function () {
   'use strict';
 
-  /* ---------- 昼夜两版的图 ----------
-     图在 2x2pbl/ 下，名字是 <情况>_day|night-256x197.png；
-     页面上只写 data-pbl2="<情况>"，src 按当前主题拼出来。 */
+  /* ---------- 数据来自数据库（js/pbl2data.js） ----------
+     5 个情况的编号、说明、公式、配图都在库里，表由脚本现搭 */
+  var DB = {}, ORDER = [];
+  ((typeof PBL2_DB !== 'undefined' && PBL2_DB.cases) || []).forEach(function (c) {
+    DB[c.id] = c; ORDER.push(c.id);
+  });
+  function esc(s) {
+    return String(s).replace(/[&<>]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
+    });
+  }
+  /* 图从库里的 img-day / img-night 取。PBL 是**固定视角**：没有 views 这层，
+     每个情况就两张图（白天紫/夜晚黄？PBL 是线稿 + 箭头，两版只是深浅）。 */
+  function IMG(id) {
+    var c = DB[id];
+    if (!c) return '';
+    return document.documentElement.dataset.theme === 'dark'
+      ? (c['img-night'] || c['img-day']) : (c['img-day'] || c['img-night']);
+  }
+  /* 展开键的图标：三行「点 + 圆头条」，和 PLL / OLL / 单手那几页一致 */
+  var PICK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+    '<circle cx="6.4" cy="7" r="2.1" fill="currentColor" stroke="none"/>' +
+    '<circle cx="6.4" cy="12" r="2.1" fill="currentColor" stroke="none"/>' +
+    '<circle cx="6.4" cy="17" r="2.1" fill="currentColor" stroke="none"/>' +
+    '<rect x="10.6" y="5.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/>' +
+    '<rect x="10.6" y="10.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/>' +
+    '<rect x="10.6" y="15.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/></svg>';
+  function row(c) {
+    var a = c.algs[0], alt = esc(c.name);
+    return '<tr>' +
+      '<td class="pic"><span class="box"><img src="' + IMG(c.id) + '" data-pbl2="' + esc(c.id) +
+      '" alt="' + alt + '" title="' + alt + '" loading="lazy" data-zoom><span class="no">' +
+      esc(c.label) + '</span></span></td>' +
+      '<td class="f"><div class="cs"><code>' + esc(a.alg) + '</code>' +
+      '<a class="tocalc" href="calc.html#@2:' + encodeURIComponent(a.alg) +
+      '" target="_blank" rel="noopener"></a></div></td>' +
+      '<td class="pickCell"><button class="pick off" type="button" disabled data-pick="' + esc(c.id) +
+      '" title="这个情况只有一条写法" aria-label="换一条写法">' + PICK_ICON + '</button></td></tr>';
+  }
+  (function render() {
+    var html = '<section><h2>5 种情况<span class="cnt">' + ORDER.length + '</span></h2>' +
+      '<table><colgroup><col class="pic"><col><col class="pick"></colgroup>' +
+      '<tbody>';
+    ORDER.forEach(function (id) { html += row(DB[id]); });
+    html += '</tbody></table></section>';
+    document.getElementById('app').innerHTML = html;
+  })();
+  /* 切主题时把已经画出来的图换成另一套（库里的 img-day / img-night） */
   function syncPbl2Imgs() {
-    var tone = document.documentElement.dataset.theme === 'dark' ? 'night' : 'day';
     Array.prototype.forEach.call(document.querySelectorAll('img[data-pbl2]'), function (im) {
-      im.src = '2x2pbl/' + im.getAttribute('data-pbl2') + '_' + tone + '-256x197.png';
+      im.src = IMG(im.getAttribute('data-pbl2'));
     });
   }
   syncPbl2Imgs();
@@ -261,6 +287,168 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   /* 下次从导航条 / 首页点「二阶公式」要回到这一次看的那一页（nav.js 读这个键）——
      和教程那两页一个做法：键名永远是「这一组的第一个页面」，值才是当前这一页 */
   try { localStorage.setItem('cube-last:oll2.html', 'pbl2.html'); } catch (e) {}
+  /* ---------- 每行的「展开选公式」 ----------
+     和 PLL / OLL / 单手那几页同一套（最右列的按钮）：候选 = 库里同一个情况的其它写法，
+     正在显示的那条不列进去；再点同一个键收起；展开时键亮起来（底色）；开合有过渡。
+     现在二阶库里每个情况只有一条写法 —— 所以键是灰的（.off + disabled）；
+     以后往 data/*.json 里加写法，重跑 emit_pages.py 就自动亮。 */
+  (function () {
+    'use strict';
+    var KEY = 'cube-pick:pbl2:';
+    var byId = {};
+    ((typeof PBL2_DB !== 'undefined' && PBL2_DB.cases) || []).forEach(function (c) { byId[c.id] = c; });
+    var open = null;
+
+    /* 「同一条公式」的判据：忽略括号和空白（库里带括号、别处可能不带） */
+    function algKey(a) { return String(a).replace(/[()\s]/g, ''); }
+    function load(id) { try { return localStorage.getItem(KEY + id) || ''; } catch (e) { return ''; } }
+    function save(id, v) { try { localStorage.setItem(KEY + id, v); } catch (e) {} }
+    /* 候选：库里这个情况的其它写法；行内写法兜底。
+       去重的写和读必须是同一个键（都用 algKey）—— OH 页踩过：写 seen[alg] 查 seen[algKey]
+       会把本行那条再加一遍，展开后就是两个一模一样的候选。 */
+    function candidates(id, own, cur) {
+      var out = [], seen = {};
+      function add(alg) {
+        if (!alg || algKey(alg) === algKey(cur) || seen[algKey(alg)]) return;
+        seen[algKey(alg)] = 1;
+        out.push(alg);
+      }
+      var c = byId[id];
+      if (c) (c.algs || []).forEach(function (a) { add(a.alg); });   // 固定视角：写法直接在 case 上
+      (own || []).forEach(add);
+      return out;
+    }
+    function close() {
+      if (!open) return;
+      open.box.classList.remove('on');
+      open.pick.classList.remove('on');
+      open = null;
+    }
+    /* 点别处收回 —— 但「正在展开的那个键」和面板自己不算别处，
+       否则捕获阶段先清掉 open，再点同一个键就变成「重新打开」，收不起来。 */
+    function closeIfOutside(t) {
+      if (!open || !t) return;
+      var p = open.pick, b = open.box;
+      if (t === p || t === b) return;
+      if (p.contains && p.contains(t)) return;
+      if (b.contains && b.contains(t)) return;
+      close();
+    }
+    function shown(row) { var cd = row.cell.querySelector('code'); return cd ? cd.textContent : ''; }
+    function ownAlgs(row) {
+      var out = [];
+      Array.prototype.forEach.call(row.cell.querySelectorAll('code'), function (cd) {
+        if (out.indexOf(cd.textContent) < 0) out.push(cd.textContent);
+      });
+      return out;
+    }
+    function apply(row, alg) {
+      row.cell.innerHTML = '';
+      var code = document.createElement('code');
+      code.textContent = alg;
+      row.cell.appendChild(code);
+      if (row.calc) {                       // 克隆原来那个「跳计算器」的按钮，换掉链接目标
+        var a = row.calc.cloneNode(true);
+        a.href = 'calc.html#@2:' + encodeURIComponent(alg);
+        row.cell.appendChild(a);
+      }
+      if (row.img) row.img.src = IMG(row.id);                        // 固定视角：图不随写法变
+      save(row.id, alg);
+    }
+    /* 这一页能不能显示这条写法（固定视角：写法直接在 case 上；存档里可能是旧数据） */
+    function usable(id, alg) {
+      var c = byId[id];
+      if (!c) return false;
+      var k = algKey(alg);
+      return (c.algs || []).some(function (a) { return algKey(a.alg) === k; });
+    }
+    function buildBox(row) {  /* 这条写法在 **case 内的编号**（库里唯一；找不到就退回面板顺序号）。
+     面板上显示它 —— 同一个 case 里不同写法编号一定不同，方便口头指代。 */
+  function noOf(id, alg) {
+    var c = byId[id];
+    if (!c) return 0;
+    var k = algKey(alg);
+    var views = c.views || [c];
+    for (var i = 0; i < views.length; i++) {
+      var as = views[i].algs || [];
+      for (var j = 0; j < as.length; j++) {
+        if (algKey(as[j].alg) === k) return as[j].no || 0;
+      }
+    }
+    return 0;
+  }
+
+      var list = candidates(row.id, ownAlgs(row), shown(row));
+      row.box.innerHTML = '';
+      list.forEach(function (alg, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.innerHTML = '<img src="' + IMG(row.id) + '" alt="">' +
+          '<b class="idx">' + (noOf(row.id, alg) || (i + 1)) + '</b><span>' + alg + '</span>';
+        b.addEventListener('click', function (e) {
+          e.preventDefault(); e.stopPropagation();
+          apply(row, alg);
+          close();
+        });
+        row.box.appendChild(b);
+      });
+      return list.length;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('#app tr'), function (tr) {
+      var img = tr.querySelector('td.pic img');
+      var cell = tr.querySelector('td.f');
+      var pick = tr.querySelector('button.pick');
+      if (!img || !cell || !pick) return;
+      var row = { id: img.getAttribute('data-pbl2'), img: img, cell: cell, pick: pick,
+                  calc: cell.querySelector('a.tocalc'), box: document.createElement('div') };
+      if (!row.id) return;
+      row.box.className = 'pickbox';
+
+      /* 恢复上次的选择：只要存档里有、且不是正在显示的那条，就应用它 */
+      var cur = load(row.id);
+      if (cur && usable(row.id, cur) && algKey(cur) !== algKey(shown(row))) apply(row, cur);
+
+      if (candidates(row.id, ownAlgs(row), shown(row)).length < 1) {
+        pick.title = '这个情况只有一条写法';
+        return;                                   // 保持模板里的淡态（disabled）
+      }
+      pick.classList.remove('off');
+      pick.disabled = false;
+      pick.title = '换一条写法';
+
+      pick.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        // 再点同一个键 = 收起（closeIfOutside 不会替我们收，见那里的注释）
+        if (open && open.pick === pick) { close(); return; }
+        close();
+        var n = buildBox(row);
+        if (!n) { pick.title = '这个情况只有一条写法'; close(); return; }
+        pick.title = '换一条写法（共 ' + n + ' 条）';
+        pick.classList.add('on');
+        document.body.appendChild(row.box);
+        var r = pick.getBoundingClientRect();
+        var sx = window.pageXOffset || document.documentElement.scrollLeft || 0;
+        var sy = window.pageYOffset || document.documentElement.scrollTop || 0;
+        row.box.style.left = Math.max(8, Math.min(r.left + sx - 380, sx + window.innerWidth - 440)) + 'px';
+        var below = r.bottom + 6, up = false;
+        if (below + row.box.offsetHeight > window.innerHeight) {
+          below = Math.max(8, r.top - row.box.offsetHeight - 6);
+          up = true;
+        }
+        row.box.style.top = (below + sy) + 'px';
+        row.box.classList.toggle('up', up);
+        // 先排一帧再挂 .on：否则首帧没有过渡起点，面板是"蹦"出来的而不是淡入
+        void row.box.offsetWidth;
+        row.box.classList.add('on');
+        open = row;
+      });
+    });
+    /* 点别处（捕获阶段）/ Esc / 缩放收回；滚动**不**收回 */
+    document.addEventListener('click', function (e) { closeIfOutside(e.target); }, true);
+    window.addEventListener && window.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    window.addEventListener && window.addEventListener('resize', close);
+  })();
+
 
   /* ---------- 白天 / 夜晚 ---------- */
   var root = document.documentElement, btn = document.getElementById('themebtn');

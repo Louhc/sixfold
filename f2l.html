@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>六面 · F2L 公式合集</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
-<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="css/theme.css">
 <style>
   /* 默认浅色（白底）；点右上角按钮切夜晚。不跟随系统 —— 这是打印/速查用的表。
      两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
@@ -131,7 +131,7 @@
     #toast{display:none}
   }
 </style>
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="css/nav.css">
 <script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
 try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 </head>
@@ -143,7 +143,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   </nav>
 
 
-<script src="nav.js"></script>
+<script src="js/nav.js"></script>
 <header>
   <h1>F2L</h1>
   <p>First Two Layers</p>
@@ -160,7 +160,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 
 <script>
 /* 数据：三节，每节若干行；每行左右两格（左=a 红色为F面，右=b 绿色为F面）。
-   图片取自 f2l/ 目录，文件名形如 f2l-01a-256x258.png。
+   图片取自 img/f2l/ 目录，文件名形如 f2l-01a-256x258.png。
    公式严格照原表誊录（含原表的 U'2 / L'2 这类写法）。 */
 var SECTIONS = [
   {
@@ -236,7 +236,7 @@ var SECTIONS = [
   }
 ];
 
-var IMG = function (name) { return 'f2l/f2l-' + name + '-256x258.png'; };
+var IMG = function (name) { return 'img/f2l/f2l-' + name + '-256x258.png'; };
 
 function esc(s) {
   return String(s).replace(/[&<>]/g, function (c) {

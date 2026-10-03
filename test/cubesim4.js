@@ -8,8 +8,8 @@
  */
 const fs = require('fs');
 const path = require('path');
-const S4 = require(path.join(__dirname, '..', 'cubesim4.js'));
-const S3 = require(path.join(__dirname, '..', 'cubesim.js'));
+const S4 = require(path.join(__dirname, '..', 'js', 'cubesim4.js'));
+const S3 = require(path.join(__dirname, '..', 'js', 'cubesim.js'));
 
 let pass = 0, fail = 0;
 const ok = (n, c, x) => { c ? pass++ : fail++; console.log((c ? '  \u2713 ' : '  \u2717 ') + n + (c ? '' : '  -> ' + x)); };

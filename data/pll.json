@@ -1,0 +1,3616 @@
+{
+  "set": "pll",
+  "v": 1,
+  "cases": [
+    {
+      "id": "Aa",
+      "no": 1,
+      "name": "Aa-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse and reflection of Ab. It is a clockwise 3-cycle of corners.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Aa-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Aa-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Aa-v0-nc-night-256x256.png",
+          "sig": "BBRLLRFRFBFL",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "x' R2 D2 (R' U' R) D2 (R' U R')",
+              "moves": [
+                "x'",
+                "R2",
+                "D2",
+                "R'",
+                "U'",
+                "R",
+                "D2",
+                "R'",
+                "U",
+                "R'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred",
+                "ohpll-preferred"
+              ]
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Aa-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Aa-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Aa-v1-nc-night-256x256.png",
+          "sig": "RLLBFLBBRFRF",
+          "algs": [
+            {
+              "no": 2,
+              "alg": "y' x' R2 D2 R' U' R D2 R' U R'",
+              "moves": [
+                "y'",
+                "x'",
+                "R2",
+                "D2",
+                "R'",
+                "U'",
+                "R",
+                "D2",
+                "R'",
+                "U",
+                "R'"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            }
+          ]
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Aa-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Aa-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Aa-v2-nc-night-256x256.png",
+          "sig": "LFBFRFRLLRBB",
+          "algs": [
+            {
+              "no": 3,
+              "alg": "x L2 D2 L' U' L D2 L' U L'",
+              "moves": [
+                "x",
+                "L2",
+                "D2",
+                "L'",
+                "U'",
+                "L",
+                "D2",
+                "L'",
+                "U",
+                "L'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 4,
+              "alg": "y' x' L' U L' D2 L U' L' D2 L2",
+              "moves": [
+                "y'",
+                "x'",
+                "L'",
+                "U",
+                "L'",
+                "D2",
+                "L",
+                "U'",
+                "L'",
+                "D2",
+                "L2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 5,
+              "alg": "y x R' U R' D2 R U' R' D2 R2",
+              "moves": [
+                "y",
+                "x",
+                "R'",
+                "U",
+                "R'",
+                "D2",
+                "R",
+                "U'",
+                "R'",
+                "D2",
+                "R2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 6,
+              "alg": "y2 x' R2 D2 R' U' R D2 R' U R'",
+              "moves": [
+                "y2",
+                "x'",
+                "R2",
+                "D2",
+                "R'",
+                "U'",
+                "R",
+                "D2",
+                "R'",
+                "U",
+                "R'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Aa-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Aa-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Aa-v3-nc-night-256x256.png",
+          "sig": "FRFRBBLFBLLR",
+          "algs": [
+            {
+              "no": 7,
+              "alg": "x R' U R' D2 R U' R' D2 R2",
+              "moves": [
+                "x",
+                "R'",
+                "U",
+                "R'",
+                "D2",
+                "R",
+                "U'",
+                "R'",
+                "D2",
+                "R2"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Ab",
+      "no": 2,
+      "name": "Ab-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse and reflection of Aa. It is a counter-clockwise 3-cycle of corners.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Ab-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Ab-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ab-v0-nc-night-256x256.png",
+          "sig": "BBFLLFLRBRFR",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "x' (R U' R) D2 (R' U R) D2 R'2",
+              "moves": [
+                "x'",
+                "R",
+                "U'",
+                "R",
+                "D2",
+                "R'",
+                "U",
+                "R",
+                "D2",
+                "R'2"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred",
+                "ohpll-preferred"
+              ]
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Ab-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Ab-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ab-v1-nc-night-256x256.png",
+          "sig": "FLLRFRBBFBRL",
+          "algs": [
+            {
+              "no": 2,
+              "alg": "y' x' R U' R D2 R' U R D2 R2",
+              "moves": [
+                "y'",
+                "x'",
+                "R",
+                "U'",
+                "R",
+                "D2",
+                "R'",
+                "U",
+                "R",
+                "D2",
+                "R2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            },
+            {
+              "no": 3,
+              "alg": "x' L2 D2 L U L' D2 L U' L",
+              "moves": [
+                "x'",
+                "L2",
+                "D2",
+                "L",
+                "U",
+                "L'",
+                "D2",
+                "L",
+                "U'",
+                "L"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 4,
+              "alg": "y x L U' L D2 L' U L D2 L2",
+              "moves": [
+                "y",
+                "x",
+                "L",
+                "U'",
+                "L",
+                "D2",
+                "L'",
+                "U",
+                "L",
+                "D2",
+                "L2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 5,
+              "alg": "y2 x R2 D2 R U R' D2 R U' R",
+              "moves": [
+                "y2",
+                "x",
+                "R2",
+                "D2",
+                "R",
+                "U",
+                "R'",
+                "D2",
+                "R",
+                "U'",
+                "R"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Ab-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Ab-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ab-v2-nc-night-256x256.png",
+          "sig": "RFRBRLFLLFBB",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Ab-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Ab-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ab-v3-nc-night-256x256.png",
+          "sig": "LRBFBBRFRLLF",
+          "algs": [
+            {
+              "no": 6,
+              "alg": "x R2 D2 R U R' D2 R U' R",
+              "moves": [
+                "x",
+                "R2",
+                "D2",
+                "R",
+                "U",
+                "R'",
+                "D2",
+                "R",
+                "U'",
+                "R"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "no": 3,
+      "name": "E-Perm",
+      "prob": "1/36",
+      "descEn": "The algorithm below was popularised by Rowe Hessler. It utilises [OCLL] / [COLL] algorithms for L / Bowtie and T / Chameleon.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-E-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-E-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-E-v0-nc-night-256x256.png",
+          "sig": "LBRFLBFRBLFR",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "x' (R U' R' D) (R U R' D') (R U R' D) (R U' R' D')",
+              "moves": [
+                "x'",
+                "R",
+                "U'",
+                "R'",
+                "D",
+                "R",
+                "U",
+                "R'",
+                "D'",
+                "R",
+                "U",
+                "R'",
+                "D",
+                "R",
+                "U'",
+                "R'",
+                "D'"
+              ],
+              "n": 17,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原｜来源 jperm OH PLL",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "x' R U' R' D R U R' D' R U R' D R U' R' u'",
+              "moves": [
+                "x'",
+                "R",
+                "U'",
+                "R'",
+                "D",
+                "R",
+                "U",
+                "R'",
+                "D'",
+                "R",
+                "U",
+                "R'",
+                "D",
+                "R",
+                "U'",
+                "R'",
+                "u'"
+              ],
+              "n": 17,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "x' L' U L D' L' U' L D L' U' L D' L' U L D",
+              "moves": [
+                "x'",
+                "L'",
+                "U",
+                "L",
+                "D'",
+                "L'",
+                "U'",
+                "L",
+                "D",
+                "L'",
+                "U'",
+                "L",
+                "D'",
+                "L'",
+                "U",
+                "L",
+                "D"
+              ],
+              "n": 17,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-E-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-E-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-E-v1-nc-night-256x256.png",
+          "sig": "BLFLFRLBRBRF",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "no": 4,
+      "name": "F-Perm",
+      "prob": "1/18",
+      "descEn": "",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-F-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-F-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-F-v0-nc-night-256x256.png",
+          "sig": "BFRLLLFRBFBR",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R' U' F' (R U R' U' R' F R2 U' R' U' R U R' F') F U R",
+              "moves": [
+                "R'",
+                "U'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "F",
+                "U",
+                "R"
+              ],
+              "n": 20,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
+              "moves": [
+                "R'",
+                "U'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 18,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-F-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-F-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-F-v1-nc-night-256x256.png",
+          "sig": "LLLFBRBFRBRF",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-F-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-F-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-F-v2-nc-night-256x256.png",
+          "sig": "RBFBRFLLLRFB",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-F-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-F-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-F-v3-nc-night-256x256.png",
+          "sig": "FRBRFBRBFLLL",
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R U R' U' R' U R U2 L' R' U R U' L U' R U' R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "L'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "L",
+                "U'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 18,
+              "uses": [
+                "OH"
+              ],
+              "verified": "箭头模式与本站角度一致",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 4,
+              "alg": "R U R' U' R' U R U2 R' L' U R U' L U' R U' R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "L'",
+                "U",
+                "R",
+                "U'",
+                "L",
+                "U'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 18,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Ga",
+      "no": 5,
+      "name": "Ga-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse of Gb. Reflection of Gc.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Ga-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Ga-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ga-v0-nc-night-256x256.png",
+          "sig": "RLFBRBLBRLFF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "D' R2 U R' U R' U' R U' R2 U' D R' U R U",
+              "moves": [
+                "D'",
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R2",
+                "U'",
+                "D",
+                "R'",
+                "U",
+                "R",
+                "U"
+              ],
+              "n": 16,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "(R2 u) (R' U R' U' R u' R'2) y' (R' U R)",
+              "moves": [
+                "R2",
+                "u",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "u'",
+                "R'2",
+                "y'",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "R2 u R' U R' U' R u' R2 y z U' R U",
+              "moves": [
+                "R2",
+                "u",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "u'",
+                "R2",
+                "y",
+                "z",
+                "U'",
+                "R",
+                "U"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "ohpll-preferred"
+              ],
+              "verified": "用户提供：单手 Ga（对得上 v0）"
+            },
+            {
+              "no": 4,
+              "alg": "R2 U R' U R' U' R U' R2 D U' R' U R u' U",
+              "moves": [
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R2",
+                "D",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "u'",
+                "U"
+              ],
+              "n": 16,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "用户提供：单手 Ga（对得上 v0）"
+            },
+            {
+              "no": 5,
+              "alg": "R2 U R' U R' U' R U' R2 (U' D) R' U R D' U",
+              "moves": [
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R2",
+                "U'",
+                "D",
+                "R'",
+                "U",
+                "R",
+                "D'",
+                "U"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（补末尾 U）｜来源 jperm PLL"
+            },
+            {
+              "no": 6,
+              "alg": "R2 u R' U R' U' R u' R2 y' R' U R",
+              "moves": [
+                "R2",
+                "u",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "u'",
+                "R2",
+                "y'",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 13,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Ga-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Ga-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ga-v1-nc-night-256x256.png",
+          "sig": "BRBLFFRLFRBL",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Ga-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Ga-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ga-v2-nc-night-256x256.png",
+          "sig": "FFLRBLBRBFLR",
+          "algs": [
+            {
+              "no": 7,
+              "alg": "z U2 r U' R U' R' U r' U2 x' U' R U",
+              "moves": [
+                "z",
+                "U2",
+                "r",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "r'",
+                "U2",
+                "x'",
+                "U'",
+                "R",
+                "U"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "用户提供：单手 Ga（对得上 v2）"
+            }
+          ]
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Ga-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Ga-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ga-v3-nc-night-256x256.png",
+          "sig": "LBRFLRFFLBRB",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Gb",
+      "no": 6,
+      "name": "Gb-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse of Ga. Reflection of Gd.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Gb-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Gb-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gb-v0-nc-night-256x256.png",
+          "sig": "LFBFBFRRLRLB",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R' d' F) (R2 u) (R' U) (R U' R u' R2)",
+              "moves": [
+                "R'",
+                "d'",
+                "F",
+                "R2",
+                "u",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R",
+                "u'",
+                "R2"
+              ],
+              "n": 12,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "(R' U' R) y (R2 u) (R' U R U') (R u' R'2)",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "y",
+                "R2",
+                "u",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R",
+                "u'",
+                "R'2"
+              ],
+              "n": 13,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "R' U' R (U D') R2 U R' U R U' R U' R2 D U'",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "D'",
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R",
+                "U'",
+                "R2",
+                "D",
+                "U'"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（补末尾 U'）｜来源 jperm PLL"
+            },
+            {
+              "no": 4,
+              "alg": "R' U' R y R2 u R' U R U' R u' R2",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "y",
+                "R2",
+                "u",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R",
+                "u'",
+                "R2"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 5,
+              "alg": "y F' U' F R2 u R' U R U' R u' R2",
+              "moves": [
+                "y",
+                "F'",
+                "U'",
+                "F",
+                "R2",
+                "u",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R",
+                "u'",
+                "R2"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Gb-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Gb-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gb-v1-nc-night-256x256.png",
+          "sig": "FBFRLBLFBLRR",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Gb-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Gb-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gb-v2-nc-night-256x256.png",
+          "sig": "BLRLRRFBFBFL",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Gb-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Gb-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gb-v3-nc-night-256x256.png",
+          "sig": "RRLBFLBLRFBF",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Gc",
+      "no": 7,
+      "name": "Gc-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse of Gd. Reflection of Ga.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Gc-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Gc-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gc-v0-nc-night-256x256.png",
+          "sig": "LBBFRFRFLRLB",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R2 U') (R U' R U R' U R2 U D') (R U' R') D U'",
+              "moves": [
+                "R2",
+                "U'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R2",
+                "U",
+                "D'",
+                "R",
+                "U'",
+                "R'",
+                "D",
+                "U'"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原｜jperm OH PLL 也把它当单手",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "(R'2 u' R U' R) (U R' u R2) y (R U' R')",
+              "moves": [
+                "R'2",
+                "u'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "u",
+                "R2",
+                "y",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "R2 u' R U' R U R' D x' U2 r U' r'",
+              "moves": [
+                "R2",
+                "u'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "D",
+                "x'",
+                "U2",
+                "r",
+                "U'",
+                "r'"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "ohpll-preferred"
+              ],
+              "verified": "用户提供：单手 Gc，对得上 v0（签名解出 + 箭头一致）"
+            },
+            {
+              "no": 4,
+              "alg": "R2 u' R U' R U R' u R2 y R U' R'",
+              "moves": [
+                "R2",
+                "u'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "u",
+                "R2",
+                "y",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            },
+            {
+              "no": 5,
+              "alg": "y2 R2 F2 R U2 R U2 R' F R U R' U' R' F R2",
+              "moves": [
+                "y2",
+                "R2",
+                "F2",
+                "R",
+                "U2",
+                "R",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2"
+              ],
+              "n": 16,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Gc-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Gc-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gc-v1-nc-night-256x256.png",
+          "sig": "FRFRLBLBBLFR",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Gc-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Gc-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gc-v2-nc-night-256x256.png",
+          "sig": "BLRLFRFRFBBL",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Gc-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Gc-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gc-v3-nc-night-256x256.png",
+          "sig": "RFLBBLBLRFRF",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Gd",
+      "no": 8,
+      "name": "Gd-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse of Gc. Reflection of Gb.<br/><br/>Check out the similarity between the Gd-Perm algorithm R2' F' (R U R U') (R' F' R U2' R' U2 R' F) F R2 and the Ra-Perm algorithm R U (R' F' R U2' R' U2 R' F) (R U R U') U' R'.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Gd-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Gd-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gd-v0-nc-night-256x256.png",
+          "sig": "RLFBFBLRRLBF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R U R') (U' D) (R2 U' R U' R' U R' U R2 D') U",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "D",
+                "R2",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "U",
+                "R2",
+                "D'",
+                "U"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "(R U R') y' (R'2 u' R U') (R' U R' u R2)",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "y'",
+                "R'2",
+                "u'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "u",
+                "R2"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "R U R' y' R2 u' R U' R' U R' u R2",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "y'",
+                "R2",
+                "u'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "u",
+                "R2"
+              ],
+              "n": 13,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Gd-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Gd-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gd-v1-nc-night-256x256.png",
+          "sig": "BFBLBFRLFRRL",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Gd-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Gd-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gd-v2-nc-night-256x256.png",
+          "sig": "FBLRRLBFBFLR",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Gd-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Gd-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gd-v3-nc-night-256x256.png",
+          "sig": "LRRFLRFBLBFB",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "H",
+      "no": 9,
+      "name": "H-Perm / X-Perm",
+      "prob": "1/72",
+      "descEn": "Best known as H-Perm (i.e. swapping opposite edge pairs) this case is also known as X-Perm (i.e.  swapping diagonal corner pairs).",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-H-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-H-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-H-v0-nc-night-256x256.png",
+          "sig": "BFBLRLRLRFBF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "M'2 U M'2 U2 M'2 U M'2",
+              "moves": [
+                "M'2",
+                "U",
+                "M'2",
+                "U2",
+                "M'2",
+                "U",
+                "M'2"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "R2 U2 R U2 R2 U2 R2 U2 R U2 R2",
+              "moves": [
+                "R2",
+                "U2",
+                "R",
+                "U2",
+                "R2",
+                "U2",
+                "R2",
+                "U2",
+                "R",
+                "U2",
+                "R2"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "M2 U' M2 U2 M2 U' M2",
+              "moves": [
+                "M2",
+                "U'",
+                "M2",
+                "U2",
+                "M2",
+                "U'",
+                "M2"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 4,
+              "alg": "M2 U M2 U2 M2 U M2",
+              "moves": [
+                "M2",
+                "U",
+                "M2",
+                "U2",
+                "M2",
+                "U",
+                "M2"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Ja",
+      "no": 10,
+      "name": "Ja-Perm",
+      "prob": "1/18",
+      "descEn": "Reflection of Jb. This case is also known as the L-Perm.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Ja-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Ja-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ja-v0-nc-night-256x256.png",
+          "sig": "LBBFFBRRRLLF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(L' U' L F) (L' U' L U) (L F') (L2 U L U)",
+              "moves": [
+                "L'",
+                "U'",
+                "L",
+                "F",
+                "L'",
+                "U'",
+                "L",
+                "U",
+                "L",
+                "F'",
+                "L2",
+                "U",
+                "L",
+                "U"
+              ],
+              "n": 14,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Ja-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Ja-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ja-v1-nc-night-256x256.png",
+          "sig": "BFFLLFLBBRRR",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Ja-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Ja-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ja-v2-nc-night-256x256.png",
+          "sig": "FLLRRRBFFBBL",
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R' U2 R U R' U2 L U' R U L'",
+              "moves": [
+                "R'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U2",
+                "L",
+                "U'",
+                "R",
+                "U",
+                "L'"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "verified": "箭头模式与本站角度一致",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "x R2 F R F' R U2 r' U r U2",
+              "moves": [
+                "x",
+                "R2",
+                "F",
+                "R",
+                "F'",
+                "R",
+                "U2",
+                "r'",
+                "U",
+                "r",
+                "U2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            },
+            {
+              "no": 4,
+              "alg": "y' R' U L' U2 R U' R' U2 R L U",
+              "moves": [
+                "y'",
+                "R'",
+                "U",
+                "L'",
+                "U2",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "L",
+                "U"
+              ],
+              "n": 12,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（补末尾 U）｜来源 jperm PLL"
+            },
+            {
+              "no": 5,
+              "alg": "y2 L' U' L F L' U' L U L F' L2 U L U",
+              "moves": [
+                "y2",
+                "L'",
+                "U'",
+                "L",
+                "F",
+                "L'",
+                "U'",
+                "L",
+                "U",
+                "L",
+                "F'",
+                "L2",
+                "U",
+                "L",
+                "U"
+              ],
+              "n": 15,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补末尾 U）"
+            }
+          ]
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Ja-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Ja-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ja-v3-nc-night-256x256.png",
+          "sig": "RRRBBLFLLFFB",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Jb",
+      "no": 11,
+      "name": "Jb-Perm",
+      "prob": "1/18",
+      "descEn": "Reflection of Ja.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Jb-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Jb-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Jb-v0-nc-night-256x256.png",
+          "sig": "BBRLLLFFBFRR",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R U R' F') (R U R' U') (R' F) (R2 U' R' U')",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U'"
+              ],
+              "n": 14,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原｜来源 jperm OH PLL",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "R U2 R' U' R U2 L' U R' U' L",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U2",
+                "L'",
+                "U",
+                "R'",
+                "U'",
+                "L"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "R U2 R' U' R U2 L' U R' U' r",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U2",
+                "L'",
+                "U",
+                "R'",
+                "U'",
+                "r"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Jb-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Jb-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Jb-v1-nc-night-256x256.png",
+          "sig": "LLLFRRBBRBFF",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Jb-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Jb-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Jb-v2-nc-night-256x256.png",
+          "sig": "RRFBFFLLLRBB",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Jb-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Jb-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Jb-v3-nc-night-256x256.png",
+          "sig": "FFBRBBRRFLLL",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Na",
+      "no": 12,
+      "name": "Na-Perm",
+      "prob": "1/72",
+      "descEn": "Reflection of Nb.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Na-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Na-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Na-v0-nc-night-256x256.png",
+          "sig": "BBFLRRLLRBFF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R U R' U (R U R' F' R U R' U' R' F R2 U' R' U') U' R U' R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "U'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 22,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "R U R' U R U2 R' U' R U2 L' U R' U' L U' R U' R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U2",
+                "L'",
+                "U",
+                "R'",
+                "U'",
+                "L",
+                "U'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 19,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 3,
+              "alg": "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 21,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Na-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Na-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Na-v1-nc-night-256x256.png",
+          "sig": "RRLBFFBBFRLL",
+          "algs": [
+            {
+              "no": 4,
+              "alg": "L U' R U2 L' U R' L U' R U2 L' U R'",
+              "moves": [
+                "L",
+                "U'",
+                "R",
+                "U2",
+                "L'",
+                "U",
+                "R'",
+                "L",
+                "U'",
+                "R",
+                "U2",
+                "L'",
+                "U",
+                "R'"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 5,
+              "alg": "R U' L U2 R' U L' R U' L U2 R' U L'",
+              "moves": [
+                "R",
+                "U'",
+                "L",
+                "U2",
+                "R'",
+                "U",
+                "L'",
+                "R",
+                "U'",
+                "L",
+                "U2",
+                "R'",
+                "U",
+                "L'"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 6,
+              "alg": "z U R' D R2 U' R D' U R' D R2 U' R D'",
+              "moves": [
+                "z",
+                "U",
+                "R'",
+                "D",
+                "R2",
+                "U'",
+                "R",
+                "D'",
+                "U",
+                "R'",
+                "D",
+                "R2",
+                "U'",
+                "R",
+                "D'"
+              ],
+              "n": 15,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Nb",
+      "no": 13,
+      "name": "Nb-Perm",
+      "prob": "1/72",
+      "descEn": "Reflection of Na.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Nb-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Nb-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Nb-v0-nc-night-256x256.png",
+          "sig": "FBBRRLRLLFFB",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R' U R U' R' F' U' F R U R' F R' F' R U' R",
+              "moves": [
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'",
+                "U'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "F",
+                "R'",
+                "F'",
+                "R",
+                "U'",
+                "R"
+              ],
+              "n": 17,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "U' L' U R' U2 L U' R L' U R' U2 L U' R",
+              "moves": [
+                "U'",
+                "L'",
+                "U",
+                "R'",
+                "U2",
+                "L",
+                "U'",
+                "R",
+                "L'",
+                "U",
+                "R'",
+                "U2",
+                "L",
+                "U'",
+                "R"
+              ],
+              "n": 15,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "R' U' R U' R' U2 (R U R') U2 L U' R U L' U R' U R",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U2",
+                "L",
+                "U'",
+                "R",
+                "U",
+                "L'",
+                "U",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 19,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 4,
+              "alg": "R' U L' U2 R U' L R' U L' U2 R U' L U",
+              "moves": [
+                "R'",
+                "U",
+                "L'",
+                "U2",
+                "R",
+                "U'",
+                "L",
+                "R'",
+                "U",
+                "L'",
+                "U2",
+                "R",
+                "U'",
+                "L",
+                "U"
+              ],
+              "n": 15,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（补末尾 U）"
+            },
+            {
+              "no": 5,
+              "alg": "U' z D' R U' R2 D R' U D' R U' R2 D R' U",
+              "moves": [
+                "U'",
+                "z",
+                "D'",
+                "R",
+                "U'",
+                "R2",
+                "D",
+                "R'",
+                "U",
+                "D'",
+                "R",
+                "U'",
+                "R2",
+                "D",
+                "R'",
+                "U"
+              ],
+              "n": 16,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补开头 U'）"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Nb-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Nb-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Nb-v1-nc-night-256x256.png",
+          "sig": "LRRFFBFBBLLR",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Ra",
+      "no": 14,
+      "name": "Ra-Perm",
+      "prob": "1/18",
+      "descEn": "Reflection of Rb.<br/><br/>Check out the similarity between the Ra-Perm algorithm R U (R' F' R U2' R' U2 R' F) (R U R U') U' R' and the Gd-Perm algorithm R2' F' (R U R U') (R' F' R U2' R' U2 R' F) F R2.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Ra-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Ra-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ra-v0-nc-night-256x256.png",
+          "sig": "BLRLBLFRBFFR",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R U R' F') (R U'2 R' U2) (R' F R U) (R U'2 R' U')",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "U'2",
+                "R'",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R",
+                "U'2",
+                "R'",
+                "U'"
+              ],
+              "n": 16,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "R U' R' U' R U R D R' U' R D' R' U2 R' U'",
+              "moves": [
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "D",
+                "R'",
+                "U'",
+                "R",
+                "D'",
+                "R'",
+                "U2",
+                "R'",
+                "U'"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "U2",
+                "R'",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "U'"
+              ],
+              "n": 16,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补末尾 U'）"
+            },
+            {
+              "no": 4,
+              "alg": "y' L U2 L' U2 L F' L' U' L U L F L2 U",
+              "moves": [
+                "y'",
+                "L",
+                "U2",
+                "L'",
+                "U2",
+                "L",
+                "F'",
+                "L'",
+                "U'",
+                "L",
+                "U",
+                "L",
+                "F",
+                "L2",
+                "U"
+              ],
+              "n": 15,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补末尾 U）"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Ra-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Ra-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ra-v1-nc-night-256x256.png",
+          "sig": "LBLFFRBLRBRF",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Ra-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Ra-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ra-v2-nc-night-256x256.png",
+          "sig": "RFFBRFLBLRLB",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Ra-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Ra-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ra-v3-nc-night-256x256.png",
+          "sig": "FRBRLBRFFLBL",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Rb",
+      "no": 15,
+      "name": "Rb-Perm",
+      "prob": "1/18",
+      "descEn": "Reflection of Ra.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Rb-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Rb-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Rb-v0-nc-night-256x256.png",
+          "sig": "LRBFLBRBRLFF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(L' U' L F) (L' U2 L U'2) (L F' L' U') (L' U2 L U)",
+              "moves": [
+                "L'",
+                "U'",
+                "L",
+                "F",
+                "L'",
+                "U2",
+                "L",
+                "U'2",
+                "L",
+                "F'",
+                "L'",
+                "U'",
+                "L'",
+                "U2",
+                "L",
+                "U"
+              ],
+              "n": 16,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "z U' R U R U' R' U' L' U R U' L U R2 U R",
+              "moves": [
+                "z",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "L'",
+                "U",
+                "R",
+                "U'",
+                "L",
+                "U",
+                "R2",
+                "U",
+                "R"
+              ],
+              "n": 17,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Rb-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Rb-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Rb-v1-nc-night-256x256.png",
+          "sig": "BLFLFFLRBRBR",
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R' U2 R' D' R U' R' D R U R U' R' U' R U'",
+              "moves": [
+                "R'",
+                "U2",
+                "R'",
+                "D'",
+                "R",
+                "U'",
+                "R'",
+                "D",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U'"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（补末尾 U'）｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Rb-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Rb-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Rb-v2-nc-night-256x256.png",
+          "sig": "FFLRBRBLFBRL",
+          "algs": [
+            {
+              "no": 4,
+              "alg": "R2 F R U R U' R' F' R U2 R' U2 R U",
+              "moves": [
+                "R2",
+                "F",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'",
+                "R",
+                "U2",
+                "R'",
+                "U2",
+                "R",
+                "U"
+              ],
+              "n": 14,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（补末尾 U）｜来源 jperm PLL"
+            },
+            {
+              "no": 5,
+              "alg": "y' R' U2 R U2 R' F R U R' U' R' F' R2 U",
+              "moves": [
+                "y'",
+                "R'",
+                "U2",
+                "R",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F'",
+                "R2",
+                "U"
+              ],
+              "n": 15,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（补末尾 U）｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Rb-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Rb-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Rb-v3-nc-night-256x256.png",
+          "sig": "RBRBRLFFLFLB",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "T",
+      "no": 16,
+      "name": "T-Perm",
+      "prob": "1/18",
+      "descEn": "Check out the similarity between the T-Perm algorithm (R U R' U' R' F R F') (F R U' R' U' R U R' F') and the Y-Perm algorithm (F R U' R' U' R U R' F') (R U R' U' R' F R F').",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-T-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-T-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-T-v0-nc-night-256x256.png",
+          "sig": "BBRLRLFLBFFR",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R U R' U') (R' F R2 U' R' U') (R U R' F')",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "F'"
+              ],
+              "n": 14,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred",
+                "ohpll-preferred"
+              ]
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-T-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-T-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-T-v1-nc-night-256x256.png",
+          "sig": "LRLFFRBBRBLF",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-T-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-T-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-T-v2-nc-night-256x256.png",
+          "sig": "RFFBLFLRLRBB",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-T-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-T-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-T-v3-nc-night-256x256.png",
+          "sig": "FLBRBBRFFLRL",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Ua",
+      "no": 17,
+      "name": "Ua-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse and reflection of Ub. It is a counter-clockwise 3-cycle of edges.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Ua-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Ua-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ua-v0-nc-night-256x256.png",
+          "sig": "BBBLFLRLRFRF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R U' R) (U R) (U R U' R' U' R'2)",
+              "moves": [
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R'2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "M2 U M U2 M' U M2",
+              "moves": [
+                "M2",
+                "U",
+                "M",
+                "U2",
+                "M'",
+                "U",
+                "M2"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "R U' R U R U R U' R' U' R2",
+              "moves": [
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原｜来源 jperm PLL",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 4,
+              "alg": "y2 R2 U' R' U' R U R U R U' R",
+              "moves": [
+                "y2",
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R"
+              ],
+              "n": 12,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Ua-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Ua-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ua-v1-nc-night-256x256.png",
+          "sig": "LFLFRFBBBRLR",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Ua-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Ua-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ua-v2-nc-night-256x256.png",
+          "sig": "FRFRLRLFLBBB",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Ua-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Ua-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ua-v3-nc-night-256x256.png",
+          "sig": "RLRBBBFRFLFL",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Ub",
+      "no": 18,
+      "name": "Ub-Perm",
+      "prob": "1/18",
+      "descEn": "Inverse and reflection of Ua. It is a clockwise 3-cycle of edges.",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Ub-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Ub-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ub-v0-nc-night-256x256.png",
+          "sig": "BBBLRLRFRFLF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "(R2 U) (R U R' U' R' U') (R' U R')",
+              "moves": [
+                "R2",
+                "U",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "U'",
+                "R'",
+                "U",
+                "R'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原｜来源 jperm OH PLL",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "M2 U' M U2 M' U' M2",
+              "moves": [
+                "M2",
+                "U'",
+                "M",
+                "U2",
+                "M'",
+                "U'",
+                "M2"
+              ],
+              "n": 7,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "z U' R U' R' U' R' U' R U R U2",
+              "moves": [
+                "z",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U2"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 4,
+              "alg": "L' U L' U' L' U' L' U L U L2",
+              "moves": [
+                "L'",
+                "U",
+                "L'",
+                "U'",
+                "L'",
+                "U'",
+                "L'",
+                "U",
+                "L",
+                "U",
+                "L2"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 5,
+              "alg": "y2 L2 U L U L' U' L' U' L' U L'",
+              "moves": [
+                "y2",
+                "L2",
+                "U",
+                "L",
+                "U",
+                "L'",
+                "U'",
+                "L'",
+                "U'",
+                "L'",
+                "U",
+                "L'"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 6,
+              "alg": "y2 R' U R' U' R' U' (R' U R U) R2",
+              "moves": [
+                "y2",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R2"
+              ],
+              "n": 12,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Ub-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Ub-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ub-v1-nc-night-256x256.png",
+          "sig": "LRLFLFBBBRFR",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Ub-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Ub-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ub-v2-nc-night-256x256.png",
+          "sig": "FLFRFRLRLBBB",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Ub-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Ub-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ub-v3-nc-night-256x256.png",
+          "sig": "RFRBBBFLFLRL",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "V",
+      "no": 19,
+      "name": "V-Perm",
+      "prob": "1/18",
+      "descEn": "",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-V-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-V-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-V-v0-nc-night-256x256.png",
+          "sig": "FRBRLLRBLFFB",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "R' U R' d' R' F' R2 U' R' U R' F R F",
+              "moves": [
+                "R'",
+                "U",
+                "R'",
+                "d'",
+                "R'",
+                "F'",
+                "R2",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "F",
+                "R",
+                "F"
+              ],
+              "n": 14,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "R' U2 R U2 L U' R' U L' U L U' R U L'",
+              "moves": [
+                "R'",
+                "U2",
+                "R",
+                "U2",
+                "L",
+                "U'",
+                "R'",
+                "U",
+                "L'",
+                "U",
+                "L",
+                "U'",
+                "R",
+                "U",
+                "L'"
+              ],
+              "n": 15,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "R' U R U' x' U R U2 R' U' R U' R' U2 R U R' U'",
+              "moves": [
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "x'",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U'"
+              ],
+              "n": 18,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 4,
+              "alg": "R U2 R' D R U' R U' R U R2 D R' U' R D2",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "D",
+                "R",
+                "U'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R2",
+                "D",
+                "R'",
+                "U'",
+                "R",
+                "D2"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            },
+            {
+              "no": 5,
+              "alg": "R' U R' U' y R' F' R2 U' R' U R' F R F",
+              "moves": [
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "y",
+                "R'",
+                "F'",
+                "R2",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "F",
+                "R",
+                "F"
+              ],
+              "n": 15,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 6,
+              "alg": "R' U R' U' R D' R' D R' U D' R2 U' R2 D R2",
+              "moves": [
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "D'",
+                "R'",
+                "D",
+                "R'",
+                "U",
+                "D'",
+                "R2",
+                "U'",
+                "R2",
+                "D",
+                "R2"
+              ],
+              "n": 16,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 7,
+              "alg": "z D' R2 D R2 U R' D' R U' R U R' D R U' z'",
+              "moves": [
+                "z",
+                "D'",
+                "R2",
+                "D",
+                "R2",
+                "U",
+                "R'",
+                "D'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "D",
+                "R",
+                "U'",
+                "z'"
+              ],
+              "n": 17,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            },
+            {
+              "no": 8,
+              "alg": "x' R' F R F' U R U2 R' U' R U' R' U2 R U R' U'",
+              "moves": [
+                "x'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U'"
+              ],
+              "n": 18,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-V-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-V-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-V-v1-nc-night-256x256.png",
+          "sig": "LLRFFBFRBLBR",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-V-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-V-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-V-v2-nc-night-256x256.png",
+          "sig": "BFFLBRLLRBRF",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-V-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-V-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-V-v3-nc-night-256x256.png",
+          "sig": "RBLBRFBFFRLL",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Y",
+      "no": 20,
+      "name": "Y-Perm",
+      "prob": "1/18",
+      "descEn": "Check out the similarity between the Y-Perm algorithm (F R U' R' U' R U R' F') (R U R' U' R' F R F') and the T-Perm algorithm (R U R' U' R' F R F') (F R U' R' U' R U R' F').",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Y-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Y-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Y-v0-nc-night-256x256.png",
+          "sig": "FLBRBLRRLFFB",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "F (R U' R' U' R U R') F' (R U R' U') (R' F R F')",
+              "moves": [
+                "F",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 17,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原｜来源 jperm OH PLL",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "R2 U' R' U R U' x' U' z' U' R U' R' U' z U R",
+              "moves": [
+                "R2",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "x'",
+                "U'",
+                "z'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "z",
+                "U",
+                "R"
+              ],
+              "n": 17,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "R2 U' R' U R U' x' U' z' U' R U' R' U' r B",
+              "moves": [
+                "R2",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "x'",
+                "U'",
+                "z'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "r",
+                "B"
+              ],
+              "n": 16,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 4,
+              "alg": "F R' F R2 U' R' U' R U R' F' R U R' U' F'",
+              "moves": [
+                "F",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 16,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Y-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Y-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Y-v1-nc-night-256x256.png",
+          "sig": "LBRFFBFLBLRR",
+          "algs": []
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Y-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Y-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Y-v2-nc-night-256x256.png",
+          "sig": "BFFLRRLBRBLF",
+          "algs": []
+        },
+        {
+          "view": 3,
+          "frame": "y'",
+          "img": "img/pll/pll-Y-v3-256x256.png",
+          "img-nc-day": "img/pll/pll-Y-v3-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Y-v3-nc-night-256x256.png",
+          "sig": "RRLBLFBFFRBL",
+          "algs": []
+        }
+      ]
+    },
+    {
+      "id": "Z",
+      "no": 21,
+      "name": "Z-Perm",
+      "prob": "1/36",
+      "descEn": "",
+      "views": [
+        {
+          "view": 0,
+          "frame": "",
+          "img": "img/pll/pll-Z-v0-256x256.png",
+          "img-nc-day": "img/pll/pll-Z-v0-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Z-v0-nc-night-256x256.png",
+          "sig": "BLBLBLRFRFRF",
+          "algs": [
+            {
+              "no": 1,
+              "alg": "U (R' U' R U') (R U R U') (R' U R U) (R2 U' R' U)",
+              "moves": [
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R2",
+                "U'",
+                "R'",
+                "U"
+              ],
+              "n": 17,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "M' U' M2 U' M2 U' M' U'2 M2 U",
+              "moves": [
+                "M'",
+                "U'",
+                "M2",
+                "U'",
+                "M2",
+                "U'",
+                "M'",
+                "U'2",
+                "M2",
+                "U"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": []
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Z-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Z-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Z-v1-nc-night-256x256.png",
+          "sig": "LBLFRFBLBRFR",
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R' U' R U' R U R U' R' U R U R2 U' R' U",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R2",
+                "U'",
+                "R'",
+                "U"
+              ],
+              "n": 16,
+              "uses": [
+                "OH"
+              ],
+              "verified": "pll_db.py: sig→alg 复原",
+              "tags": [
+                "ohpll-preferred"
+              ]
+            },
+            {
+              "no": 4,
+              "alg": "y M' U' M2 U' M2 U' M' U2 M2",
+              "moves": [
+                "y",
+                "M'",
+                "U'",
+                "M2",
+                "U'",
+                "M2",
+                "U'",
+                "M'",
+                "U2",
+                "M2"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL"
+            },
+            {
+              "no": 5,
+              "alg": "M' U M2 U M2 U M' U2 M2 U'",
+              "moves": [
+                "M'",
+                "U",
+                "M2",
+                "U",
+                "M2",
+                "U",
+                "M'",
+                "U2",
+                "M2",
+                "U'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补末尾 U'）"
+            },
+            {
+              "no": 6,
+              "alg": "y M2 U M2 U M' U2 M2 U2 M' U",
+              "moves": [
+                "y",
+                "M2",
+                "U",
+                "M2",
+                "U",
+                "M'",
+                "U2",
+                "M2",
+                "U2",
+                "M'",
+                "U"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补末尾 U）"
+            },
+            {
+              "no": 7,
+              "alg": "M2 U' M2 U' M' U2 M2 U2 M' U",
+              "moves": [
+                "M2",
+                "U'",
+                "M2",
+                "U'",
+                "M'",
+                "U2",
+                "M2",
+                "U2",
+                "M'",
+                "U"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补末尾 U）"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

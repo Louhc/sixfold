@@ -40,10 +40,11 @@ python3 tools/verify.py --find T  pll     # PLL 用字母编号（Aa..Z）
    PLL 是「12 条侧面色带」。
 3. 比对。**只有分毫不差才算通过**，差一步 AUF 也算对不上。
 
-页面上**如果有备选公式**，也一并校验：每条都带着"先转几下的 AUF 标注"，
-校验时会先做那个 AUF、再做公式，确认能解开图上的局面。
-（现在 OLL / PLL 的数据里只剩主公式了 —— 那段备选写法连同页面上展开它的交互都去掉了，
-这条校验留着：以后再加备选，它照样能把每条都验一遍。）
+页面上**如果有备选公式**（`oll.html` 还保留这种「主式 + 备选行」的排法），也一并校验：
+每条都带着"先转几下的 AUF 标注"，校验时会先做那个 AUF、再做公式，确认能解开图上的局面。
+
+PLL 现在不排单独的备选表了：写法（含单手）都收在 `data/pll.json` 里，
+页面上用行尾的**展开键**换，由 `tools/pll_db.py --check` 逐条核（见下）。
 
 ## 原理（F2L：不用图，只看公式的结构）
 
@@ -112,9 +113,94 @@ FR 槽插入公式。这种错要靠镜像判据（a/b 不再互为镜像）来�
 | | |
 |---|---|
 | `cubesim.py` | 三阶模拟器：贴纸「坐标 + 法向」模型，转动时旋转受影响小块 |
-| `signature.py` | 从导出的图里按比例取样，读出签名 |
-| `verify.py` | 主校验脚本（F2L 结构校验 + OLL/PLL 读图比对 + `--find` 搜索） |
+| `signature.py` | 从导出的图里按比例取样，读出签名（OLL 是顶面 9 格 + 侧边 12 划线，PLL 是 12 条色带） |
+| `verify.py` | 主校验脚本（F2L 结构校验 + `--find` 搜索；OLL/PLL 交给各自的库校验） |
+| `pll_db.py` | PLL 公式库（`data/pll.json`）的构建 / 校验 / 合并 |
+| `oll_db.py` | OLL 公式库（`data/oll.json`）的构建（按 `U^k` 展开 / 去重画面）/ 校验 |
+| `oll2_db.py` / `pbl2_db.py` | 二阶 OLL / PBL 库（`data/oll2.json` / `data/pbl2.json`）的 bootstrap 与校验 |
+| `emit_pages.py` | 把四个库发布成 `js/plldata.js` + `js/olldata.js` + `js/oll2data.js` + `js/pbl2data.js` + `js/alglist.js`（生成物，勿手改） |
+| `formula_images.py` | 出 `img/pll/…` 的角度图（彩色 + 无色昼夜两版）；也提供 OLL 复用的 `paint_net` |
+| `pll_geometry.js` | 角度图的箭头/色带置换（改渲染前先读它） |
+| `oll_geometry.js` | OLL 俯视图几何：`sig` → 朝向数组 → `cube.js` 的 `buildOll` |
+| `oll_images.py` | 出 `img/oll/…` 的图（每个去重画面昼夜两版） |
+| `oll2_geometry.js` / `oll2_images.py` | 二阶 OLL：`Cube.buildOll2` 的四格俯视图 + 昼夜两版 |
+| `pbl2_geometry.js` / `pbl2_images.py` | 二阶 PBL：`Cube.buildPbl2` 的两层网格 + 双头箭头（256×197） |
 | `data/oll.js` `data/pll.js` | 第三方公式库，取自 [Logiqx/cubing-algs](https://github.com/Logiqx/cubing-algs)，仅用于「找不到朝向吻合的写法时」搜索替代 |
+
+## PLL 公式库（data/pll.json）
+
+PLL 的公式、配图、签名都在 `data/pll.json`（`cases → views → algs`），页面不再各存一份：
+
+```bash
+python3 tools/pll_db.py --check                 # 全量校验：图签名、角度序列、公式与角度是不是同一个局面
+python3 tools/pll_db.py --merge                 # 同一角度下「同一条公式」合并（忽略括号、R'2 ≡ R2）
+python3 tools/pll_db.py --build                 # 从页面 / 第三方库重建（一次性 bootstrap；页面字面量没了就跑不动）
+python3 tools/emit_pages.py                     # 改完库必须重跑：plldata.js + olldata.js + alglist.js
+python3 tools/formula_images.py [--only <编号>]  # 出图（PIL 4× 超采样 → LANCZOS → FASTOCTREE 64 色调色板）
+```
+
+判据（`--check`）：①公式是纯顶层公式；②签名能复原**或**箭头模式与本角度逐项一致
+（等价判据只比箭头，配色只看相对位置）；③每个角度的彩色图签名 == 库里的 `sig`；
+④角度序列 == 按箭头去重的结果（H=1、E/Na/Nb/Z=2、其余 4）。
+`img/pll/pll-<编号>-v<角度>[-nc|-nc-night]-256x256.png`，共 73 个角度 × 3 版 = 219 张。
+
+### 单手（OH）：从 jperm 导入
+
+```bash
+python3 tools/import_ohpll.py            # 只看计划
+python3 tools/import_ohpll.py --apply    # 落盘（之后重跑 emit_pages.py）
+```
+
+源数据是抓下来的 `tools/data/jperm-oh-pll.json`（`https://jperm.net/algs/oh/pll` 的 `/lib/ohpll.js`，
+21 情况 / 46 条）。规则：先按 `alg_key` 指纹**查重**（命中就把已有写法补上 `OH`，不新增重复条目）；
+不认识的新写法按 `pll_db.check` 的判据核一遍 —— **jperm 有 12 条省了末尾的 AUF**
+（他们的 Jb 就比库里那条少一个 `U'`），所以会按 无 / `U` / `U'` / `U2` 后缀试，
+取第一个「照图摆好直接能用」的；补完 AUF 后常常正好和库里已有的写法对上，于是合并。
+最后一条规则：**带 `M` 层的一律只算双手**（单手做 M 不现实）—— 脚本会把这类写法的 `OH` 摘掉、补上 `2H`
+（`H` 的 `M2 U' M2 U2 M2 U' M2`、`Z` 的 `y M' U' M2 U' M2 U' M' U2 M2`）。
+jperm 的 `H` 那条 `x' R r U2 R' r' u U' R2 U D` 没进来（`u U'` = 中层转，不是纯 PLL）。
+
+## OLL 公式库（data/oll.json）
+
+OLL 的公式、配图、签名在 `data/oll.json`（同样是 `cases → views → algs`）：每个 case 按 `U^k`
+转出来的画面**按签名去重**（对称的情况少于 4 个，全库 215 个画面），写法都挂在基准画面 `view 0` 上；
+另外带 `groups` 分组和每个画面的 `img-day` / `img-night`：
+
+```bash
+python3 tools/oll_db.py --check                 # 全量校验：画面序列、每个画面的 day/night 图签名、公式、四个分组
+python3 tools/oll_db.py --build                 # 按 U^k 展开 / 去重画面（公式从现有库取，可反复跑）
+python3 tools/oll_images.py [--only <编号>]     # 出 img/oll/oll-<编号>-v<角度>-day|night-256x256.png
+```
+
+出图走的是**编辑器的 OLL 俯视图**：`tools/oll_geometry.js` 把库里的 `sig`
+（顶面 9 位 + 侧边 12 位）反推成朝向数组 → `cube.js` 的 `buildOll` 出几何 →
+`formula_images.py` 的 `paint_net` 上色。签名采样点和 `buildOll` 的候选划线中心**分毫不差**
+（`PAD=0.4342`），所以 sig ↔ 模型是唯一确定的，出完再用 `signature.py` 读回来对 `sig` 自检。
+两版只差顶面色：day = 紫 `#7E6FC7`、night = 黄 `HEX.yellow`，描边都用 dark 那套浅色。
+判据（`--check`）：①画面序列 == 基准局面按 `U^k` 去重算出来的；②每个画面的 day/night 两版图都存在、签名 == `sig`；
+③每条写法是合法 OLL、签名正好是基准画面的（AUF 0）、且只挂在基准画面上；
+④四个分组（十字 7 / 单点 8 / 一字 15 / 拐角 27）覆盖 1..57。全库 57 情况 / 215 画面 / 430 张图。
+
+## 二阶两个库（data/oll2.json / data/pbl2.json）
+
+二阶 OLL 存的是四个角的朝向（`sig` = 4 个 `u/b/f/l/r`），按 `U^k` 去重后有 26 个画面（h 只有 2 个），
+每个画面昼夜两版；**写法挂在自己所属的画面上**（antisune 的 `R' U' R U' R' U2 R` 挂 v3、sune 的 `L U L' U L U2 L'` 挂 v2），页面上换过去时图也切到那个画面；二阶 PBL 没有颜色签名，存两层各 4 个角的置换（`state`），
+**是固定视角：`cases → algs`，没有 `views` 这层**，一个情况就一张图。
+两页的行、图、公式都由库生成，页面里只留渲染脚本：
+
+```bash
+python3 tools/oll2_db.py --check              # 7 个情况 / 26 画面 / 9 条公式：画面序列 + 图 ↔ 公式 ↔ sig
+                                              # 写法编号（algs[].no）在 case 内唯一、跨画面连续 1..n
+python3 tools/oll2_db.py --build              # 按 U^k 展开 / 去重画面
+python3 tools/pbl2_db.py --check              # 5 个情况（固定视角，没有 views）：公式的置换 ↔ state ↔ 编号（Adj / Diag）
+python3 tools/oll2_images.py [--only <情况>]  # 出 img/oll2/<情况>-v<角度>-day|night-256x256.png
+python3 tools/pbl2_images.py [--only <情况>]  # 出 img/pbl2/<情况>_day|night-256x197.png（PBL 不做旋转图）
+```
+
+两个 `--build` 现在都从**现有库**取公式（页面已经没有静态表格了），可以反复跑；
+二阶 OLL 的 `--build` 会按 `U^k` 重排画面，二阶 PBL 的只重建那一个基准画面。
+两页的行尾都有**展开键**（和 PLL / OLL 同一套）：候选就是这个情况的所有写法 ——
+现在库里每个情况只有一条，所以键是灰的；往库的 `algs` 里加写法后重跑 `emit_pages.py` 就自动亮。
 
 ## 教程步骤图（tutorial_geometry.js + tutorial_paint.py + tutorial_images.py）
 
@@ -131,7 +217,7 @@ python3 tools/tutorial_images.py          # 出全部图（可跟图名只出某
    `CubeSim.apply(st,'x2')` 整体转过来）；
 2. `tutorial_geometry.js`（node）—— 局面 → U/F/R 三面状态 → cube.js 的多边形几何（JSON）。
    面映射用的是给计算器拍照时和 DOM 逐格对拍过的那份变换（U 上、F 左前、R 右前）；
-3. `tutorial_paint.py` —— PIL 4 倍超采样画 256px、256 色调色板 PNG。
+3. `tutorial_paint.py` —— PIL 4 倍超采样画 256px、256 色调色板 PNG（教程图没跟着降到 64 色）。
 
 > 为什么不直接让 cube.js 出 SVG 再栅格化：环境里 ImageMagick 的内置 SVG 渲染器
 > 画这种图会糊成一团，所以改成「出几何、自己画」。

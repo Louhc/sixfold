@@ -10,10 +10,14 @@
   3. 从同名图里读出签名（顶面 9 格 + 侧边 12 条划线／12 条色带）
   4. 比对 —— 只有分毫不差才算「照图摆好就能用」
 
+有了公式库之后，OLL / PLL 的「公式 ↔ 图」交给各自的库（tools/oll_db.py /
+tools/pll_db.py），这里负责其余部分：F2L 的结构校验、教程页、单手 PLL、
+二阶 OLL / PBL，以及 `--find`（去第三方库里搜能用的写法）。
+
 注意：差一步 AUF 也算**对不上**。那意味着照图摆好直接做会做错。
 
 用法:
-    python3 tools/verify.py                 # 校验仓库里的 oll.html / pll.html
+    python3 tools/verify.py                 # 跑全部
     python3 tools/verify.py --find 16 oll    # OLL 16 有没有别的写法
     python3 tools/verify.py --find T  pll    # PLL T（编号用字母）
 """
@@ -112,64 +116,6 @@ def page_data(page):
                 if line.strip():
                     out.append((str(r[0]), line.strip(), alts))
     return out
-
-
-def check(kind, page, imgdir, libfile):
-    print('=== %s ===' % os.path.basename(page))
-    rows = page_data(page)
-    if not rows:
-        print('  读不到数据')
-        return 1
-    bad = 0
-    nalt = 0
-    for n, alg, alts in rows:
-        # OLL 以「夜晚（黄顶）」那版为准，白天那版单独再核一次签名
-        tone = 'night' if kind == 'oll' else ''
-        img = S.read(kind, os.path.join(imgdir, img_name(kind, n, tone)))
-        if kind == 'oll':
-            day = os.path.join(imgdir, img_name(kind, n, 'day'))
-            if not os.path.exists(day) or S.read('oll', day) != img:
-                print('  %-4s 白天那版（紫顶）和夜晚那版签名不一致' % n)
-                bad += 1
-        if not alg:
-            print('  %-4s 留空（未填公式）' % n)
-            bad += 1
-            continue
-        ss = sigs(alg, kind)
-        if ss is None:
-            print('  %-4s 公式算不出合法局面 ← 公式有问题' % n)
-            bad += 1
-            continue
-        if ss[0] == img:
-            # 主式对了，再逐条验备选：先做 m 步 AUF，再做公式，应当能解开
-            # （页面里每条备选配的那张旋转图，就是"先转 m 步"的可视化）
-            C = sim.case_of(clean(alg), kind)
-            for a, m in alts:
-                nalt += 1
-                if not isinstance(m, int) or not (0 <= m <= 3):
-                    print('  %-4s 备选 AUF 步数不合法: %r' % (n, m)); bad += 1; continue
-                st = C
-                for _ in range(m):
-                    st = sim.turn(st, 'U', 1)
-                try:
-                    good = solved_rot(sim.apply(st, clean(a)))
-                except Exception:
-                    good = False
-                if not good:
-                    print('  %-4s 备选对不上（U^%d 后）: %s' % (n, m, a))
-                    bad += 1
-            continue
-        k = ss.index(img) if img in ss else None
-        print('  %-4s %s' % (n, ('差 %d 步 AUF' % k) if k is not None else '对不上'))
-        print('       图   %s' % (img if kind == 'pll'
-                                 else '%s %s %s  %s' % (img[0][:3], img[0][3:6], img[0][6:9], img[1])))
-        g = ss[0]
-        print('       公式 %s' % (g if kind == 'pll'
-                                 else '%s %s %s  %s' % (g[0][:3], g[0][3:6], g[0][6:9], g[1])))
-        bad += 1
-    print('  %d 条主式 + %d 条备选，%s'
-          % (len(rows), nalt, '全部通过 ✓' if bad == 0 else '%d 条有问题' % bad))
-    return bad
 
 
 def find(kind, ident, imgdir, libfile):
@@ -512,19 +458,22 @@ def check_tutorial(page, tmpdir):
     bad += len(broken)
 
     # 2) 步骤图
-    # tutorial/ 里两种都有：编辑器导出的立体图 256x258、顶层俯视图 256x256
-    dirs = {'f2l': (256, 258), 'oll': (256, 256), 'pll': (256, 256),
-            'tutorial': (256, 258), 'tutorial-top': (256, 256)}
-    refs = sorted(set(re.findall(r'src="((?:f2l|oll|pll|tutorial)/[\w.-]+\.png)"', html)))
+    # 公式图都在 img/ 下：f2l 立体图 256x258、oll / pll 俯视图 256x256、
+    # oll2 256x256、pbl2 256x197；tutorial/ 里两种都有（立体图 256x258、形状图 256x256）
+    size_of = {'img/f2l/': (256, 258), 'img/oll/': (256, 256), 'img/oll2/': (256, 256),
+               'img/pbl2/': (256, 197), 'img/pll/': (256, 256), 'tutorial/': (256, 258)}
+    refs = sorted(set(re.findall(
+        r'src="((?:img/(?:f2l|oll|oll2|pbl2|pll)|tutorial)/[\w.-]+\.png)"', html)))
     wrong = []
     for r in refs:
         p = os.path.join(ROOT, r)
         if not os.path.exists(p):
             wrong.append(r + ' 不存在')
             continue
+        d = next((k for k in size_of if r.startswith(k)), None)
         with Image.open(p) as im:
-            want = dirs[r.split('/')[0]]
-            if (im.size != want and not (r.startswith('tutorial/') and im.size == (256, 256))):
+            want = size_of.get(d)
+            if want is None or (im.size != want and not (d == 'tutorial/' and im.size == (256, 256))):
                 wrong.append('%s %s≠%s' % (r, im.size, want))
     print('  %d 张图引用，%s' % (len(refs), '全部存在且尺寸对 ✓' if not wrong else '✗ ' + '; '.join(wrong)))
     bad += len(wrong)
@@ -539,7 +488,7 @@ def check_tutorial(page, tmpdir):
             dyn.append('tutorial/shape-%s-%s-256x256.png' % (k, tone))
     for n in nol:
         for tone in ('day', 'night'):
-            dyn.append('oll/oll-%s-%s-256x256.png' % (n, tone))
+            dyn.append('img/oll/oll-%s-v0-%s-256x256.png' % (n, tone))
     for r in dyn:
         p = os.path.join(ROOT, r)
         if not os.path.exists(p):
@@ -590,310 +539,42 @@ def check_tutorial(page, tmpdir):
     return bad
 
 
-# ---------- 二阶 OLL：读图 ----------
-# 图是 2×2 的俯视图：四个菱形小格拼成一个大菱形（前面在下边）。每格里「有彩色的
-# 那一块」就是那个角的 U 贴纸 —— 白天是紫 #7E6FC7、夜晚是黄 #FFE600：
-#   · 整块填满  = 这个角已经朝上（u）
-#   · 靠某一边的一小条 = U 贴纸贴在那一侧的面：上 b / 下 f / 左 l / 右 r
-# 判据只看「有没有彩色」（通道极差），所以昼夜两版读出来一样；
-# 四格的顺序是 左上 / 右上 / 左下 / 右下。
-_OLL2_TILE = [(0, 0), (1, 0), (0, 1), (1, 1)]
-_OLL2_DIR = {0: 'u', 1: '?', 2: '?', 3: 'f', 4: 'l', 5: 'r'}
-# 每个角「允许」的朝向：朝上，或者它自己那两张侧面（用来核对图/模型的读法没错位）
-_OLL2_ALLOW = [('u', 'b', 'l'), ('u', 'b', 'r'), ('u', 'f', 'l'), ('u', 'f', 'r')]
+def check_ohpll(page, db_path):
+    """单手 PLL 页：每条单手写法和**本页那一行的图**必须是同一个局面。
 
-
-def _oll2_img_sig(path):
-    from PIL import Image
-
-    im = Image.open(path).convert('RGBA')
-    w, h = im.size
-    px = im.load()
-
-    def opaque(x, y):
-        return px[x, y][3] > 60
-
-    def colorful(x, y):
-        r, g, b, a = px[x, y]
-        return a > 60 and max(r, g, b) - min(r, g, b) > 60
-
-    xs = [x for x in range(w) if any(opaque(x, y) for y in range(0, h, 2))]
-    ys = [y for y in range(h) if any(opaque(x, y) for x in range(0, w, 2))]
-    if not xs or not ys:
-        return None
-    x0, x1, y0, y1 = xs[0], xs[-1], ys[0], ys[-1]
-    mx, my = (x0 + x1) / 2.0, (y0 + y1) / 2.0
-    boxes = [(x0, y0, mx, my), (mx, y0, x1, my), (x0, my, mx, y1), (mx, my, x1, y1)]
-    out = []
-    for (bx0, by0, bx1, by1) in boxes:
-        n = sx = sy = 0
-        for y in range(int(by0), int(by1) + 1):
-            for x in range(int(bx0), int(bx1) + 1):
-                if colorful(x, y):
-                    n += 1
-                    sx += x
-                    sy += y
-        if not n:
-            return None
-        cx = (sx / n - bx0) / max(1.0, bx1 - bx0)
-        cy = (sy / n - by0) / max(1.0, by1 - by0)
-        if n > 3000:                       # 整块填满 = 朝上
-            out.append('u')
-        elif cy < 0.25:
-            out.append('b')
-        elif cy > 0.75:
-            out.append('f')
-        elif cx < 0.25:
-            out.append('l')
-        elif cx > 0.75:
-            out.append('r')
-        else:
-            out.append('?')
-    return out
-
-
-def _oll2_model_sig(alg):
-    """把公式「倒着做一遍」得到它要解的局面，再读四个角各自的 U 贴纸朝哪边。
-
-    朝向用的就是模型里的法向：朝上 u / 指后 b（俯视图的上边）/ 指前 f / 指左 l / 指右 r。
-    四格的顺序和读图那边一致（左上 = 左后那个角，前面画在下边）。
+    页面现在由 data/pll.json 驱动（行、图都来自库），所以这里也读库：
+    取每个情况的「单手能用」写法（有 OH 用 OH，没有就回退到 2H —— 和页面同一套规则），
+    拿那条写法所在角度的 sig 造出局面、执行公式，按库的判据核
+    （签名能复原**或**箭头模式与本角度一致，二者之一即通过）。
     """
-    st = sim.apply_inverse(sim.solved(), alg)
-    out = []
-    for (x, z) in _OLL2_MODEL_TILE:
-        p = (x, 1, z)
-        face = None
-        for f in 'UDFBRL':
-            if st.get((p, sim.FACES[f])) == 'U':
-                face = f
-                break
-        if face is None:
-            return None
-        out.append({'U': 'u', 'B': 'b', 'F': 'f', 'L': 'l', 'R': 'r'}[face])
-    return out
-
-
-# 俯视图里前面画在下边：左后 / 右后 / 左前 / 右前
-_OLL2_MODEL_TILE = [(-1, -1), (1, -1), (-1, 1), (1, 1)]
-# 视角顺时针转 90°：块跟着转，朝后的贴纸变成朝右
-_OLL2_CW = {'u': 'u', 'b': 'r', 'r': 'f', 'f': 'l', 'l': 'b'}
-
-
-def _oll2_rot(sig):
-    return [_OLL2_CW[d] for d in [sig[2], sig[0], sig[3], sig[1]]]
-
-
-def check_oll2(page):
-    """二阶 OLL 页：7 条公式和 7 张图必须指的是同一个情况。
-
-    判据和别的公式页一样，是**算出来**的：把公式倒着做一遍得到它要解的局面，
-    读四个角的 U 贴纸朝哪边；图上也读同样四格。两边只允许差一个 AUF（整体转
-    0/90/180/270 度）—— 差的要是别的，就说明「照图摆好做这条公式」是错的。
-    """
-    from PIL import Image
-
-    html = open(page, encoding='utf-8').read()
-    bad = 0
-
-    # 1) 表里的「图 + 公式」（编号是图左上角的角标，不进表格文本）
-    rows = re.findall(r'<img data-oll2="([\w-]+)"[\s\S]{0,400}?<code>([^<]+)</code>', html)
-    ids = re.findall(r'<img data-oll2="([\w-]+)"', html)   # 打印规则里也有一份
-    badges = re.findall(r'<span class="no">([^<]+)</span>', html)
-    if len(rows) != 7 or len(ids) != 7 or len(badges) != 7:
-        print('  ✗ 表里应有 7 行（图 + 公式 + 角标），实际 %d 行 / %d 张图 / %d 个角标'
-              % (len(rows), len(ids), len(badges)))
-        return bad + 1
-    print('  表里 %d 行：%s' % (len(rows), ' '.join(c for c, _ in rows)))
-    print('  编号角标：%s' % ' '.join(badges))
-
-    # 2) 每个情况：昼夜两版图都在、尺寸 256x256，而且图上的朝向和公式算出来的一致
-    want_oriented = {'h': 0, 'pi': 0, 'antisune': 1, 'sune': 1, 'l': 2, 't': 2, 'u': 2}
-    sigs = {}
-    for cid, alg in rows:
-        day = os.path.join(ROOT, '2x2oll', '%s_day-256x256.png' % cid)
-        night = os.path.join(ROOT, '2x2oll', '%s_night-256x256.png' % cid)
-        miss = [os.path.basename(x) for x in (day, night) if not os.path.exists(x)]
-        if miss:
-            print('  ✗ %-9s 缺图：%s' % (cid, '、'.join(miss)))
-            bad += 1
-            continue
-        with Image.open(day) as im:
-            if im.size != (256, 256):
-                print('  ✗ %-9s 白天那版不是 256x256（%s）' % (cid, im.size))
-                bad += 1
-                continue
-        try:
-            sim.parse(alg)
-        except Exception as e:                     # noqa: BLE001
-            print('  ✗ %-9s 公式解析失败：%s' % (cid, e))
-            bad += 1
-            continue
-
-        got_img = _oll2_img_sig(day)
-        got_mod = _oll2_model_sig(alg)
-        if got_img is None or got_mod is None:
-            print('  ✗ %-9s 图或局面读不出来（图 %s / 模型 %s）' % (cid, got_img, got_mod))
-            bad += 1
-            continue
-        sigs[cid] = got_mod
-
-        # 每个角只能是「朝上」或者它自己那两张侧面 —— 读错位置的话这条会先炸
-        wrong_faces = [i for i in range(4)
-                       if got_img[i] not in _OLL2_ALLOW[i] or got_mod[i] not in _OLL2_ALLOW[i]]
-        # 图上和算出来的，只允许差一个整体转（AUF）
-        rots = [got_mod]
-        for _ in range(3):
-            rots.append(_oll2_rot(rots[-1]))
-        auf = rots.index(got_img) if got_img in rots else -1
-        n_up = got_mod.count('u')
-        okrow = (not wrong_faces) and auf >= 0 and n_up == want_oriented.get(cid, n_up)
-        print('  %-9s %-28s 公式 %s  图 %s  AUF %s  %s' %
-              (cid, alg, ''.join(got_mod), ''.join(got_img),
-               ('%d×90°' % auf) if auf >= 0 else '对不上',
-               '✓' if okrow else '✗' +
-               ('，贴纸落在了不该在的面上：%s' % wrong_faces if wrong_faces else '') +
-               ('，朝上的角应有 %d 个' % want_oriented[cid] if n_up != want_oriented.get(cid) else '')))
-        if not okrow:
-            bad += 1
-
-    # 3) 7 个情况两两不同（差一个 AUF 也算同一个）—— 同一个情况抄了两遍会在这儿露出来
-    canon = {}
-    for cid, sig in sigs.items():
-        rots = [sig]
-        for _ in range(3):
-            rots.append(_oll2_rot(rots[-1]))
-        canon[cid] = min(''.join(r) for r in rots)
-    dup = len(set(canon.values())) != len(canon)
-    print('  7 个情况的朝向（按 AUF 归一）：%s %s'
-          % (' '.join('%s=%s' % (k, v) for k, v in sorted(canon.items())),
-             '✗ 有重复' if dup else '✓'))
-    if dup:
-        bad += 1
-
-    # 4) 图：7 种 × 昼夜两版都在（白天那版上面逐张核过，这里只数夜晚那版）
-    missing_night = [cid for cid, _ in rows
-                     if not os.path.exists(os.path.join(ROOT, '2x2oll', '%s_night-256x256.png' % cid))]
-    print('  图：7 种 × 昼夜两版 %s' % ('都在 ✓' if not missing_night else '✗ ' + '、'.join(missing_night)))
-    bad += len(missing_night)
-    return bad
-
-
-def check_pbl2(page):
-    """二阶 PBL 页：公式能解析 + 每条公式的「换法」和它标的名称对得上 + 昼夜两版图都在。
-
-    图上画的是箭头，读图反推换法要另写一套识别（还得容忍画法），所以换个判据：
-    **把公式作用在复原的魔方上，直接读上下两层角块的置换**。
-    三阶和二阶的角块行为完全一样，所以拿三阶模拟器算就行（这几条公式里没有 M/S/E）。
-
-    情况那格是短编号：a = 换相邻两个角（Adj）、d = 换对角两个角（Diag）；
-    两个字母是「上层 / 下层」，只写一个（a / d）表示另一层已经排好。
-    图上怎么摆是画的时候定的（可能差一个 AUF），
-    所以只核对**两层的换法组合**和**角块有没有被翻**，不核对谁上谁下。
-    """
-    import urllib.parse
-
-    html = open(page, encoding='utf-8').read()
-    bad = 0
-
-    # 1) 公式：页面里送进计算器的那些链接（都该带 @2: —— 二阶公式要在二阶模式里播）
-    links = [urllib.parse.unquote(m.group(1))
-             for m in re.finditer(r'href="calc\.html#([^"]+)"', html)]
-    noflag = [x for x in links if not x.startswith('@2:')]
-    print('  跳计算器的链接：%d 条，带 @2: 的 %d 条 %s'
-          % (len(links), len(links) - len(noflag), '✓' if not noflag else '✗ ' + '; '.join(noflag)))
-    bad += len(noflag)
-    algs = [_PREFIX.sub('', x) for x in links]
-    broken = []
-    for a in sorted(set(algs)):
-        try:
-            sim.parse(a)
-        except Exception as e:                       # noqa: BLE001
-            broken.append('%s (%s)' % (a, e))
-    print('  %d 条公式（%d 个不同），解析失败 %d 条 %s'
-          % (len(algs), len(set(algs)), len(broken), '✓' if not broken else '✗ ' + '; '.join(broken)))
-    bad += len(broken)
-
-    # 2) 图：data-pbl2 的图是脚本按主题拼的，昼夜两版都要在（大小 256x197）
-    ids = sorted(set(re.findall(r'data-pbl2="([\w-]+)"', html)))
-    missing = []
-    for i in ids:
-        for tone in ('day', 'night'):
-            r = '2x2pbl/%s_%s-256x197.png' % (i, tone)
-            if not os.path.exists(os.path.join(ROOT, r)):
-                missing.append(r + ' 不存在')
-    print('  图：%d 种 × 昼夜两版 %s' % (len(ids), '都在 ✓' if not missing else '✗ ' + '; '.join(missing)))
-    bad += len(missing)
-
-    # 3) 语义：公式的换法要和名称对得上
-    # 编号是图左上角的角标（dd / ad / aa / a / d），所以按「图 + 公式」解析，
-    # 角标那一份也数一遍：两者必须一一对应，别漏画或画错
-    rows = re.findall(r'<img data-pbl2="([\w-]+)"[\s\S]{0,400}?<code>([^<]+)</code>', html)
-    badges = re.findall(r'<span class="no">([^<]+)</span>', html)
-    if len(rows) != 5 or badges != [c for c, _ in rows]:
-        print('  ✗ 表里应有 5 行（图 + 公式 + 角标），实际 %d 行，角标 %s'
-              % (len(rows), ' '.join(badges) or '（没有）'))
-        return bad + 1
-    print('  编号角标：%s' % ' '.join(badges))
-
-    solved = sim.solved()
-    faces = [sim.FACES[f] for f in 'UDFBRL']
-
-    def stickers(st, p):
-        return ''.join(sorted(st[(p, n)] for n in faces if (p, n) in st))
-
-    # 复原态里每个角位上的三张贴纸 -> 「这块是谁」
-    home = {}
-    for y in (1, -1):
-        for x in (1, -1):
-            for z in (1, -1):
-                home[stickers(solved, (x, y, z))] = (x, y, z)
-
-    # 情况那一格写的是短编号：a = 相邻两个角换、d = 对角两个角换。
-    # 两个字母就是「上层 / 下层」，只写一个 = 另一层已经排好了。
-    LETTER = {'a': 'adjacent', 'd': 'diagonal'}
-    checks = 0
-    for name, alg in rows:
-        label = name.strip().lower()
-        expect = [LETTER[c] for c in label if c in LETTER]
-        if not expect or len(expect) > 2 or len(label) != len(expect):
-            print('  ✗ 情况那格认不出来：%r（只认 a / d，最多两个字母）' % name)
-            bad += 1
-            continue
-        if len(expect) == 1:                     # 只写一个 = 有一面已经排好
-            expect.append('solved')
-        expect = sorted(expect)
-        st = sim.apply(sim.solved(), alg)
-        got, twisted = {}, []
-        for y in (1, -1):
-            key = 'U' if y == 1 else 'D'
-            ref = [(x, y, z) for x in (1, -1) for z in (1, -1)]
-            perm = []
-            for p in ref:
-                perm.append(ref.index(home[stickers(st, p)]))
-                # 角块朝向：顶层那块的 U 贴纸必须朝上、底层朝下（AUF 不影响这条）
-                want = sim.FACES['U'] if y == 1 else sim.FACES['D']
-                if st.get((p, want)) != ('U' if y == 1 else 'D'):
-                    twisted.append('%s%s' % (key, p))
-            moved = [i for i in range(4) if perm[i] != i]
-            if not moved:
-                got[key] = 'solved'
-            elif len(moved) == 2:
-                a, b = moved
-                shared = sum(1 for i in (0, 2) if ref[a][i] == ref[b][i])
-                got[key] = 'adjacent' if shared == 1 else 'diagonal'
+    print('=== %s ===' % os.path.basename(page))
+    import pll_db as P
+    data = json.load(open(db_path, encoding='utf-8'))
+    bad, n = 0, 0
+    for c in data['cases']:
+        oh = [(a, v) for v in c['views'] for a in v['algs'] if 'OH' in a.get('uses', [])]
+        if not oh:
+            oh = [(a, c['views'][0]) for a in c['views'][0]['algs'] if '2H' in a.get('uses', [])]
+        if not oh:
+            print('  %-4s ★没有可用的单手 / 双手写法' % c['id']); bad += 1; continue
+        for a, v in oh:
+            n += 1
+            if not os.path.exists(os.path.join(ROOT, v['img'])):
+                print('  %-4s ★没有图（%s）' % (c['id'], v['img'])); bad += 1; continue
+            try:
+                out = sim.apply(P.state_from_sig(v['sig']), clean(a['alg']))
+            except Exception as e:
+                print('  %-4s ★算不动（%s）' % (c['id'], e)); bad += 1; continue
+            base = P.state_from_sig(c['views'][0]['sig'])
+            perm0, sk = P.perm_of(base), P.turn_sigma(v['view'])
+            want = frozenset((sk[j], sk[perm0[j]]) for j in range(8) if perm0[j] != j)
+            st_alg = sim.case_of(clean(a['alg']), 'pll')
+            got = P.arrows_of(P.perm_of(st_alg)) if st_alg else None
+            if solved_rot(out) or got == want:
+                print('  %-4s 图 ✓ 公式 ✓' % c['id'])
             else:
-                got[key] = '%d 个角动了' % len(moved)
-
-        pair = sorted(got.values())
-        okrow = pair == expect and not twisted
-        print('  %-12s %-36s 上层 %-9s 下层 %-9s %s'
-              % (label, alg, got['U'], got['D'],
-                 '✓' if okrow else '✗ 期望 ' + ' + '.join(expect) +
-                 ('' if not twisted else '，角块被翻了：' + ', '.join(twisted))))
-        if not okrow:
-            bad += 1
-        checks += 1
-    print('  %d 条公式：换法、角块朝向和名称%s' % (checks, '都对得上 ✓' if bad == 0 else '有对不上的 ✗'))
+                print('  %-4s ★图和公式不是同一个局面（%s）' % (c['id'], a['alg'])); bad += 1
+    print('  %d 条，%s' % (n, '全部通过 ✓' if bad == 0 else '%d 条有问题' % bad))
     return bad
 
 
@@ -908,19 +589,26 @@ def main(argv):
     bad = 0
     bad += check_f2l(os.path.join(ROOT, 'f2l.html'))
     print()
-    for kind in ('oll', 'pll'):
-        bad += check(kind, os.path.join(ROOT, '%s.html' % kind),
-                     os.path.join(ROOT, kind),
-                     os.path.join(ROOT, 'tools/data/%s.js' % kind))
-        print()
+    # PLL / OLL 的公式与图由各自的库检查（tools/pll_db.py / tools/oll_db.py）：
+    # 图签名、公式与角度是不是同一个局面，都在那里逐条核。
+    import oll_db
+    import oll2_db
+    import pbl2_db
+    bad += oll_db.check(os.path.join(ROOT, 'data', 'oll.json'))
+    print()
+    bad += oll2_db.check(os.path.join(ROOT, 'data', 'oll2.json'))
+    print()
+    bad += pbl2_db.check(os.path.join(ROOT, 'data', 'pbl2.json'))
+    print()
     for page in ('tutorial-basic.html', 'tutorial-advanced.html'):
         print('=== %s ===' % page)
         bad += check_tutorial(os.path.join(ROOT, page), None)
         print()
-    print('=== pbl2.html（二阶 PBL） ===')
-    bad += check_pbl2(os.path.join(ROOT, 'pbl2.html'))
+    bad += check_ohpll(os.path.join(ROOT, 'oh-pll.html'),
+                       os.path.join(ROOT, 'data', 'pll.json'))
     print()
-    bad += check_oll2(os.path.join(ROOT, 'oll2.html'))
+    import pll_db
+    bad += pll_db.check(os.path.join(ROOT, 'data', 'pll.json'))
     print()
     print('总计：%s' % ('全部通过 ✓' if bad == 0 else '%d 条需要处理' % bad))
     return 1 if bad else 0

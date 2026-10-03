@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>六面 · 魔方配色编辑器</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
-<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="css/theme.css">
 <style>
   /* 两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
   *{box-sizing:border-box}
@@ -199,7 +199,7 @@
     #host{max-width:100%;max-height:42vh}
   }
 </style>
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="css/nav.css">
 <script>/* 主题必须在首次绘制前定好，否则会先画一遍再翻（闪一下）。
    本页默认配色是深色（别的页是浅色），所以「白天」也得显式写上 data-theme ——
    不能像别的页那样只在夜晚时才设，否则默认会落到深色底。 */
@@ -208,7 +208,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 </head>
 <body>
 
-<script src="nav.js"></script>
+<script src="js/nav.js"></script>
 <div class="app">
   <main class="stage" id="stage">
     <button class="themebtn" id="themebtn"></button>
@@ -317,7 +317,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 <div id="ring" class="ring"></div>
 <div id="toast"></div>
 
-<script src="cube.js"></script>
+<script src="js/cube.js"></script>
 <script>
 (function () {
   'use strict';

@@ -1,0 +1,166 @@
+{
+  "source": "https://jperm.net/algs/pll（页面数据文件 /lib/pll.js）",
+  "note": "第三方双手 PLL 清单（21 情况 / 55 条）。里面有个笔误：Ub 的 `y2 R' U R' U' R3 U' (R' U R U) R2` 写了 `R3`；jperm 有些条目省了末尾的 AUF，tools/import_jperm.py 按「照图摆好直接能用」的判据处理。",
+  "cases": [
+    {
+      "name": "H",
+      "alg": [
+        "M2 U M2 U2 M2 U M2",
+        "M2 U' M2 U2 M2 U' M2"
+      ]
+    },
+    {
+      "name": "Z",
+      "alg": [
+        "M' U M2 U M2 U M' U2 M2",
+        "y M' U' M2 U' M2 U' M' U2 M2",
+        "y M2 U M2 U M' U2 M2 U2 M'",
+        "M2 U' M2 U' M' U2 M2 U2 M'"
+      ]
+    },
+    {
+      "name": "Ua",
+      "alg": [
+        "M2 U M U2 M' U M2",
+        "R U' R U R U R U' R' U' R2",
+        "y2 R2 U' R' U' R U R U R U' R"
+      ]
+    },
+    {
+      "name": "Ub",
+      "alg": [
+        "M2 U' M U2 M' U' M2",
+        "R2 U (R U R' U') R' U' R' U R'",
+        "y2 R' U R' U' R' U' (R' U R U) R2",
+        "y2 R' U R' U' R3 U' (R' U R U) R2"
+      ]
+    },
+    {
+      "name": "Aa",
+      "alg": [
+        "x L2 D2 L' U' L D2 L' U L'",
+        "y' x' L' U L' D2 L U' L' D2 L2",
+        "y x R' U R' D2 R U' R' D2 R2",
+        "y2 x' R2 D2 R' U' R D2 R' U R'"
+      ]
+    },
+    {
+      "name": "Ab",
+      "alg": [
+        "x' L2 D2 L U L' D2 L U' L",
+        "y x L U' L D2 L' U L D2 L2",
+        "y2 x R2 D2 R U R' D2 R U' R",
+        "y' x' R U' R D2 R' U R D2 R2"
+      ]
+    },
+    {
+      "name": "E",
+      "alg": [
+        "x' L' U L D' L' U' L D L' U' L D' L' U L D",
+        "x' R U' R' D R U R' D' R U R' D R U' R' D'"
+      ]
+    },
+    {
+      "name": "F",
+      "alg": [
+        "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R"
+      ]
+    },
+    {
+      "name": "Ja",
+      "alg": [
+        "x R2 F R F' R U2 r' U r U2",
+        "y2 L' U' L F L' U' L U L F' L2 U L",
+        "y' R' U L' U2 R U' R' U2 R L"
+      ]
+    },
+    {
+      "name": "Jb",
+      "alg": [
+        "R U R' F' R U R' U' R' F R2 U' R'"
+      ]
+    },
+    {
+      "name": "Ra",
+      "alg": [
+        "R U' R' U' R U R D R' U' R D' R' U2 R'",
+        "R U R' F' R U2 R' U2 R' F R U R U2 R'",
+        "y' L U2 L' U2 L F' L' U' L U L F L2"
+      ]
+    },
+    {
+      "name": "Rb",
+      "alg": [
+        "R2 F R U R U' R' F' R U2 R' U2 R",
+        "y' R' U2 R U2 R' F R U R' U' R' F' R2",
+        "R' U2 R' D' R U' R' D R U R U' R' U' R"
+      ]
+    },
+    {
+      "name": "T",
+      "alg": [
+        "R U R' U' R' F R2 U' R' U' (R U R') F'"
+      ]
+    },
+    {
+      "name": "Y",
+      "alg": [
+        "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+        "F R' F R2 U' R' U' R U R' F' R U R' U' F'"
+      ]
+    },
+    {
+      "name": "V",
+      "alg": [
+        "R' U R' U' y R' F' R2 U' R' U R' F R F",
+        "R' U R' U' R D' R' D R' U D' R2 U' R2 D R2",
+        "z D' R2 D R2 U R' D' R U' R U R' D R U' z'",
+        "R U2 R' D R U' R U' R U R2 D R' U' R D2",
+        "x' R' F R F' U R U2 R' U' R U' R' U2 R U R' U'"
+      ]
+    },
+    {
+      "name": "Na",
+      "alg": [
+        "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'",
+        "z U R' D R2 U' R D' U R' D R2 U' R D'"
+      ]
+    },
+    {
+      "name": "Nb",
+      "alg": [
+        "R' (U R U' R') F' U' F R U R' F R' F' R U' R",
+        "z D' R U' R2 D R' U D' R U' R2 D R' U"
+      ]
+    },
+    {
+      "name": "Ga",
+      "alg": [
+        "R2 U R' U R' U' R U' R2 (U' D) R' U R D'",
+        "R2 u R' U R' U' R u' R2 y' R' U R"
+      ]
+    },
+    {
+      "name": "Gb",
+      "alg": [
+        "R' U' R (U D') R2 U R' U R U' R U' R2 D",
+        "y F' U' F R2 u R' U R U' R u' R2"
+      ]
+    },
+    {
+      "name": "Gc",
+      "alg": [
+        "R2 U' R U' R U R' U R2 (U D') R U' R' D",
+        "y2 R2 F2 R U2 R U2 R' F R U R' U' R' F R2",
+        "R2 u' R U' R U R' u R2 y R U' R'"
+      ]
+    },
+    {
+      "name": "Gd",
+      "alg": [
+        "R U R' (U' D) R2 U' R U' R' U R' U R2 D'",
+        "R U R' y' R2 u' R U' R' U R' u R2"
+      ]
+    }
+  ]
+}

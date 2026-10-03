@@ -1,0 +1,157 @@
+{
+  "source": "https://jperm.net/algs/oh/pll（页面数据文件 /lib/ohpll.js）",
+  "note": "第三方单手 PLL 清单。jperm 有些条目省了末尾的 AUF（例如 Jb 比我们少一个 U'），tools/import_ohpll.py 会按「照图摆好直接能用」的判据补上再入库。",
+  "cases": [
+    {
+      "name": "H",
+      "alg": [
+        "R2 U2 R U2 R2 U2 R2 U2 R U2 R2",
+        "x' R r U2 R' r' u U' R2 U D",
+        "M2 U' M2 U2 M2 U' M2"
+      ]
+    },
+    {
+      "name": "Z",
+      "alg": [
+        "R' U' R U' R U R U' R' U R U R2 U' R'",
+        "y M' U' M2 U' M2 U' M' U2 M2"
+      ]
+    },
+    {
+      "name": "Ua",
+      "alg": [
+        "R U' R U R U R U' R' U' R2",
+        "y2 R2 U' R' U' R U R U R U' R"
+      ]
+    },
+    {
+      "name": "Ub",
+      "alg": [
+        "L' U L' U' L' U' L' U L U L2",
+        "y2 L2 U L U L' U' L' U' L' U L'",
+        "R2 U (R U R' U') R' U' R' U R'",
+        "y2 R' U R' U' R' U' (R' U R U) R2"
+      ]
+    },
+    {
+      "name": "Aa",
+      "alg": [
+        "x R' U R' D2 R U' R' D2 R2",
+        "y' x' R2 D2 R' U' R D2 R' U R'"
+      ]
+    },
+    {
+      "name": "Ab",
+      "alg": [
+        "x R2 D2 R U R' D2 R U' R",
+        "y' x' R U' R D2 R' U R D2 R2"
+      ]
+    },
+    {
+      "name": "E",
+      "alg": [
+        "x' R U' R' D R U R' D' R U R' D R U' R' D'"
+      ]
+    },
+    {
+      "name": "F",
+      "alg": [
+        "R U R' U' R' U R U2 R' L' U R U' L U' R U' R'",
+        "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R"
+      ]
+    },
+    {
+      "name": "Ja",
+      "alg": [
+        "R' U2 (R U R') U2 L U' R U L'",
+        "x R2 F R F' R U2 r' U r U2",
+        "y' R' U L' U2 R U' R' U2 R L"
+      ]
+    },
+    {
+      "name": "Jb",
+      "alg": [
+        "R U2 R' U' R U2 L' U R' U' r",
+        "R U R' F' R U R' U' R' F R2 U' R'"
+      ]
+    },
+    {
+      "name": "Ra",
+      "alg": [
+        "R U' R' U' R U R D R' U' R D' R' U2 R'"
+      ]
+    },
+    {
+      "name": "Rb",
+      "alg": [
+        "R' U2 R' D' R U' R' D R U R U' R' U' R",
+        "R2 F R U R U' R' F' R U2 R' U2 R",
+        "y' R' U2 R U2 R' F R U R' U' R' F' R2"
+      ]
+    },
+    {
+      "name": "T",
+      "alg": [
+        "R U R' U' R' F R2 U' R' U' (R U R') F'"
+      ]
+    },
+    {
+      "name": "Y",
+      "alg": [
+        "R2 U' R' U R U' x' U' z' U' R U' R' U' r B",
+        "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+        "F R' F R2 U' R' U' R U R' F' R U R' U' F'"
+      ]
+    },
+    {
+      "name": "V",
+      "alg": [
+        "R' U R U' x' U R U2 R' U' R U' R' U2 R U R' U'",
+        "R U2 R' D R U' R U' R U R2 D R' U' R D2"
+      ]
+    },
+    {
+      "name": "Na",
+      "alg": [
+        "R U R' U R U2 R' U' R U2 L' U R' U' L U' R U' R'",
+        "L U' R U2 L' U R' L U' R U2 L' U R'",
+        "R U' L U2 R' U L' R U' L U2 R' U L'"
+      ]
+    },
+    {
+      "name": "Nb",
+      "alg": [
+        "R' U' R U' R' U2 (R U R') U2 L U' R U L' U R' U R",
+        "R' U L' U2 R U' L R' U L' U2 R U' L"
+      ]
+    },
+    {
+      "name": "Ga",
+      "alg": [
+        "R2 U R' U R' U' R U' R2 (U' D) R' U R D'",
+        "R2 u R' U R' U' R u' R2 y' R' U R"
+      ]
+    },
+    {
+      "name": "Gb",
+      "alg": [
+        "R' U' R (U D') R2 U R' U R U' R U' R2 D",
+        "R' U' R y R2 u R' U R U' R u' R2"
+      ]
+    },
+    {
+      "name": "Gc",
+      "alg": [
+        "R2 U' R U' R U R' U R2 (U D') R U' R' D",
+        "R2 u' R U' R U R' u R2 y R U' R'"
+      ]
+    },
+    {
+      "name": "Gd",
+      "alg": [
+        "R U R' (U' D) R2 U' R U' R' U R' U R2 D'",
+        "R U R' y' R2 u' R U' R' U R' u R2"
+      ]
+    }
+  ]
+}

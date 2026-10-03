@@ -15,8 +15,8 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const S = require(path.join(__dirname, '..', 'cubesim.js'));
-const Cube = require(path.join(__dirname, '..', 'cube.js'));
+const S = require(path.join(__dirname, '..', 'js', 'cubesim.js'));
+const Cube = require(path.join(__dirname, '..', 'js', 'cube.js'));
 
 /* 模型坐标 -> cube.js 坐标的旋转：U->上(+z)、F->左前(-x)、R->右前(-y)。
    这样 cube.js 那三个槽位（top/left/right）看到的正好是标准的 U/F/R 三面。 */
