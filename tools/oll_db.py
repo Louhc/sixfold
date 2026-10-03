@@ -15,6 +15,7 @@ sig 是图和数据之间唯一的尺子：
     python3 tools/oll_db.py --check     # 只校验（默认）
 """
 import json
+
 import os
 import re
 import sys
@@ -25,6 +26,8 @@ import signature as sig                    # noqa: E402
 import verify as V                         # noqa: E402
 import pll_db as P                         # noqa: E402  （复用 moves_of）
 
+# 写法不该以整体转体 y / y' / y2 开头（它属于哪个画面由画面表达，见 AGENTS §4.4）
+Y_LEAD = re.compile(r"^\s*y(?:2|'|'2)?\s*")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB = os.path.join(ROOT, 'data', 'oll.json')
 LIB = os.path.join(ROOT, 'tools', 'data', 'oll.js')
@@ -177,31 +180,37 @@ def check(path=DB):
             bad.append('%s：画面序列 %s 与按 U 去重算出的 %s 不一致'
                        % (cid, [''.join(v['sig'][0]) for v in views],
                           [''.join(s2[0]) for s2 in orbit]))
-        # 3) 写法：只挂在基准画面上；每条都是合法 OLL，且签名正好是本画面的
-        want0 = list(views[0]['sig'])
-        for v in views[1:]:
-            if v.get('algs'):
-                bad.append('%s view%d：非基准画面不该挂写法' % (cid, v['view']))
-        algs = views[0]['algs']
+        # 3) 写法：挂在**它自己所属的那个画面**上（开头带 y/y' 的写法天然属于别的画面，
+        #    比如 jperm 的 `y' F R U R' U' F' f R U R' U' f'` 落在 v1），
+        #    判据是「照这个画面摆好，做完就复原」= 公式局面的签名 == 该画面的 sig（AUF 0）。
         nos = [a.get('no') for v in views for a in v.get('algs') or []]
         if nos != list(range(1, len(nos) + 1)):
             bad.append('%s：写法编号 %r 不是 case 内唯一的 1..%d' % (cid, nos, len(nos)))
-        for i, a in enumerate(algs, 1):
-            nalg += 1
-            if a.get('no') != i:
-                bad.append('%s/%s：no 不是 %d' % (cid, a.get('alg'), i))
-            if a.get('n') != len(a.get('moves') or []):
-                bad.append('%s/%s：n 与 moves 不一致' % (cid, a.get('alg')))
-            st = sim.case_of(V.clean(a['alg']), 'oll')
-            if st is None:
-                bad.append('%s/%s：不是合法的 OLL 公式' % (cid, a['alg']))
-                continue
-            k = [list(sim.sig_str(sim.turn(st, 'U', j))) for j in range(4)]
-            if want0 not in k:
-                bad.append('%s/%s：签名不在公式的 4 个 AUF 里' % (cid, a['alg']))
-            elif k.index(want0) != 0:
-                bad.append('%s/%s：差 %d 步 AUF（照图摆好还不能直接用）'
-                           % (cid, a['alg'], k.index(want0)))
+        for v in views:
+            want = list(v['sig'])
+            for i, a in enumerate(v.get('algs') or [], 1):
+                nalg += 1
+                if a.get('no') is None:
+                    bad.append('%s/%s：缺 no' % (cid, a.get('alg')))
+                if a.get('n') != len(a.get('moves') or []):
+                    bad.append('%s/%s：n 与 moves 不一致' % (cid, a.get('alg')))
+                if Y_LEAD.match(a['alg']):
+                    bad.append('%s/%s：写法不该以 y / y\' / y2 开头（去掉它、归到对应的画面）'
+                               % (cid, a['alg']))
+                try:
+                    st = sim.case_of(V.clean(a['alg']), 'oll')
+                except Exception:
+                    st = None
+                if st is None:
+                    bad.append('%s/%s：不是合法的 OLL 公式' % (cid, a['alg']))
+                    continue
+                k = [list(sim.sig_str(sim.turn(st, 'U', j))) for j in range(4)]
+                if want not in k:
+                    bad.append('%s view%d/%s：签名不在公式的 4 个 AUF 里'
+                               % (cid, v['view'], a['alg']))
+                elif k.index(want) != 0:
+                    bad.append('%s view%d/%s：差 %d 步 AUF（照图摆好还不能直接用）'
+                               % (cid, v['view'], a['alg'], k.index(want)))
         print('  %-3s %-10s %-12s %d 个画面  %s'
               % (cid, c.get('name', ''), gtitles.get(c.get('group'), ''), len(views),
                  ' '.join('v%d(%s)' % (v['view'], ''.join(v['sig'][0])) for v in views[:3])

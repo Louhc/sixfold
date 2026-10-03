@@ -144,11 +144,12 @@ python3 tools/formula_images.py [--only <编号>]  # 出图（PIL 4× 超采样 
 ④角度序列 == 按箭头去重的结果（H=1、E/Na/Nb/Z=2、其余 4）。
 `img/pll/pll-<编号>-v<角度>[-nc|-nc-night]-256x256.png`，共 73 个角度 × 3 版 = 219 张。
 
-### 单手（OH）：从 jperm 导入
+### 从 jperm 导入（单手 PLL / 双手 PLL / OLL / 单手 OLL）
 
 ```bash
-python3 tools/import_ohpll.py            # 只看计划
-python3 tools/import_ohpll.py --apply    # 落盘（之后重跑 emit_pages.py）
+python3 tools/import_jperm.py                    # 四套都只看计划，不落盘
+python3 tools/import_jperm.py --set oholl        # 只看单手 OLL
+python3 tools/import_jperm.py --apply            # 落盘（之后重跑 emit_pages.py）
 ```
 
 源数据是抓下来的 `tools/data/jperm-oh-pll.json`（`https://jperm.net/algs/oh/pll` 的 `/lib/ohpll.js`，
@@ -156,9 +157,34 @@ python3 tools/import_ohpll.py --apply    # 落盘（之后重跑 emit_pages.py�
 不认识的新写法按 `pll_db.check` 的判据核一遍 —— **jperm 有 12 条省了末尾的 AUF**
 （他们的 Jb 就比库里那条少一个 `U'`），所以会按 无 / `U` / `U'` / `U2` 后缀试，
 取第一个「照图摆好直接能用」的；补完 AUF 后常常正好和库里已有的写法对上，于是合并。
+`oll` 那一套（`tools/data/jperm-oll.json`，57 情况 / 98 条）并进 `data/oll.json`：
+按 `alg_key` 查重后新增 75 条（62 → 137 条）；**开头带 `y`/`y'` 的写法是有语义的 —— 正因如此它属于另一个画面**
+（`y' F R U R' U' F' f R U R' U' f'` 归到 v1）：去掉开头的 y、按去掉后的写法归到那个画面，
+**不往 v0 硬塞 AUF、也不留开头的 y**；去掉之后哪个画面都对不上的（jperm 的 Z `y M' U' M2 U' M2 U' M' U2 M2`）
+按规矩丢掉 —— `oll_db.check` 会逐条核「签名 == 它所在画面的 sig」+「不带开头 y」。
+计算器选公式栏的 OLL 缩略图也跟着这一行带的画面号走（`row[2]`）。
+
+`oholl` 那一套（`tools/data/jperm-oh-oll.json`，57 情况 / 91 条）也进 `data/oll.json`：65 条和库里已有的双手写法
+一模一样（于是那条补上 `OH`、变成 `["2H","OH"]`）、新增 25 条（137 → **162 条**）；每个情况的第一条打
+`tags:["oholl-preferred"]`，`oh-oll.html`（单手 OLL 页）和 `alglist.oholl` 默认显示它。
+`pll` 那边 `oh` + `2h` 两份合计把库从 46 条加到 **95 条**（其中带 `OH` 的 56 条）。
+
 最后一条规则：**带 `M` 层的一律只算双手**（单手做 M 不现实）—— 脚本会把这类写法的 `OH` 摘掉、补上 `2H`
 （`H` 的 `M2 U' M2 U2 M2 U' M2`、`Z` 的 `y M' U' M2 U' M2 U' M' U2 M2`）。
 jperm 的 `H` 那条 `x' R r U2 R' r' u U' R2 U D` 没进来（`u U'` = 中层转，不是纯 PLL）。
+
+## F2L 公式库（data/f2l.json）
+
+```bash
+python3 tools/f2l_db.py --build     # 从 f2l.html 的 SECTIONS 字面量 bootstrap（一次性）
+python3 tools/f2l_db.py --check     # 结构 + 编号 + 图（39 张 256×258）
+```
+
+**F2L 不做转体**（用户拍板）：一个情况就一张固定视角的图 `img/f2l/f2l-<编号>-256x258.png`，
+库的形状是 `sections`（三节 + 每行左右两格，左 = 红 F、右 = 绿 F，单图形行右格是 `null`）
++ `cases`（`id` / `no` 读序 1..39 / `section` / `img` / `algs`，一情况可以有多条写法 —— 现在只有 07 有两条）。
+页面 `f2l.html` 从 `js/f2ldata.js` 渲染；**公式的语义**（落在 FR/FL 槽、a/b 互为镜像、局面互不相同、
+「白色朝上」节的白贴纸真朝 U）由 `tools/verify.py` 的 `check_f2l` 读库来核。
 
 ## OLL 公式库（data/oll.json）
 
@@ -178,7 +204,8 @@ python3 tools/oll_images.py [--only <编号>]     # 出 img/oll/oll-<编号>-v<�
 （`PAD=0.4342`），所以 sig ↔ 模型是唯一确定的，出完再用 `signature.py` 读回来对 `sig` 自检。
 两版只差顶面色：day = 紫 `#7E6FC7`、night = 黄 `HEX.yellow`，描边都用 dark 那套浅色。
 判据（`--check`）：①画面序列 == 基准局面按 `U^k` 去重算出来的；②每个画面的 day/night 两版图都存在、签名 == `sig`；
-③每条写法是合法 OLL、签名正好是基准画面的（AUF 0）、且只挂在基准画面上；
+③每条写法是合法 OLL、签名正好等于**它所在那个画面**的 sig（AUF 0 —— 开头带 y/y' 的写法归到自己那个画面，
+   不去 v0 硬塞 AUF）；
 ④四个分组（十字 7 / 单点 8 / 一字 15 / 拐角 27）覆盖 1..57。全库 57 情况 / 215 画面 / 430 张图。
 
 ## 二阶两个库（data/oll2.json / data/pbl2.json）

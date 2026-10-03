@@ -24,8 +24,9 @@
 | `js/cubesim.js` | **浏览器端三阶模拟器**，`calc.html` 用；与 `tools/cubesim.py` 是同一套模型 |
 | `js/cubesim4.js` | **浏览器端四阶模拟器**，`calc.html` 的四阶模式用。和三阶同一套做法（每张贴纸记坐标 + 法向），另写一份是因为三阶那份被一大堆测试和 Python 版盯着；两份互相对拍：**只动外层 / 宽转 / 整体转的公式，八个角块必须一模一样** |
 | `js/alglist.js` | **生成物**（`tools/emit_pages.py` 产出）：计算器「选公式」面板的共享数据。`pll` / `ohpll` / `oll` 三个键从 `data/pll.json` / `data/oll.json` 生成，其余集合暂时仍从页面抽出 —— 勿手改 |
-| `data/pll.json` | **PLL 公式数据库（唯一数据源）**：`cases`（21 个情况）→ `views`（同一情况按顶层 `U^k` 转出的画面）→ `algs`（写法，共 **78 条**，其中 **58 条带 `OH`** —— 带 `M` 层的一律只算双手），配图路径和签名也在里面；单手那批里有一份来自 jperm 的 OH PLL（源数据 `tools/data/jperm-oh-pll.json`，导入脚本 `tools/import_ohpll.py`） |
-| `js/plldata.js` | **生成物**（`tools/emit_pages.py` 产出）：把库发布成 `var PLL_DB = {…}` —— 页面是 `file://` 打开的，不能 `fetch` JSON，只能 `<script src>` 加载。改库后必须重跑生成器 |
+| `data/f2l.json` | **F2L 公式数据库（唯一数据源）**：`sections`（三节 + 每行左右两格，左 = 红 F、右 = 绿 F，单图形行右格是 `null`）+ `cases`（39 个情况：`id` / `no` 读序 / `section` / `img` / `algs`，一情况可以有多条写法）；**不做转体** —— 一个情况一张固定视角的图 `img/f2l/f2l-<编号>-256x258.png` |
+| `data/pll.json` | **PLL 公式数据库（唯一数据源）**：`cases`（21 个情况）→ `views`（同一情况按顶层 `U^k` 转出的画面）→ `algs`（写法，共 **95 条**，其中 **56 条带 `OH`** —— 带 `M` 层的一律只算双手），配图路径和签名也在里面；jperm 的 OH PLL / 双手 PLL 都并进来了（源数据 `tools/data/jperm-oh-pll.json` / `jperm-pll.json`，导入脚本 `tools/import_jperm.py`）。**写法不带开头的 `y`/`y'`/`y2`** —— 开头带 y 的写法属于另一个画面，导入时会去掉 y、按画面归位 |
+| `js/plldata.js` `js/olldata.js` `js/oll2data.js` `js/pbl2data.js` `js/f2ldata.js` | **生成物**（`tools/emit_pages.py` 产出）：把库发布成 `var PLL_DB / OLL_DB / OLL2_DB / PBL2_DB / F2L_DB = {…}` —— 页面是 `file://` 打开的，不能 `fetch` JSON，只能 `<script src>` 加载。改库后必须重跑生成器 |
 | `data/oll.json` | **OLL 公式数据库（唯一数据源）**：`cases`（57 个情况）→ `views`（OLL 只有一个基准画面）→ `algs`（写法），另外带 `groups`（页面上的四个分组）和 `img-day` / `img-night` |
 | `js/olldata.js` | **生成物**：OLL 的 `var OLL_DB = {…}`（和 `plldata.js` 同一套生成器） |
 | `data/oll2.json` | **二阶 OLL 公式库（唯一数据源）**：7 个情况，按 `U^k` 去重后共 26 个画面，`sig` 是四个角的朝向（u/b/f/l/r） |
@@ -38,8 +39,9 @@
 | `cube-64x64.ico` | 网页图标（favicon），由本工具导出 |
 | `oh-pll.html` | **单手 PLL**（One-Handed，21 种）：行、配图、展开选公式都走 `data/pll.json`（有单手写法就用它 —— 标了 `ohpll-preferred` 的排最前；没有专属写法的（`Ga`/`Gb`/`Ra`）回退到双手那条；
   21 个情况都已经有单手写法（回退到双手那条只是兜底），展开键里能换其它单手写法 ——
-  其中包含从 jperm OH PLL 导入的那批）；公式逐条校验「照图摆好直接就能用」。图用 `img/pll/` 里 PLL 那套角度图，导航条里排在「三阶公式」和「二阶公式」之间 |
-| `f2l.html` `oll.html` `pll.html` `oll2.html` `pbl2.html` | **公式合集表**（头部有打印按钮，点了直接 `window.print()`）；**页头写缩写 + 英文全称**（`First Two Layers` / `Orientation of the Last Layer` / `Permutation of the Last Layer` / `Permutation of Both Layers`）；`pbl2.html` 是**二阶 PBL**（五种情况，图放 `img/pbl2/`，昼夜两版。编号写成图左上角的角标：`a` = 邻角换、`d` = 对角换，两个字母是「上层 / 下层」，只写一个表示另一层已经排好 —— 全称留在图的 `alt` / `title` 里）；`f2l.html` / `oll.html` / `pll.html` 是**三阶公式**（F2L 39 / OLL 57 / PLL 21，三页共用一个导航入口「三阶公式」，悬停展开 F2L / OLL / PLL；三页左侧也各挂一条同样的目录。其中 `oll.html` / `pll.html` 的行、配图、展开选公式都走 `data/oll.json` / `data/pll.json`（OLL 也按 `U^k` 存去重后的画面：每个画面一条签名、两张昼夜图，行里的图跟着当前这条写法所属的画面走），每行行尾有个**展开键**（再点一次收起、展开时键亮起、开合有过渡，打印时那一列不印）；`f2l.html` 正文宽 1180（表要两列），所以那条目录比别的页更靠左、窄屏阈值也更高）；`oll2.html` / `pbl2.html` 是**二阶公式**（OLL 七种 + PBL 五种，分两页，**表格没有「图 / 公式」表头行**，行 / 图 / 公式 / 展开选公式都走 `data/oll2.json` / `data/pbl2.json`，图放 `img/oll2/` 与 `img/pbl2/`，都分昼夜两版 —— 二阶 OLL 也按 `U^k` 存去重后的画面，二阶 PBL 是固定视角（没有 `views`，每情况只一张）；编号写成图左上角的角标 `H` / `Pi` / `AntiSune` / `Sune` / `L` / `T` / `U` 与 `dd` / `ad` / `aa` / `a` / `d`，和 PLL 那几页一个做法。**两页左侧各挂一条目录**（和教程页那条一样：固定在导航条底下，当前那页高亮，窄屏收起），导航条和首页也只留一个入口「二阶公式」——**鼠标停在导航项上会展开二级目录**（教程 → 初级 / 进阶，二阶公式 → OLL / PBL），当前那一页在目录里高亮；**这一组记住上次看的是哪一页**（`cube-last:oll2.html`，和教程的初级 / 进阶同一个机制）—— 从 PBL 离开再点回来，还是 PBL）；二阶两页的行尾也有**展开键**（同一套交互，候选从库里读 —— 现在每个情况只有一条写法，所以键是灰的，加写法后自动亮）；↗ 都带 `@2:`，一进去就是二阶模式 |
+  其中包含从 jperm OH PLL 导入的那批）；公式逐条校验「照图摆好直接就能用」。图用 `img/pll/` 里 PLL 那套角度图。这一页和下一行那张「单手 OLL」在导航条上合成一个入口「单手公式」（悬停展开 OH-OLL / OH-PLL，和「三阶公式」「二阶公式」一个做法，也记住上次看的是哪一页：`cube-last:oh-oll.html`） |
+| `oh-oll.html` | **单手 OLL**（One-Handed，57 种）：和 `oh-pll.html` 同一套，只是换到 OLL —— 行、配图、展开选公式都走 `data/oll.json`（每个情况显示标了 `OH` 的写法，标了 `oholl-preferred` 的排最前；一个情况一条单手写法都没有时才回退双手那条）。单手指法从 jperm OH OLL 导入（`tools/data/jperm-oh-oll.json`，57 情况 / 91 条：65 条和库里已有的双手写法一模一样、于是合并成 `2H+OH`，新增 25 条），**带 `M` 的一律只算双手**（单手做 M 不现实）；公式逐条校验「照图摆好直接就能用」。图用 `img/oll/` 那套昼夜两版 OLL 图，行里的图跟着这条写法所属的画面走 |
+| `f2l.html` `oll.html` `pll.html` `oll2.html` `pbl2.html` | **公式合集表**（头部有打印按钮，点了直接 `window.print()`）；**页头写缩写 + 英文全称**（`First Two Layers` / `Orientation of the Last Layer` / `Permutation of the Last Layer` / `Permutation of Both Layers`）；`pbl2.html` 是**二阶 PBL**（五种情况，图放 `img/pbl2/`，昼夜两版。编号写成图左上角的角标：`a` = 邻角换、`d` = 对角换，两个字母是「上层 / 下层」，只写一个表示另一层已经排好 —— 全称留在图的 `alt` / `title` 里）；`f2l.html` / `oll.html` / `pll.html` 是**三阶公式**（F2L 39 / OLL 57 / PLL 21，三页共用一个导航入口「三阶公式」，悬停展开 F2L / OLL / PLL；三页左侧也各挂一条同样的目录。其中 `f2l.html` / `oll.html` / `pll.html` 的行都走数据库（`data/f2l.json` / `data/oll.json` / `data/pll.json`；**F2L 不做转体**：一个情况一张固定视角的图、没有画面层，表格是「两列情况」（每格 = 图 + 公式 + 展开键），**首屏一格只显示第一条写法**、其余在展开键里换（`cube-pick:f2l:<编号>`；07 有两条所以它的键是亮的））——（OLL 也按 `U^k` 存去重后的画面：每个画面一条签名、两张昼夜图，行里的图跟着当前这条写法所属的画面走 —— **写法挂在它自己那个画面上**：开头带 `y`/`y'` 的写法天然属于别的画面，比如 jperm 的 `y' F R U R' U' F' f R U R' U' f'` 归到 v1，展开键换过去时图也跟着切），每行行尾有个**展开键**（再点一次收起、展开时键亮起、开合有过渡，打印时那一列不印）；`f2l.html` 正文和 `oll.html` / `pll.html` 一样是 880 宽（表缩进这个宽度里），左边那条目录三页落在**同一个位置**、收起阈值也一样）；`oll2.html` / `pbl2.html` 是**二阶公式**（OLL 七种 + PBL 五种，分两页，**表格没有「图 / 公式」表头行**，行 / 图 / 公式 / 展开选公式都走 `data/oll2.json` / `data/pbl2.json`，图放 `img/oll2/` 与 `img/pbl2/`，都分昼夜两版 —— 二阶 OLL 也按 `U^k` 存去重后的画面，二阶 PBL 是固定视角（没有 `views`，每情况只一张）；编号写成图左上角的角标 `H` / `Pi` / `AntiSune` / `Sune` / `L` / `T` / `U` 与 `dd` / `ad` / `aa` / `a` / `d`，和 PLL 那几页一个做法。**两页左侧各挂一条目录**（和教程页那条一样：固定在导航条底下，当前那页高亮，窄屏收起），导航条和首页也只留一个入口「二阶公式」——**鼠标停在导航项上会展开二级目录**（教程 → 初级 / 进阶，二阶公式 → OLL / PBL），当前那一页在目录里高亮；**这一组记住上次看的是哪一页**（`cube-last:oll2.html`，和教程的初级 / 进阶同一个机制）—— 从 PBL 离开再点回来，还是 PBL）；二阶两页的行尾也有**展开键**（同一套交互，候选从库里读 —— 现在每个情况只有一条写法，所以键是灰的，加写法后自动亮）；↗ 都带 `@2:`，一进去就是二阶模式 |
 | `img/pbl2/` | 二阶 PBL 页的图：5 种情况 × **昼夜两版** = 10 张 256×197（两个 2×2 层叠着 + 换位箭头；**不做旋转图**），由 `tools/pbl2_images.py` 走编辑器几何重出 |
 | `img/oll2/` | 二阶 OLL 页的图：7 个情况按 `U^k` 去重后 **26 个画面 × 昼夜两版 = 52 张** 256×256（一张 2×2 俯视图：四个角各自的 U 贴纸朝哪边），命名 `<情况>-v<角度>-…`，由 `tools/oll2_images.py` 重出。写法按画面挂（如 `antisune` 的 v3、`sune` 的 v2），页面上换写法会连图一起切到那个画面 |
 | `img/pll/` | PLL（含单手页）的图，**按角度**分：`pll-<编号>-v<角度>[-nc|-nc-night]-256x256.png` —— 彩色 / `-nc-` 无色白天（紫箭头）/ `-nc-night-` 无色夜晚（黄箭头）。21 个情况的 `views` 去重后共 **73 个角度 × 3 版 = 219 张**，页面按主题和「显示颜色」开关自动挑 |
@@ -567,7 +569,7 @@ PLL 无色的黄箭头）落在白纸上很难看。公式页的图又是 `loadi
 
 ## 公式数据库（data/pll.json / data/oll.json）
 
-`oll.html` / `pll.html` / `oh-pll.html` 不再是「页面各存一份数据」：公式、配图、签名都在库里
+`oll.html` / `pll.html` / `oh-pll.html` / `oh-oll.html` 不再是「页面各存一份数据」：公式、配图、签名都在库里
 （唯一数据源），三层结构 —— `cases`（一个情况）→ `views`（画面）→ `algs`（写法）。
 
 - **`data/pll.json`**：21 个情况。PLL 的 `views` 是同一个情况按顶层 `U^k` 转出来的**画面**
@@ -663,7 +665,7 @@ PLL 页右上角（主题开关下面）还有个**「显示颜色」开关**，
 照着图摆好直接做就会做错。这类问题光看图看不出来，必须算。
 
 ```bash
-python3 tools/verify.py              # 跑全部：F2L 结构校验、教程页、单手 PLL、二阶 OLL / PBL
+python3 tools/verify.py              # 跑全部：F2L 结构校验、教程页、单手 PLL / 单手 OLL、二阶 OLL / PBL
                                      # （PLL / OLL 的「公式 ↔ 图」分别交给 tools/pll_db.py / tools/oll_db.py）
 python3 tools/verify.py --find 7  oll  # OLL 7 朝向对不上时，搜能用的写法
 python3 tools/verify.py --find T  pll  # PLL 用字母编号（Aa..Z）

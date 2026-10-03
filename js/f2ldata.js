@@ -1,0 +1,702 @@
+/* 由 tools/emit_pages.py 从 data/f2l.json 生成 —— 不要手改：
+   改公式请改数据库，然后重跑生成器。 */
+var F2L_DB = {
+  "set": "f2l",
+  "v": 1,
+  "generated": "data/f2l.json",
+  "cases": [
+    {
+      "id": "01a",
+      "no": 1,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-01a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U' R' U)(R U' R' U2)(R U' R')",
+          "n": 11,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "01b",
+      "no": 2,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-01b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U L U')(L' U L U2)(L' U L)",
+          "n": 11,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "02a",
+      "no": 3,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-02a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(l U)(L F' L' U' l')",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "02b",
+      "no": 4,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-02b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(r' U')(R' F R U r)",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "03a",
+      "no": 5,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-03a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R2 U'2)(R' U' R U')(R' U2 R')",
+          "n": 9,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "03b",
+      "no": 6,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-03b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L'2 U2)(L U L' U)(L U2 L)",
+          "n": 9,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "04a",
+      "no": 7,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-04a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U' R' F')(L' U'2 L F)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "04b",
+      "no": 8,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-04b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U L F)(R U2 R' F')",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "05a",
+      "no": 9,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-05a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U R' U')(R U R')",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "05b",
+      "no": 10,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-05b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U' L U)(L' U' L)",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "06a",
+      "no": 11,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-06a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U')(R2 F R F')",
+          "n": 6,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "06b",
+      "no": 12,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-06b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U)(L2 F' L' F)",
+          "n": 6,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "no": 13,
+      "section": "需要特殊处理的几种情况",
+      "img": "img/f2l/f2l-07-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U R' U2)(R U2 R' U)y'(R' U R)",
+          "n": 12,
+          "uses": [],
+          "tags": []
+        },
+        {
+          "no": 2,
+          "alg": "(R' F R F')(R U' R' U)(R U' R' U2 R U' R')",
+          "n": 15,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "no": 14,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-08-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U R' U')(R U R' U')(R U R')",
+          "n": 11,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "no": 15,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-09-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U' R' U)y(L' U L)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "10a",
+      "no": 16,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-10a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U R' U'2)(R U R' U')(R U R')",
+          "n": 11,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "10b",
+      "no": 17,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-10b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U' L U2)(L' U' L U)(L' U' L)",
+          "n": 11,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "11a",
+      "no": 18,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-11a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U2 R' U')(R U R')",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "11b",
+      "no": 19,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-11b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U2 L U)(L' U' L)",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "12a",
+      "no": 20,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-12a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U' R' U2)(R U R')",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "12b",
+      "no": 21,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-12b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U L U2)(L' U' L)",
+          "n": 7,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "13a",
+      "no": 22,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-13a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U(R U'2 R' U)(R U' R')",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "13b",
+      "no": 23,
+      "section": "白色朝上的情况",
+      "img": "img/f2l/f2l-13b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U'(L' U2 L U')(L' U L)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "14a",
+      "no": 24,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-14a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(R U R')",
+          "n": 3,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "14b",
+      "no": 25,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-14b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(L' U' L)",
+          "n": 3,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "15a",
+      "no": 26,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-15a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U'(R U' R' U)(R U R')",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "15b",
+      "no": 27,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-15b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U(L' U L U')(L' U' L)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "16a",
+      "no": 28,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-16a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U'(R U R' U)(R U R')",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "16b",
+      "no": 29,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-16b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U(L' U' L U')(L' U' L)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "17a",
+      "no": 30,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-17a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(U R U' R')",
+          "n": 4,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "17b",
+      "no": 31,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-17b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(U' L' U L)",
+          "n": 4,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "18a",
+      "no": 32,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-18a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U'(R U R' U2)(R U' R')",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "18b",
+      "no": 33,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-18b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U(L' U' L U2)(L' U L)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "19a",
+      "no": 34,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-19a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U'(R U2 R' U2)(R U' R')",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "19b",
+      "no": 35,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-19b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U(L' U2 L U2)(L' U L)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "20a",
+      "no": 36,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-20a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U'(R U' R' U2)(R U' R')",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "20b",
+      "no": 37,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-20b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "U(L' U L U2)(L' U L)",
+          "n": 8,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "21a",
+      "no": 38,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-21a-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(U' R U R')y(U L' U' L)",
+          "n": 9,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "21b",
+      "no": 39,
+      "section": "简单情况",
+      "img": "img/f2l/f2l-21b-256x258.png",
+      "algs": [
+        {
+          "no": 1,
+          "alg": "(U L' U' L)y'(U' R U R')",
+          "n": 9,
+          "uses": [],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "title": "需要特殊处理的几种情况",
+      "rows": [
+        [
+          "01a",
+          "01b"
+        ],
+        [
+          "02a",
+          "02b"
+        ],
+        [
+          "03a",
+          "03b"
+        ],
+        [
+          "04a",
+          "04b"
+        ],
+        [
+          "05a",
+          "05b"
+        ],
+        [
+          "06a",
+          "06b"
+        ],
+        [
+          "07",
+          null
+        ]
+      ]
+    },
+    {
+      "title": "白色朝上的情况",
+      "rows": [
+        [
+          "08",
+          null
+        ],
+        [
+          "09",
+          null
+        ],
+        [
+          "10a",
+          "10b"
+        ],
+        [
+          "11a",
+          "11b"
+        ],
+        [
+          "12a",
+          "12b"
+        ],
+        [
+          "13a",
+          "13b"
+        ]
+      ]
+    },
+    {
+      "title": "简单情况",
+      "rows": [
+        [
+          "14a",
+          "14b"
+        ],
+        [
+          "15a",
+          "15b"
+        ],
+        [
+          "16a",
+          "16b"
+        ],
+        [
+          "17a",
+          "17b"
+        ],
+        [
+          "18a",
+          "18b"
+        ],
+        [
+          "19a",
+          "19b"
+        ],
+        [
+          "20a",
+          "20b"
+        ],
+        [
+          "21a",
+          "21b"
+        ]
+      ]
+    }
+  ]
+};

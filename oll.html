@@ -189,10 +189,13 @@ var SECTIONS = (function () {
     byKey[g.key] = { title: g.title, cnt: 0, rows: [] };
     out.push(byKey[g.key]);
   });
+  /* 这一页是**双手**页：只显示标了 2H 的写法（库里还有单手 OH 的，那是 oh-oll.html 的事）。
+     首屏取「这个情况的第一条双手写法」，万一没有双手写法才回退第一条。 */
   ((typeof OLL_DB !== 'undefined' && OLL_DB.cases) || []).forEach(function (c) {
     var sec = byKey[c.group], v = c.views && c.views[0];
     if (!sec || !v || !v.algs || !v.algs.length) return;
-    sec.rows.push([c.id, v.algs[0].alg]);
+    var two = v.algs.filter(function (a) { return a.uses.indexOf('2H') >= 0; });
+    sec.rows.push([c.id, (two.length ? two : v.algs)[0].alg]);
     sec.cnt++;
   });
   return out.filter(function (s) { return s.cnt; });
@@ -365,9 +368,14 @@ document.getElementById('app').addEventListener('click', function (e) {
       out.push(alg);
     }
     var c = byId[id];
-    if (c) (c.views || []).forEach(function (v) {
-      (v.algs || []).forEach(function (a) { add(a.alg); });
-    });
+    if (c) {                                  // 双手页：候选也只列 2H 的（没有才回退全部）
+      var all = [];
+      (c.views || []).forEach(function (v) {
+        (v.algs || []).forEach(function (a) { all.push(a); });
+      });
+      var two = all.filter(function (a) { return a.uses.indexOf('2H') >= 0; });
+      (two.length ? two : all).forEach(function (a) { add(a.alg); });
+    }
     (own || []).forEach(add);
     return out;
   }
@@ -413,11 +421,14 @@ document.getElementById('app').addEventListener('click', function (e) {
   function usable(id, alg) {
     var c = byId[id];
     if (!c) return false;
-    var k = algKey(alg), hit = false;
+    var k = algKey(alg), two = [], all = [];
     (c.views || []).forEach(function (v) {
-      (v.algs || []).forEach(function (a) { if (algKey(a.alg) === k) hit = true; });
+      (v.algs || []).forEach(function (a) {
+        all.push(a);
+        if (a.uses.indexOf('2H') >= 0) two.push(a);
+      });
     });
-    return hit;
+    return (two.length ? two : all).some(function (a) { return algKey(a.alg) === k; });
   }
   function buildBox(row) {  /* 这条写法在 **case 内的编号**（库里唯一；找不到就退回面板顺序号）。
      面板上显示它 —— 同一个 case 里不同写法编号一定不同，方便口头指代。 */

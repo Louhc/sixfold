@@ -176,32 +176,25 @@ def _key(st):
     return tuple(sorted(st.items()))
 
 
-def f2l_page(page):
+def f2l_page(page=None):
     """读出 [(小节标题, [(a 编号, af, b 编号或 None, bf 或 None), ...]), ...]
 
-    f2l.html 的 rows 是对象（a/b/af/bf），和 OLL/PLL 的数组结构不同，所以单独写读取器。
+    **数据来自库 data/f2l.json**（f2l.html 已经改成读库渲染，页面里没有 SECTIONS 字面量了）。
+    一情况的写法按库里的顺序用 `\n`（两个字符）拼起来 —— 和以前从页面字面量里读到的形状一致，
+    所以下面 f2l_rows / 镜像那几处 `split('\\n')` 不用改。
     注意 b/bf 允许是 null —— 07/08/09 是只有左格、没有右格的单图形行。
-    早先按 '…' 硬匹配会把这三行连同 07 里的两条公式一起静默漏掉。
     """
-    h = open(page, encoding='utf-8').read()
+    db = json.load(open(os.path.join(ROOT, 'data', 'f2l.json'), encoding='utf-8'))
+    text = {c['id']: '\\n'.join(a['alg'] for a in c['algs']) for c in db['cases']}
     out = []
-    for sec in re.finditer(r"title:\s*'([^']*)',\s*rows:\s*\[(.*?)\n\s*\]", h, re.S):
+    for sec in db['sections']:
         rows = []
-        for rm in re.finditer(r'\{([^{}]*)\}', sec.group(2)):
-            row = rm.group(1)
-
-            def field(name, row=row):
-                mm = re.search(r'\b%s\s*:\s*(?:\'([^\']*)\'|"((?:[^"\\]|\\.)*)"|null)'
-                               % name, row)
-                if not mm:
-                    return None
-                return mm.group(1) if mm.group(1) is not None else mm.group(2)
-
-            a, b = field('a'), field('b')
+        for r in sec['rows']:
+            a, b = r[0], r[1]
             if not a and not b:
                 continue
-            rows.append((a, field('af'), b, field('bf')))
-        out.append((sec.group(1), rows))
+            rows.append((a, text.get(a) if a else None, b, text.get(b) if b else None))
+        out.append((sec['title'], rows))
     return out
 
 
@@ -350,8 +343,8 @@ def f2l_sections(page):
     return out
 
 
-def check_f2l(page):
-    print('=== %s （结构校验，不用图） ===' % os.path.basename(page))
+def check_f2l(page=None):
+    print('=== data/f2l.json（F2L 库；f2l.html 读它渲染）（结构校验，不用图） ===')
     rows = f2l_rows(page)
     if not rows:
         print('  读不到数据')
@@ -578,6 +571,40 @@ def check_ohpll(page, db_path):
     return bad
 
 
+def check_oholl(page, db_path):
+    """单手 OLL 页：每个情况那一条单手写法，和**它所在画面**的图必须是同一个局面。
+
+    页面由 data/oll.json 驱动（行、图都来自库），这里也读库：每个情况取标了
+    oholl-preferred 的那条（没有就取第一条 OH），核「照这个画面摆好做完就复原」
+    （公式局面的签名 == 该画面的 sig，和 oll_db.check 同一条判据）+ 昼夜两张图都在。
+    """
+    print('=== %s ===' % os.path.basename(page))
+    data = json.load(open(db_path, encoding='utf-8'))
+    bad, n = 0, 0
+    for c in data['cases']:
+        oh = [(a, v) for v in c['views'] for a in v.get('algs', [])
+              if 'OH' in a.get('uses', [])]
+        if not oh:
+            print('  %-3s ★没有单手写法' % c['id']); bad += 1; continue
+        pref = [x for x in oh if 'oholl-preferred' in (x[0].get('tags') or [])]
+        a, v = (pref or oh)[0]
+        n += 1
+        miss = [k for k in ('img-day', 'img-night') if not os.path.exists(os.path.join(ROOT, v[k]))]
+        if miss:
+            print('  %-3s ★缺图（%s）' % (c['id'], ' / '.join(miss))); bad += 1; continue
+        try:
+            st = sim.case_of(clean(a['alg']), 'oll')
+        except Exception as e:
+            print('  %-3s ★算不动（%s）' % (c['id'], e)); bad += 1; continue
+        if st is not None and list(sim.sig_str(st)) == list(v['sig']):
+            print('  %-3s v%d 图 ✓ 公式 ✓（%s）' % (c['id'], v['view'], a['alg'][:40]))
+        else:
+            print('  %-3s ★公式和它所在画面（v%d）对不上（%s）' % (c['id'], v['view'], a['alg']))
+            bad += 1
+    print('  %d 条，%s' % (n, '全部通过 ✓' if bad == 0 else '%d 条有问题' % bad))
+    return bad
+
+
 def main(argv):
     kind = None
     if '--find' in argv:
@@ -587,7 +614,10 @@ def main(argv):
         return find(kind, ident, os.path.join(ROOT, kind),
                     os.path.join(ROOT, 'tools/data/%s.js' % kind))
     bad = 0
-    bad += check_f2l(os.path.join(ROOT, 'f2l.html'))
+    bad += check_f2l()
+    print()
+    import f2l_db
+    bad += f2l_db.check(os.path.join(ROOT, 'data', 'f2l.json'))
     print()
     # PLL / OLL 的公式与图由各自的库检查（tools/pll_db.py / tools/oll_db.py）：
     # 图签名、公式与角度是不是同一个局面，都在那里逐条核。
@@ -606,6 +636,9 @@ def main(argv):
         print()
     bad += check_ohpll(os.path.join(ROOT, 'oh-pll.html'),
                        os.path.join(ROOT, 'data', 'pll.json'))
+    print()
+    bad += check_oholl(os.path.join(ROOT, 'oh-oll.html'),
+                       os.path.join(ROOT, 'data', 'oll.json'))
     print()
     import pll_db
     bad += pll_db.check(os.path.join(ROOT, 'data', 'pll.json'))

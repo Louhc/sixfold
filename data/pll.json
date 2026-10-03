@@ -55,26 +55,25 @@
           "algs": [
             {
               "no": 2,
-              "alg": "y' x' R2 D2 R' U' R D2 R' U R'",
+              "alg": "x' L' U L' D2 L U' L' D2 L2",
               "moves": [
-                "y'",
                 "x'",
-                "R2",
-                "D2",
-                "R'",
-                "U'",
-                "R",
-                "D2",
-                "R'",
+                "L'",
                 "U",
-                "R'"
+                "L'",
+                "D2",
+                "L",
+                "U'",
+                "L'",
+                "D2",
+                "L2"
               ],
-              "n": 11,
+              "n": 10,
               "uses": [
-                "OH"
+                "2H"
               ],
               "tags": [],
-              "verified": "jperm OH PLL"
+              "verified": "jperm PLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
         },
@@ -107,75 +106,6 @@
               ],
               "tags": [],
               "verified": "jperm PLL"
-            },
-            {
-              "no": 4,
-              "alg": "y' x' L' U L' D2 L U' L' D2 L2",
-              "moves": [
-                "y'",
-                "x'",
-                "L'",
-                "U",
-                "L'",
-                "D2",
-                "L",
-                "U'",
-                "L'",
-                "D2",
-                "L2"
-              ],
-              "n": 11,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL"
-            },
-            {
-              "no": 5,
-              "alg": "y x R' U R' D2 R U' R' D2 R2",
-              "moves": [
-                "y",
-                "x",
-                "R'",
-                "U",
-                "R'",
-                "D2",
-                "R",
-                "U'",
-                "R'",
-                "D2",
-                "R2"
-              ],
-              "n": 11,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL"
-            },
-            {
-              "no": 6,
-              "alg": "y2 x' R2 D2 R' U' R D2 R' U R'",
-              "moves": [
-                "y2",
-                "x'",
-                "R2",
-                "D2",
-                "R'",
-                "U'",
-                "R",
-                "D2",
-                "R'",
-                "U",
-                "R'"
-              ],
-              "n": 11,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL"
             }
           ]
         },
@@ -188,7 +118,7 @@
           "sig": "FRFRBBLFBLLR",
           "algs": [
             {
-              "no": 7,
+              "no": 4,
               "alg": "x R' U R' D2 R U' R' D2 R2",
               "moves": [
                 "x",
@@ -204,10 +134,11 @@
               ],
               "n": 10,
               "uses": [
+                "2H",
                 "OH"
               ],
               "tags": [],
-              "verified": "jperm OH PLL"
+              "verified": "jperm OH PLL｜来源 jperm PLL"
             }
           ]
         }
@@ -253,22 +184,11 @@
                 "preferred",
                 "ohpll-preferred"
               ]
-            }
-          ]
-        },
-        {
-          "view": 1,
-          "frame": "y",
-          "img": "img/pll/pll-Ab-v1-256x256.png",
-          "img-nc-day": "img/pll/pll-Ab-v1-nc-256x256.png",
-          "img-nc-night": "img/pll/pll-Ab-v1-nc-night-256x256.png",
-          "sig": "FLLRFRBBFBRL",
-          "algs": [
+            },
             {
               "no": 2,
-              "alg": "y' x' R U' R D2 R' U R D2 R2",
+              "alg": "x' R U' R D2 R' U R D2 R2",
               "moves": [
-                "y'",
                 "x'",
                 "R",
                 "U'",
@@ -280,14 +200,24 @@
                 "D2",
                 "R2"
               ],
-              "n": 11,
+              "n": 10,
               "uses": [
                 "2H",
                 "OH"
               ],
               "tags": [],
-              "verified": "jperm OH PLL｜来源 jperm PLL"
-            },
+              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm PLL"
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Ab-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Ab-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ab-v1-nc-night-256x256.png",
+          "sig": "FLLRFRBBFBRL",
+          "algs": [
             {
               "no": 3,
               "alg": "x' L2 D2 L U L' D2 L U' L",
@@ -309,12 +239,21 @@
               ],
               "tags": [],
               "verified": "jperm PLL"
-            },
+            }
+          ]
+        },
+        {
+          "view": 2,
+          "frame": "y2",
+          "img": "img/pll/pll-Ab-v2-256x256.png",
+          "img-nc-day": "img/pll/pll-Ab-v2-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Ab-v2-nc-night-256x256.png",
+          "sig": "RFRBRLFLLFBB",
+          "algs": [
             {
               "no": 4,
-              "alg": "y x L U' L D2 L' U L D2 L2",
+              "alg": "x L U' L D2 L' U L D2 L2",
               "moves": [
-                "y",
                 "x",
                 "L",
                 "U'",
@@ -326,46 +265,14 @@
                 "D2",
                 "L2"
               ],
-              "n": 11,
+              "n": 10,
               "uses": [
                 "2H"
               ],
               "tags": [],
-              "verified": "jperm PLL"
-            },
-            {
-              "no": 5,
-              "alg": "y2 x R2 D2 R U R' D2 R U' R",
-              "moves": [
-                "y2",
-                "x",
-                "R2",
-                "D2",
-                "R",
-                "U",
-                "R'",
-                "D2",
-                "R",
-                "U'",
-                "R"
-              ],
-              "n": 11,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL"
+              "verified": "jperm PLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
-        },
-        {
-          "view": 2,
-          "frame": "y2",
-          "img": "img/pll/pll-Ab-v2-256x256.png",
-          "img-nc-day": "img/pll/pll-Ab-v2-nc-256x256.png",
-          "img-nc-night": "img/pll/pll-Ab-v2-nc-night-256x256.png",
-          "sig": "RFRBRLFLLFBB",
-          "algs": []
         },
         {
           "view": 3,
@@ -376,7 +283,7 @@
           "sig": "LRBFBBRFRLLF",
           "algs": [
             {
-              "no": 6,
+              "no": 5,
               "alg": "x R2 D2 R U R' D2 R U' R",
               "moves": [
                 "x",
@@ -392,10 +299,11 @@
               ],
               "n": 10,
               "uses": [
+                "2H",
                 "OH"
               ],
               "tags": [],
-              "verified": "jperm OH PLL"
+              "verified": "jperm OH PLL｜来源 jperm PLL"
             }
           ]
         }
@@ -538,40 +446,6 @@
           "algs": [
             {
               "no": 1,
-              "alg": "R' U' F' (R U R' U' R' F R2 U' R' U' R U R' F') F U R",
-              "moves": [
-                "R'",
-                "U'",
-                "F'",
-                "R",
-                "U",
-                "R'",
-                "U'",
-                "R'",
-                "F",
-                "R2",
-                "U'",
-                "R'",
-                "U'",
-                "R",
-                "U",
-                "R'",
-                "F'",
-                "F",
-                "U",
-                "R"
-              ],
-              "n": 20,
-              "uses": [
-                "2H"
-              ],
-              "verified": "pll_db.py: sig→alg 复原",
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
               "alg": "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
               "moves": [
                 "R'",
@@ -598,8 +472,10 @@
                 "2H",
                 "OH"
               ],
-              "tags": [],
-              "verified": "jperm OH PLL｜来源 jperm PLL"
+              "tags": [
+                "preferred"
+              ],
+              "verified": "pll_db.py: sig→alg 复原｜与 jperm PLL 那条是同一条（原来 1 号多了一对互相抵消的 F' F，已约掉）"
             }
           ]
         },
@@ -630,7 +506,7 @@
           "sig": "FRBRFBRBFLLL",
           "algs": [
             {
-              "no": 3,
+              "no": 2,
               "alg": "R U R' U' R' U R U2 L' R' U R U' L U' R U' R'",
               "moves": [
                 "R",
@@ -660,36 +536,6 @@
               "tags": [
                 "ohpll-preferred"
               ]
-            },
-            {
-              "no": 4,
-              "alg": "R U R' U' R' U R U2 R' L' U R U' L U' R U' R'",
-              "moves": [
-                "R",
-                "U",
-                "R'",
-                "U'",
-                "R'",
-                "U",
-                "R",
-                "U2",
-                "R'",
-                "L'",
-                "U",
-                "R",
-                "U'",
-                "L",
-                "U'",
-                "R",
-                "U'",
-                "R'"
-              ],
-              "n": 18,
-              "uses": [
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL"
             }
           ]
         }
@@ -1056,12 +902,21 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL"
-            },
+            }
+          ]
+        },
+        {
+          "view": 1,
+          "frame": "y",
+          "img": "img/pll/pll-Gb-v1-256x256.png",
+          "img-nc-day": "img/pll/pll-Gb-v1-nc-256x256.png",
+          "img-nc-night": "img/pll/pll-Gb-v1-nc-night-256x256.png",
+          "sig": "FBFRLBLFBLRR",
+          "algs": [
             {
               "no": 5,
-              "alg": "y F' U' F R2 u R' U R U' R u' R2",
+              "alg": "F' U' F R2 u R' U R U' R u' R2",
               "moves": [
-                "y",
                 "F'",
                 "U'",
                 "F",
@@ -1075,23 +930,14 @@
                 "u'",
                 "R2"
               ],
-              "n": 13,
+              "n": 12,
               "uses": [
                 "2H"
               ],
               "tags": [],
-              "verified": "jperm PLL"
+              "verified": "jperm PLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
-        },
-        {
-          "view": 1,
-          "frame": "y",
-          "img": "img/pll/pll-Gb-v1-256x256.png",
-          "img-nc-day": "img/pll/pll-Gb-v1-nc-256x256.png",
-          "img-nc-night": "img/pll/pll-Gb-v1-nc-night-256x256.png",
-          "sig": "FBFRLBLFBLRR",
-          "algs": []
         },
         {
           "view": 2,
@@ -1154,7 +1000,7 @@
                 "2H",
                 "OH"
               ],
-              "verified": "pll_db.py: sig→alg 复原｜jperm OH PLL 也把它当单手",
+              "verified": "pll_db.py: sig→alg 复原｜来源 jperm OH PLL",
               "tags": [
                 "preferred"
               ]
@@ -1236,34 +1082,6 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL｜来源 jperm PLL"
-            },
-            {
-              "no": 5,
-              "alg": "y2 R2 F2 R U2 R U2 R' F R U R' U' R' F R2",
-              "moves": [
-                "y2",
-                "R2",
-                "F2",
-                "R",
-                "U2",
-                "R",
-                "U2",
-                "R'",
-                "F",
-                "R",
-                "U",
-                "R'",
-                "U'",
-                "R'",
-                "F",
-                "R2"
-              ],
-              "n": 16,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL"
             }
           ]
         },
@@ -1283,7 +1101,35 @@
           "img-nc-day": "img/pll/pll-Gc-v2-nc-256x256.png",
           "img-nc-night": "img/pll/pll-Gc-v2-nc-night-256x256.png",
           "sig": "BLRLFRFRFBBL",
-          "algs": []
+          "algs": [
+            {
+              "no": 5,
+              "alg": "R2 F2 R U2 R U2 R' F R U R' U' R' F R2",
+              "moves": [
+                "R2",
+                "F2",
+                "R",
+                "U2",
+                "R",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2"
+              ],
+              "n": 15,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            }
+          ]
         },
         {
           "view": 3,
@@ -1502,7 +1348,7 @@
                 "2H"
               ],
               "tags": [],
-              "verified": "jperm OH PLL"
+              "verified": "jperm OH PLL｜来源 jperm PLL"
             },
             {
               "no": 4,
@@ -1579,7 +1425,32 @@
           "img-nc-day": "img/pll/pll-Ja-v1-nc-256x256.png",
           "img-nc-night": "img/pll/pll-Ja-v1-nc-night-256x256.png",
           "sig": "BFFLLFLBBRRR",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R' U L' U2 R U' R' U2 R L U'",
+              "moves": [
+                "R'",
+                "U",
+                "L'",
+                "U2",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "L",
+                "U'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达）、补末尾 U'）｜来源 jperm PLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -1590,7 +1461,7 @@
           "sig": "FLLRRRBFFBBL",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "R' U2 R U R' U2 L U' R U L'",
               "moves": [
                 "R'",
@@ -1615,7 +1486,7 @@
               ]
             },
             {
-              "no": 3,
+              "no": 4,
               "alg": "x R2 F R F' R U2 r' U r U2",
               "moves": [
                 "x",
@@ -1637,58 +1508,6 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL｜来源 jperm PLL"
-            },
-            {
-              "no": 4,
-              "alg": "y' R' U L' U2 R U' R' U2 R L U",
-              "moves": [
-                "y'",
-                "R'",
-                "U",
-                "L'",
-                "U2",
-                "R",
-                "U'",
-                "R'",
-                "U2",
-                "R",
-                "L",
-                "U"
-              ],
-              "n": 12,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL（补末尾 U）｜来源 jperm PLL"
-            },
-            {
-              "no": 5,
-              "alg": "y2 L' U' L F L' U' L U L F' L2 U L U",
-              "moves": [
-                "y2",
-                "L'",
-                "U'",
-                "L",
-                "F",
-                "L'",
-                "U'",
-                "L",
-                "U",
-                "L",
-                "F'",
-                "L2",
-                "U",
-                "L",
-                "U"
-              ],
-              "n": 15,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL（补末尾 U）"
             }
           ]
         },
@@ -2311,33 +2130,6 @@
               ],
               "tags": [],
               "verified": "jperm PLL（补末尾 U'）"
-            },
-            {
-              "no": 4,
-              "alg": "y' L U2 L' U2 L F' L' U' L U L F L2 U",
-              "moves": [
-                "y'",
-                "L",
-                "U2",
-                "L'",
-                "U2",
-                "L",
-                "F'",
-                "L'",
-                "U'",
-                "L",
-                "U",
-                "L",
-                "F",
-                "L2",
-                "U"
-              ],
-              "n": 15,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL（补末尾 U）"
             }
           ]
         },
@@ -2366,7 +2158,34 @@
           "img-nc-day": "img/pll/pll-Ra-v3-nc-256x256.png",
           "img-nc-night": "img/pll/pll-Ra-v3-nc-night-256x256.png",
           "sig": "FRBRLBRFFLBL",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "L U2 L' U2 L F' L' U' L U L F L2 U",
+              "moves": [
+                "L",
+                "U2",
+                "L'",
+                "U2",
+                "L",
+                "F'",
+                "L'",
+                "U'",
+                "L",
+                "U",
+                "L",
+                "F",
+                "L2",
+                "U"
+              ],
+              "n": 14,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（补末尾 U）｜去掉开头的 y（它属于哪个画面由画面表达）"
+            }
+          ]
         }
       ]
     },
@@ -2484,6 +2303,33 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL（补末尾 U'）｜来源 jperm PLL"
+            },
+            {
+              "no": 4,
+              "alg": "R' U2 R U2 R' F R U R' U' R' F' R2 U'",
+              "moves": [
+                "R'",
+                "U2",
+                "R",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F'",
+                "R2",
+                "U'"
+              ],
+              "n": 14,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达）、补末尾 U'）｜来源 jperm PLL"
             }
           ]
         },
@@ -2496,7 +2342,7 @@
           "sig": "FFLRBRBLFBRL",
           "algs": [
             {
-              "no": 4,
+              "no": 5,
               "alg": "R2 F R U R U' R' F' R U2 R' U2 R U",
               "moves": [
                 "R2",
@@ -2515,34 +2361,6 @@
                 "U"
               ],
               "n": 14,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL（补末尾 U）｜来源 jperm PLL"
-            },
-            {
-              "no": 5,
-              "alg": "y' R' U2 R U2 R' F R U R' U' R' F' R2 U",
-              "moves": [
-                "y'",
-                "R'",
-                "U2",
-                "R",
-                "U2",
-                "R'",
-                "F",
-                "R",
-                "U",
-                "R'",
-                "U'",
-                "R'",
-                "F'",
-                "R2",
-                "U"
-              ],
-              "n": 15,
               "uses": [
                 "2H",
                 "OH"
@@ -2723,31 +2541,6 @@
               "tags": [
                 "ohpll-preferred"
               ]
-            },
-            {
-              "no": 4,
-              "alg": "y2 R2 U' R' U' R U R U R U' R",
-              "moves": [
-                "y2",
-                "R2",
-                "U'",
-                "R'",
-                "U'",
-                "R",
-                "U",
-                "R",
-                "U",
-                "R",
-                "U'",
-                "R"
-              ],
-              "n": 12,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL｜来源 jperm PLL"
             }
           ]
         },
@@ -2767,7 +2560,32 @@
           "img-nc-day": "img/pll/pll-Ua-v2-nc-256x256.png",
           "img-nc-night": "img/pll/pll-Ua-v2-nc-night-256x256.png",
           "sig": "FRFRLRLFLBBB",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "R2 U' R' U' R U R U R U' R",
+              "moves": [
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm PLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -2888,55 +2706,6 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL"
-            },
-            {
-              "no": 5,
-              "alg": "y2 L2 U L U L' U' L' U' L' U L'",
-              "moves": [
-                "y2",
-                "L2",
-                "U",
-                "L",
-                "U",
-                "L'",
-                "U'",
-                "L'",
-                "U'",
-                "L'",
-                "U",
-                "L'"
-              ],
-              "n": 12,
-              "uses": [
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL"
-            },
-            {
-              "no": 6,
-              "alg": "y2 R' U R' U' R' U' (R' U R U) R2",
-              "moves": [
-                "y2",
-                "R'",
-                "U",
-                "R'",
-                "U'",
-                "R'",
-                "U'",
-                "R'",
-                "U",
-                "R",
-                "U",
-                "R2"
-              ],
-              "n": 12,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL｜来源 jperm PLL"
             }
           ]
         },
@@ -2956,7 +2725,55 @@
           "img-nc-day": "img/pll/pll-Ub-v2-nc-256x256.png",
           "img-nc-night": "img/pll/pll-Ub-v2-nc-night-256x256.png",
           "sig": "FLFRFRLRLBBB",
-          "algs": []
+          "algs": [
+            {
+              "no": 5,
+              "alg": "L2 U L U L' U' L' U' L' U L'",
+              "moves": [
+                "L2",
+                "U",
+                "L",
+                "U",
+                "L'",
+                "U'",
+                "L'",
+                "U'",
+                "L'",
+                "U",
+                "L'"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            },
+            {
+              "no": 6,
+              "alg": "R' U R' U' R' U' (R' U R U) R2",
+              "moves": [
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm PLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -3478,6 +3295,50 @@
               ],
               "verified": "pll_db.py: sig→alg 复原",
               "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "M' U' M2 U' M2 U' M' U2 M2 U",
+              "moves": [
+                "M'",
+                "U'",
+                "M2",
+                "U'",
+                "M2",
+                "U'",
+                "M'",
+                "U2",
+                "M2",
+                "U"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达）、补末尾 U）｜来源 jperm PLL"
+            },
+            {
+              "no": 4,
+              "alg": "M2 U M2 U M' U2 M2 U2 M' U2",
+              "moves": [
+                "M2",
+                "U",
+                "M2",
+                "U",
+                "M'",
+                "U2",
+                "M2",
+                "U2",
+                "M'",
+                "U2"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm PLL（去掉开头的 y（它属于哪个画面由画面表达）、补末尾 U2）"
             }
           ]
         },
@@ -3490,7 +3351,7 @@
           "sig": "LBLFRFBLBRFR",
           "algs": [
             {
-              "no": 3,
+              "no": 5,
               "alg": "R' U' R U' R U R U' R' U R U R2 U' R' U",
               "moves": [
                 "R'",
@@ -3520,29 +3381,7 @@
               ]
             },
             {
-              "no": 4,
-              "alg": "y M' U' M2 U' M2 U' M' U2 M2",
-              "moves": [
-                "y",
-                "M'",
-                "U'",
-                "M2",
-                "U'",
-                "M2",
-                "U'",
-                "M'",
-                "U2",
-                "M2"
-              ],
-              "n": 10,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL"
-            },
-            {
-              "no": 5,
+              "no": 6,
               "alg": "M' U M2 U M2 U M' U2 M2 U'",
               "moves": [
                 "M'",
@@ -3562,29 +3401,6 @@
               ],
               "tags": [],
               "verified": "jperm PLL（补末尾 U'）"
-            },
-            {
-              "no": 6,
-              "alg": "y M2 U M2 U M' U2 M2 U2 M' U",
-              "moves": [
-                "y",
-                "M2",
-                "U",
-                "M2",
-                "U",
-                "M'",
-                "U2",
-                "M2",
-                "U2",
-                "M'",
-                "U"
-              ],
-              "n": 11,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL（补末尾 U）"
             },
             {
               "no": 7,

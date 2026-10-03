@@ -56,10 +56,12 @@
               ],
               "n": 11,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -74,7 +76,32 @@
           ],
           "img-day": "img/oll/oll-21-v1-day-256x256.png",
           "img-night": "img/oll/oll-21-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R U R' U R U' R' U R U2 R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         }
       ]
     },
@@ -118,6 +145,30 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R U2 (R2 U' R2 U' R2) U2 R",
+              "moves": [
+                "R",
+                "U2",
+                "R2",
+                "U'",
+                "R2",
+                "U'",
+                "R2",
+                "U2",
+                "R"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -190,12 +241,39 @@
               ],
               "n": 9,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R U R' U R U2 R2 U' R U' R' U2 R",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R2",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -219,7 +297,56 @@
           ],
           "img-day": "img/oll/oll-23-v2-day-256x256.png",
           "img-night": "img/oll/oll-23-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R2 D' R U2 R' D R U2 R",
+              "moves": [
+                "R2",
+                "D'",
+                "R",
+                "U2",
+                "R'",
+                "D",
+                "R",
+                "U2",
+                "R"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            },
+            {
+              "no": 4,
+              "alg": "R' U' R U' R' U2 R R U R' U R U2 R'",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（归到 v2）"
+            }
+          ]
         },
         {
           "view": 3,
@@ -274,6 +401,33 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R' U2 R U R' U R2 U2 R' U' R U' R'",
+              "moves": [
+                "R'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R2",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
         },
@@ -286,7 +440,29 @@
           ],
           "img-day": "img/oll/oll-24-v1-day-256x256.png",
           "img-night": "img/oll/oll-24-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r U R' U' r' F R F'",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U'",
+                "r'",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 8,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -297,7 +473,55 @@
           ],
           "img-day": "img/oll/oll-24-v2-day-256x256.png",
           "img-night": "img/oll/oll-24-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "R U R D R' U' R D' R2",
+              "moves": [
+                "R",
+                "U",
+                "R",
+                "D",
+                "R'",
+                "U'",
+                "R",
+                "D'",
+                "R2"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            },
+            {
+              "no": 5,
+              "alg": "R U2 R' U' R U' R2 U2 R U R' U R",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R2",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            }
+          ]
         },
         {
           "view": 3,
@@ -364,7 +588,77 @@
           ],
           "img-day": "img/oll/oll-25-v1-day-256x256.png",
           "img-night": "img/oll/oll-25-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R' F R B' R' F' R B",
+              "moves": [
+                "R'",
+                "F",
+                "R",
+                "B'",
+                "R'",
+                "F'",
+                "R",
+                "B"
+              ],
+              "n": 8,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            },
+            {
+              "no": 3,
+              "alg": "F R' F' r U R U' r'",
+              "moves": [
+                "F",
+                "R'",
+                "F'",
+                "r",
+                "U",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 8,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL（归到 v1）"
+            },
+            {
+              "no": 4,
+              "alg": "R2 U' R U R U' R' U' R U' R' U R' U R2",
+              "moves": [
+                "R2",
+                "U'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "U",
+                "R2"
+              ],
+              "n": 15,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（归到 v1）"
+            }
+          ]
         },
         {
           "view": 2,
@@ -375,7 +669,29 @@
           ],
           "img-day": "img/oll/oll-25-v2-day-256x256.png",
           "img-night": "img/oll/oll-25-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 5,
+              "alg": "F' r U R' U' r' F R",
+              "moves": [
+                "F'",
+                "r",
+                "U",
+                "R'",
+                "U'",
+                "r'",
+                "F",
+                "R"
+              ],
+              "n": 8,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -422,10 +738,12 @@
               ],
               "n": 7,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -440,7 +758,28 @@
           ],
           "img-day": "img/oll/oll-26-v1-day-256x256.png",
           "img-night": "img/oll/oll-26-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "(R U2 R') U' R U' R'",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -516,7 +855,30 @@
           ],
           "img-day": "img/oll/oll-27-v1-day-256x256.png",
           "img-night": "img/oll/oll-27-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R' U2 (R U R' U) R",
+              "moves": [
+                "R'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -527,7 +889,28 @@
           ],
           "img-day": "img/oll/oll-27-v2-day-256x256.png",
           "img-night": "img/oll/oll-27-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R U R' U R U2 R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -584,6 +967,33 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R U2 R' R' F R F' U2 R' F R F'",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 12,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -642,6 +1052,33 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "F R U R' U' F' f R U R' U' f'",
+              "moves": [
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'",
+                "f",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "f'"
+              ],
+              "n": 12,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
             }
           ]
         },
@@ -654,7 +1091,32 @@
           ],
           "img-day": "img/oll/oll-02-v1-day-256x256.png",
           "img-night": "img/oll/oll-02-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r U r' U2 r U2 R' U2 R U' r'",
+              "moves": [
+                "r",
+                "U",
+                "r'",
+                "U2",
+                "r",
+                "U2",
+                "R'",
+                "U2",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -723,6 +1185,31 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "f R U R' U' f' U' F R U R' U' F'",
+              "moves": [
+                "f",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "f'",
+                "U'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
         },
@@ -735,7 +1222,55 @@
           ],
           "img-day": "img/oll/oll-03-v1-day-256x256.png",
           "img-night": "img/oll/oll-03-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r' R2 U R' U r U2 r' U M'",
+              "moves": [
+                "r'",
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "r",
+                "U2",
+                "r'",
+                "U",
+                "M'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v1）"
+            },
+            {
+              "no": 4,
+              "alg": "r' R2 U R' U r U2 r' U R' r",
+              "moves": [
+                "r'",
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "r",
+                "U2",
+                "r'",
+                "U",
+                "R'",
+                "r"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL（归到 v1）"
+            }
+          ]
         },
         {
           "view": 2,
@@ -746,7 +1281,33 @@
           ],
           "img-day": "img/oll/oll-03-v2-day-256x256.png",
           "img-night": "img/oll/oll-03-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 5,
+              "alg": "F U R U' R' F' U F R U R' U' F'",
+              "moves": [
+                "F",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'",
+                "U",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            }
+          ]
         },
         {
           "view": 3,
@@ -804,6 +1365,31 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "F U R U' R' F' U' F R U R' U' F'",
+              "moves": [
+                "F",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'",
+                "U'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
         },
@@ -827,7 +1413,33 @@
           ],
           "img-day": "img/oll/oll-04-v2-day-256x256.png",
           "img-night": "img/oll/oll-04-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "f R U R' U' f' U F R U R' U' F'",
+              "moves": [
+                "f",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "f'",
+                "U",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            }
+          ]
         },
         {
           "view": 3,
@@ -838,7 +1450,55 @@
           ],
           "img-day": "img/oll/oll-04-v3-day-256x256.png",
           "img-night": "img/oll/oll-04-v3-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "M U' r U2 r' U' R U' R' M'",
+              "moves": [
+                "M",
+                "U'",
+                "r",
+                "U2",
+                "r'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "M'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v3）"
+            },
+            {
+              "no": 5,
+              "alg": "r' R U' r U2 r' U' R U' R2 r",
+              "moves": [
+                "r'",
+                "R",
+                "U'",
+                "r",
+                "U2",
+                "r'",
+                "U'",
+                "R",
+                "U'",
+                "R2",
+                "r"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL（归到 v3）"
+            }
+          ]
         }
       ]
     },
@@ -880,10 +1540,12 @@
               ],
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -909,7 +1571,55 @@
           ],
           "img-day": "img/oll/oll-17-v2-day-256x256.png",
           "img-night": "img/oll/oll-17-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "F R' F' R2 r' U R U' R' U' M'",
+              "moves": [
+                "F",
+                "R'",
+                "F'",
+                "R2",
+                "r'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "M'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）"
+            },
+            {
+              "no": 3,
+              "alg": "F R' F' R2 r' U R U' R' U' R' r",
+              "moves": [
+                "F",
+                "R'",
+                "F'",
+                "R2",
+                "r'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R'",
+                "r"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（归到 v2）"
+            }
+          ]
         },
         {
           "view": 3,
@@ -968,6 +1678,59 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r U R' U R U2 r' r' U' R U' R' U2 r",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "r'",
+                "r'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "r"
+              ],
+              "n": 14,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 3,
+              "alg": "r U R' U R U2 r2 U' R U' R' U2 r",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "r2",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "r"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -980,7 +1743,59 @@
           ],
           "img-day": "img/oll/oll-18-v1-day-256x256.png",
           "img-night": "img/oll/oll-18-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "R U2 R' R' F R F' U2 M' (U R U' r')",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "U2",
+                "M'",
+                "U",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            },
+            {
+              "no": 5,
+              "alg": "R U2 R' R' F R F' U2 R' r (U R U' r')",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "U2",
+                "R'",
+                "r",
+                "U",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            }
+          ]
         },
         {
           "view": 2,
@@ -991,7 +1806,33 @@
           ],
           "img-day": "img/oll/oll-18-v2-day-256x256.png",
           "img-night": "img/oll/oll-18-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 6,
+              "alg": "r' U' R U' R' U2 r2 U R' U R U2 r'",
+              "moves": [
+                "r'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "r2",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "r'"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            }
+          ]
         },
         {
           "view": 3,
@@ -1048,6 +1889,57 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r' R U R U R' U' M' R' F R F'",
+              "moves": [
+                "r'",
+                "R",
+                "U",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "M'",
+                "R'",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 12,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 3,
+              "alg": "r' U2 R U R' U r2 U2 R' U' R U' r'",
+              "moves": [
+                "r'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "r2",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
         },
@@ -1071,7 +1963,33 @@
           ],
           "img-day": "img/oll/oll-19-v2-day-256x256.png",
           "img-night": "img/oll/oll-19-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "r U2 R' U' R U' r2 U2 R U R' U r",
+              "moves": [
+                "r",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "r2",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "r"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（归到 v2）"
+            }
+          ]
         },
         {
           "view": 3,
@@ -1128,6 +2046,105 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r U R' U' M2 U R U' R' U' M'",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U'",
+                "M2",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "M'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 3,
+              "alg": "r' R U (R U R' U') M2 U R U' r'",
+              "moves": [
+                "r'",
+                "R",
+                "U",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "M2",
+                "U",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 12,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 4,
+              "alg": "r U R' U' r2 R2 U R U' R' U' R' r",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U'",
+                "r2",
+                "R2",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R'",
+                "r"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
+            },
+            {
+              "no": 5,
+              "alg": "r' R U (R U R' U') r2 R2 U R U' r'",
+              "moves": [
+                "r'",
+                "R",
+                "U",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "r2",
+                "R2",
+                "U",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL"
             }
           ]
         }
@@ -1196,6 +2213,56 @@
               ],
               "verified": "oll_db.py: sig 复原",
               "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "F U R U' R2 F' R U R U' R'",
+              "moves": [
+                "F",
+                "U",
+                "R",
+                "U'",
+                "R2",
+                "F'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
+            },
+            {
+              "no": 4,
+              "alg": "r U' r' U' r U r' y' R' U R",
+              "moves": [
+                "r",
+                "U'",
+                "r'",
+                "U'",
+                "r",
+                "U",
+                "r'",
+                "y'",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -1297,6 +2364,31 @@
               ],
               "verified": "oll_db.py: sig 复原",
               "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "R' F R U R' F' R y' R U' R'",
+              "moves": [
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "F'",
+                "R",
+                "y'",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -1376,6 +2468,30 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r' U' R' r U' R U r' U r",
+              "moves": [
+                "r'",
+                "U'",
+                "R'",
+                "r",
+                "U'",
+                "R",
+                "U",
+                "r'",
+                "U",
+                "r"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -1399,7 +2515,31 @@
           ],
           "img-day": "img/oll/oll-15-v2-day-256x256.png",
           "img-night": "img/oll/oll-15-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "l' U' l L' U' L U l' U l",
+              "moves": [
+                "l'",
+                "U'",
+                "l",
+                "L'",
+                "U'",
+                "L",
+                "U",
+                "l'",
+                "U",
+                "l"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -1478,7 +2618,33 @@
           ],
           "img-day": "img/oll/oll-16-v2-day-256x256.png",
           "img-night": "img/oll/oll-16-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "r U r' R U R' U' r U' r'",
+              "moves": [
+                "r",
+                "U",
+                "r'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "r",
+                "U'",
+                "r'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -1526,10 +2692,12 @@
               ],
               "n": 8,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -1630,10 +2798,35 @@
               ],
               "n": 11,
               "uses": [
+                "2H",
+                "OH"
+              ],
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
+              "tags": [
+                "oholl-preferred"
+              ]
+            },
+            {
+              "no": 3,
+              "alg": "R U R' U' B' R' F R F' B",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "B'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "B"
+              ],
+              "n": 10,
+              "uses": [
                 "2H"
               ],
-              "verified": "oll_db.py: sig 复原",
-              "tags": []
+              "tags": [],
+              "verified": "jperm OLL"
             }
           ]
         },
@@ -1712,6 +2905,30 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r U' r' U' r y R U R' f'",
+              "moves": [
+                "r",
+                "U'",
+                "r'",
+                "U'",
+                "r",
+                "y",
+                "R",
+                "U",
+                "R'",
+                "f'"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -1735,7 +2952,30 @@
           ],
           "img-day": "img/oll/oll-39-v2-day-256x256.png",
           "img-night": "img/oll/oll-39-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R B' R' U' R U B U' R'",
+              "moves": [
+                "R",
+                "B'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "B",
+                "U'",
+                "R'"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -1784,10 +3024,12 @@
               ],
               "n": 9,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -1859,10 +3101,12 @@
               ],
               "n": 6,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -1936,10 +3180,12 @@
               ],
               "n": 8,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -2044,7 +3290,33 @@
           ],
           "img-day": "img/oll/oll-51-v2-day-256x256.png",
           "img-night": "img/oll/oll-51-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "F U R U' R' U R U' R' F'",
+              "moves": [
+                "F",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -2101,6 +3373,54 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R U R' U R U' B U' B' R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "B",
+                "U'",
+                "B'",
+                "R'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 3,
+              "alg": "R U R' U R U' y R U' R' F'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "y",
+                "R",
+                "U'",
+                "R'",
+                "F'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -2124,7 +3444,31 @@
           ],
           "img-day": "img/oll/oll-52-v2-day-256x256.png",
           "img-night": "img/oll/oll-52-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "R' F' U' F U' (R U R' U) R",
+              "moves": [
+                "R'",
+                "F'",
+                "U'",
+                "F",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -2181,6 +3525,32 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R U2 R2 U' R U' R' U2 F R F'",
+              "moves": [
+                "R",
+                "U2",
+                "R2",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
             }
           ]
         },
@@ -2193,7 +3563,36 @@
           ],
           "img-day": "img/oll/oll-55-v1-day-256x256.png",
           "img-night": "img/oll/oll-55-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R' F R U R U' R2 F' R2 U' R' U R U R'",
+              "moves": [
+                "R'",
+                "F",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R2",
+                "F'",
+                "R2",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R'"
+              ],
+              "n": 15,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         }
       ]
     },
@@ -2242,6 +3641,60 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "(r U r') U R U' R' U R U' R' (r U' r')",
+              "moves": [
+                "r",
+                "U",
+                "r'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "r",
+                "U'",
+                "r'"
+              ],
+              "n": 14,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
+            },
+            {
+              "no": 3,
+              "alg": "(r U r') U R U' R' U R U' M' U' r'",
+              "moves": [
+                "r",
+                "U",
+                "r'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "M'",
+                "U'",
+                "r'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
             }
           ]
         },
@@ -2298,6 +3751,30 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R U R' U' R' r U R U' r'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "r",
+                "U",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -2352,6 +3829,28 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "l' U2 L U L' U l",
+              "moves": [
+                "l'",
+                "U2",
+                "L",
+                "U",
+                "L'",
+                "U",
+                "l"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -2375,7 +3874,28 @@
           ],
           "img-day": "img/oll/oll-05-v2-day-256x256.png",
           "img-night": "img/oll/oll-05-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r' U2 R U R' U r",
+              "moves": [
+                "r'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "r"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -2422,10 +3942,12 @@
               ],
               "n": 7,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -2527,7 +4049,30 @@
           ],
           "img-day": "img/oll/oll-07-v2-day-256x256.png",
           "img-night": "img/oll/oll-07-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "r U R' U R U2 r'",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "r'"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -2580,6 +4125,28 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r' U' R U' R' U2 r",
+              "moves": [
+                "r'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "r"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
             }
           ]
         },
@@ -2603,7 +4170,48 @@
           ],
           "img-day": "img/oll/oll-08-v2-day-256x256.png",
           "img-night": "img/oll/oll-08-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "l' U' L U' L' U2 l",
+              "moves": [
+                "l'",
+                "U'",
+                "L",
+                "U'",
+                "L'",
+                "U2",
+                "l"
+              ],
+              "n": 7,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            },
+            {
+              "no": 4,
+              "alg": "R U2 R' U2 R' F R F'",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "U2",
+                "R'",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 8,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）"
+            }
+          ]
         },
         {
           "view": 3,
@@ -2671,7 +4279,34 @@
           ],
           "img-day": "img/oll/oll-09-v1-day-256x256.png",
           "img-night": "img/oll/oll-09-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R U R' U' R' F R2 U R' U' F'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R2",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -2750,7 +4385,34 @@
           ],
           "img-day": "img/oll/oll-10-v1-day-256x256.png",
           "img-night": "img/oll/oll-10-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R U R' U R' F R F' R U2 R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "R",
+                "U2",
+                "R'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -2772,7 +4434,35 @@
           ],
           "img-day": "img/oll/oll-10-v3-day-256x256.png",
           "img-night": "img/oll/oll-10-v3-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r U R' U R U' R' U' r' R (U R U' R')",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "r'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 14,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         }
       ]
     },
@@ -2818,6 +4508,32 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r U R' U R' F R F' R U2 r'",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "R",
+                "U2",
+                "r'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -2841,7 +4557,53 @@
           ],
           "img-day": "img/oll/oll-11-v2-day-256x256.png",
           "img-night": "img/oll/oll-11-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r' R2 U R' U R U2 R' U M'",
+              "moves": [
+                "r'",
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "U",
+                "M'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            },
+            {
+              "no": 4,
+              "alg": "r' R2 U R' U R U2 R' U R' r",
+              "moves": [
+                "r'",
+                "R2",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "U",
+                "R'",
+                "r"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL（归到 v2）"
+            }
+          ]
         },
         {
           "view": 3,
@@ -2898,6 +4660,54 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "M' R' U' R U' R' U2 R U' R r'",
+              "moves": [
+                "M'",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "U'",
+                "R",
+                "r'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 3,
+              "alg": "r R2 U' R U' R' U2 R U' r' R",
+              "moves": [
+                "r",
+                "R2",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "U'",
+                "r'",
+                "R"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -2988,7 +4798,33 @@
           ],
           "img-day": "img/oll/oll-28-v1-day-256x256.png",
           "img-night": "img/oll/oll-28-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "r U R' U' r' R U R U' R'",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U'",
+                "r'",
+                "R",
+                "U",
+                "R",
+                "U'",
+                "R'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -3117,7 +4953,36 @@
           ],
           "img-day": "img/oll/oll-29-v3-day-256x256.png",
           "img-night": "img/oll/oll-29-v3-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "R U R' U' R U' R' F' U' F R U R'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "F'",
+                "U'",
+                "F",
+                "R",
+                "U",
+                "R'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v3）｜来源 jperm OH OLL"
+            }
+          ]
         }
       ]
     },
@@ -3190,6 +5055,55 @@
               ],
               "verified": "oll_db.py: sig 复原",
               "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "F R' F R2 U' R' U' R U R' F2",
+              "moves": [
+                "F",
+                "R'",
+                "F",
+                "R2",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "F2"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 4,
+              "alg": "F U (R U2 R' U') R U2 R' U' F'",
+              "moves": [
+                "F",
+                "U",
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U2",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -3291,7 +5205,32 @@
           ],
           "img-day": "img/oll/oll-31-v2-day-256x256.png",
           "img-night": "img/oll/oll-31-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R' U' F U R U' R' F' R",
+              "moves": [
+                "R'",
+                "U'",
+                "F",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'",
+                "R"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -3346,6 +5285,27 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "S R U R' U' R' F R f'",
+              "moves": [
+                "S",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R",
+                "f'"
+              ],
+              "n": 9,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
             }
           ]
         },
@@ -3369,7 +5329,32 @@
           ],
           "img-day": "img/oll/oll-32-v2-day-256x256.png",
           "img-night": "img/oll/oll-32-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "L U F' U' L' U L F L'",
+              "moves": [
+                "L",
+                "U",
+                "F'",
+                "U'",
+                "L'",
+                "U",
+                "L",
+                "F",
+                "L'"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -3424,6 +5409,31 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R U2 R' R' F R F' R U2 R'",
+              "moves": [
+                "R",
+                "U2",
+                "R'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "R",
+                "U2",
+                "R'"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -3503,6 +5513,57 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R' U' R U' R' U R U R B' R' B",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "R",
+                "B'",
+                "R'",
+                "B"
+              ],
+              "n": 12,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
+            },
+            {
+              "no": 3,
+              "alg": "R' U' R U' R' U R U x' R U' R' U",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U",
+                "x'",
+                "R",
+                "U'",
+                "R'",
+                "U"
+              ],
+              "n": 13,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -3526,7 +5587,32 @@
           ],
           "img-day": "img/oll/oll-36-v2-day-256x256.png",
           "img-night": "img/oll/oll-36-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "L' U' L U' L' U L U L F' L' F",
+              "moves": [
+                "L'",
+                "U'",
+                "L",
+                "U'",
+                "L'",
+                "U",
+                "L",
+                "U",
+                "L",
+                "F'",
+                "L'",
+                "F"
+              ],
+              "n": 12,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）"
+            }
+          ]
         },
         {
           "view": 3,
@@ -3574,12 +5660,36 @@
               ],
               "n": 8,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "F R U' R' U' R U R' F'",
+              "moves": [
+                "F",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "F'"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -3682,7 +5792,35 @@
           ],
           "img-day": "img/oll/oll-38-v2-day-256x256.png",
           "img-night": "img/oll/oll-38-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R U R' U R U' R' U' R' F R F'",
+              "moves": [
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R",
+                "F'"
+              ],
+              "n": 12,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -3735,10 +5873,12 @@
               ],
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -3846,7 +5986,36 @@
           ],
           "img-day": "img/oll/oll-42-v2-day-256x256.png",
           "img-night": "img/oll/oll-42-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "R' U' R U' R' U2 R F R U R' U' F'",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U2",
+                "R",
+                "F",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "F'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -3921,7 +6090,50 @@
           ],
           "img-day": "img/oll/oll-43-v2-day-256x256.png",
           "img-night": "img/oll/oll-43-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "F' U' L' U L F",
+              "moves": [
+                "F'",
+                "U'",
+                "L'",
+                "U",
+                "L",
+                "F"
+              ],
+              "n": 6,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            },
+            {
+              "no": 3,
+              "alg": "R' U' F R' F' R U R",
+              "moves": [
+                "R'",
+                "U'",
+                "F",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R"
+              ],
+              "n": 8,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -3996,7 +6208,29 @@
           ],
           "img-day": "img/oll/oll-44-v2-day-256x256.png",
           "img-night": "img/oll/oll-44-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "F U R U' R' F'",
+              "moves": [
+                "F",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'"
+              ],
+              "n": 6,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -4046,12 +6280,64 @@
               ],
               "n": 10,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R' U' R' F R F' R' F R F' U R",
+              "moves": [
+                "R'",
+                "U'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "R'",
+                "F",
+                "R",
+                "F'",
+                "U",
+                "R"
+              ],
+              "n": 12,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL"
+            },
+            {
+              "no": 3,
+              "alg": "R' U' x R' U R U' R' U R U' x' U R",
+              "moves": [
+                "R'",
+                "U'",
+                "x",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "x'",
+                "U",
+                "R"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -4086,7 +6372,34 @@
           ],
           "img-day": "img/oll/oll-47-v3-day-256x256.png",
           "img-night": "img/oll/oll-47-v3-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "F U R U' R' F' R U R' U R U2 R'",
+              "moves": [
+                "F",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "F'",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "R'"
+              ],
+              "n": 13,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         }
       ]
     },
@@ -4125,10 +6438,12 @@
               ],
               "n": 10,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -4209,6 +6524,31 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "R x' U' z u2 R u2 R u2 R' u",
+              "moves": [
+                "R",
+                "x'",
+                "U'",
+                "z",
+                "u2",
+                "R",
+                "u2",
+                "R",
+                "u2",
+                "R'",
+                "u"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -4232,7 +6572,30 @@
           ],
           "img-day": "img/oll/oll-49-v2-day-256x256.png",
           "img-night": "img/oll/oll-49-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r U' r2 U r2 U r2 U' r",
+              "moves": [
+                "r",
+                "U'",
+                "r2",
+                "U",
+                "r2",
+                "U",
+                "r2",
+                "U'",
+                "r"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,
@@ -4287,6 +6650,30 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "r' U r2 U' r2 U' r2 U r'",
+              "moves": [
+                "r'",
+                "U",
+                "r2",
+                "U'",
+                "r2",
+                "U'",
+                "r2",
+                "U",
+                "r'"
+              ],
+              "n": 9,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
             }
           ]
         },
@@ -4361,10 +6748,12 @@
               ],
               "n": 11,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             }
@@ -4379,7 +6768,32 @@
           ],
           "img-day": "img/oll/oll-53-v1-day-256x256.png",
           "img-night": "img/oll/oll-53-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "r' U2 (R U R' U') R U R' U r",
+              "moves": [
+                "r'",
+                "U2",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "U",
+                "r"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -4401,7 +6815,31 @@
           ],
           "img-day": "img/oll/oll-53-v3-day-256x256.png",
           "img-night": "img/oll/oll-53-v3-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "l' U2 L U L' U' L U L' U l",
+              "moves": [
+                "l'",
+                "U2",
+                "L",
+                "U",
+                "L'",
+                "U'",
+                "L",
+                "U",
+                "L'",
+                "U",
+                "l"
+              ],
+              "n": 11,
+              "uses": [
+                "2H"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（归到 v3）"
+            }
+          ]
         }
       ]
     },
@@ -4459,7 +6897,34 @@
           ],
           "img-day": "img/oll/oll-54-v1-day-256x256.png",
           "img-night": "img/oll/oll-54-v1-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 2,
+              "alg": "(r U2 R' U') R U R' U' R U' r'",
+              "moves": [
+                "r",
+                "U2",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "r'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 2,
@@ -4470,7 +6935,32 @@
           ],
           "img-day": "img/oll/oll-54-v2-day-256x256.png",
           "img-night": "img/oll/oll-54-v2-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "r U R' U R U' R' U R U2 r'",
+              "moves": [
+                "r",
+                "U",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U2",
+                "r'"
+              ],
+              "n": 11,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+            }
+          ]
         },
         {
           "view": 3,

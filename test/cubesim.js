@@ -683,9 +683,10 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       /function applyTheme\(t\) \{\s*\n\s*root\.dataset\.theme = t;\s*\n\s*syncThumb\(\);/.test(html));
     ok('题图文件名按昼夜挑（只有 OLL 有两版）',
       /kind === 'oll' \? \(document\.documentElement\.dataset\.theme === 'dark' \? '-night' : '-day'\) : ''/.test(html));
-    ok('OLL 缩略图带 -v0（库里的 OLL 图是按「去重后的画面」命名的）',
-      /kind === 'oll' \? '-v0' : ''/.test(html) &&
-      /kind === 'oll' \? '-v0' : ''/.test(
+    ok('练习页的 OLL 缩略图带 -v0（它只取每题第一行 = 主公式，一定在基准画面）',
+      /kind === 'oll' \? '-v0' : ''/.test(html));
+    ok('计算器的 OLL 缩略图用行里带的画面号（row[2]，可能是 v1/v2/v3）',
+      /var tv = row\[2\] == null \? 0 : row\[2\]/.test(
         fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')));
     {
       const before = els5.qimg.src;
@@ -757,8 +758,8 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
     // 以前抽到第二条时答案就变成备选的那条。现在只练第一行。
     {
       const rows29 = ctx5.ALG_LIST.oll.filter(r => r[0] === '29');
-      ok("OLL 29 题库里还是两条，第一行是主公式 (R' F R F') (R U2 R' U') y' (R' U' R)",
-        rows29.length === 2 && rows29[0][1] === "(R' F R F') (R U2 R' U') y' (R' U' R)",
+      ok("OLL 29 题库里多条写法都进来了，但第一行仍是主公式 (R' F R F') (R U2 R' U') y' (R' U' R)",
+        rows29.length >= 2 && rows29[0][1] === "(R' F R F') (R U2 R' U') y' (R' U' R)",
         JSON.stringify(rows29.map(r => r[1])));
       const one29 = uniq('oll').filter(r => r[0] === '29')[0];
       ok('练习取 OLL 29 时用的是主公式，不是备选那条',
@@ -984,9 +985,9 @@ console.log('\n[11e] 「跳计算器」链接的朝向标记：只有 F2L 的 b 
                   body: { appendChild() {} }, addEventListener() {} } };
     ctx.globalThis = ctx;
     vm.createContext(ctx);
-    // 公式页的行数据来自 plldata.js / olldata.js（pll / oll 的 SECTIONS 都由库生成），
-    // 桩里先都跑一遍（f2l 用不到，跑了也无害）
-    ['js/plldata.js', 'js/olldata.js'].forEach(f =>
+    // 公式页的行数据来自各自的库（SECTIONS 由 plldata.js / olldata.js / f2ldata.js 生成），
+    // 桩里先都跑一遍
+    ['js/plldata.js', 'js/olldata.js', 'js/f2ldata.js'].forEach(f =>
       vm.runInContext(fs.readFileSync(path.join(__dirname, '..', f), 'utf8'), ctx));
     const src = fs.readFileSync(path.join(__dirname, '..', page), 'utf8')
       .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
@@ -994,7 +995,32 @@ console.log('\n[11e] 「跳计算器」链接的朝向标记：只有 F2L 的 b 
     vm.runInContext(src, ctx);
     return els.app.innerHTML;
   };
-  const f2l = render('f2l.html'), oll = render('oll.html'), pll = render('pll.html');
+  const f2l = render('f2l.html'), oll = render('oll.html'), pll = render('pll.html'),
+        oholl = render('oh-oll.html');
+  // 单手 OLL 页：57 行，每行显示的是这个情况的**单手**写法（oholl-preferred 排最前）
+  {
+    const odb = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'oll.json'), 'utf8'));
+    const pickOh = c => {
+      const oh = c.views.flatMap(v => v.algs).filter(a => a.uses.indexOf('OH') >= 0);
+      const pref = oh.filter(a => (a.tags || []).indexOf('oholl-preferred') >= 0);
+      return (pref[0] || oh[0] || {}).alg;
+    };
+    const rows = oholl.split('<tr>').filter(r => /data-oholl="/.test(r));
+    const bad = odb.cases.filter(c => {
+      const row = rows.filter(r => r.indexOf('data-oholl="' + c.id + '"') >= 0)[0] || '';
+      return row.indexOf(pickOh(c)) < 0;
+    });
+    ok('单手 OLL 页从库渲染：57 行、每行显示这个情况的单手写法（首选那条）',
+      rows.length === 57 && (oholl.match(/data-zoom/g) || []).length === 57 && bad.length === 0,
+      rows.length + ' 行 / ' + bad.length + ' 个不对：' + bad.slice(0, 3).map(c => c.id).join(','));
+    // 模板里那 57 个键都是淡态（.off + disabled）：亮不亮由展开键那段脚本按
+    // 「这个情况还有没有别的单手写法」决定 —— 那段要真 DOM，links.js 的探针里核。
+    const picks = [...oholl.matchAll(/class="pick off" type="button" disabled data-pick="/g)];
+    ok('单手 OLL 页：57 个展开键（模板默认淡态，脚本再按有没有别的写法点亮）',
+      picks.length === 57, String(picks.length));
+    ok('单手 OLL 页一条 @g: 都没有（@g: 只属于 F2L 的 b 版）',
+      (oholl.match(/href="calc\.html#[^"]*"/g) || []).every(h => h.indexOf('@g:') < 0));
+  }
 
   const links = (html) => [...html.matchAll(/href="(calc\.html#[^"]*)"/g)].map(m => m[1]);
   // 正面对照：F2L 的 b 版确实带 @g:，a 版不带 —— 说明这个标记本身是对的
@@ -1009,6 +1035,24 @@ console.log('\n[11e] 「跳计算器」链接的朝向标记：只有 F2L 的 b 
       ls.length >= 20 && ls.every(h => h.indexOf('@g:') < 0),
       ls.filter(h => h.indexOf('@g:') >= 0).slice(0, 3).join(' '));
   });
+  // F2L 页现在从库（js/f2ldata.js）渲染：39 张图、40 条写法（07 那一格两条）
+  // 展开键：一格里一个（公式格右边那一列），只有 07 有两条写法 → 只有它那个键不是 .off
+  const picks = [...f2l.matchAll(/<button type="button" class="pick( off)?"[^>]*data-f2l="([\w]+)"/g)];
+  ok('F2L 展开键：39 个键，只有 07 那个不是淡态（库里只有它有两写法）',
+    picks.length === 39 && picks.filter(m => !m[1]).length === 1 &&
+    picks.filter(m => !m[1])[0][2] === '07' &&
+    picks.filter(m => m[1]).every(m => m[1] === ' off'),
+    picks.length + ' 键 / 可用 ' + picks.filter(m => !m[1]).map(m => m[2]).join(','));
+  const row07 = f2l.split('<tr>').filter(r => r.indexOf('f2l-07-256x258.png') >= 0)[0] || '';
+  ok('F2L 页从库渲染：39 张图 + 39 格（每格只显示第一条写法，其余在展开键里）；单图形行另半边是一格 colspan=3',
+    (f2l.match(/data-zoom/g) || []).length === 39 &&
+    (f2l.match(/class="fw"/g) || []).length === 39 &&
+    (row07.match(/<code>/g) || []).length === 1 &&
+    /<td class="empty"><\/td><td class="empty emptyTail" colspan="2"><\/td>/.test(row07) &&
+    row07.indexOf("(R U R' U2)") >= 0 && row07.indexOf("(R' F R F')") < 0,
+    (f2l.match(/data-zoom/g) || []).length + ' 图 / ' +
+    (f2l.match(/class="fw"/g) || []).length + ' 格 / 07 行 code ' +
+    (row07.match(/<code>/g) || []).length);
   // 点名那条：Nb 末尾的 b 是「第二个变体」，不是 F2L 的 b 版
   const nb = (pll.match(/Nb[\s\S]{0,800}?href="(calc\.html#[^"]*)"/) || [])[1] || '';
   ok('PLL-Nb 的 ↗ 不带 @g:（它和 F2L 的 b 版没关系）',
@@ -3007,7 +3051,16 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
       vm3.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), c3);
       const A = c3.ALG_LIST;
       ok('alglist 覆盖 f2l/oll/pll', ['f2l', 'oll', 'pll'].every(k => A[k] && A[k].length));
-      // 逐条和「公式来源」比对：pll / oll 的行数据都由库生成（页面里没有字面量了），
+      // f2l 也搬进库了（data/f2l.json）：39 个情况、40 条写法（07 有两条）
+      {
+        const db = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data/f2l.json'), 'utf8'));
+        const want = db.cases.flatMap(c => c.algs.map(a => c.id + '\u0000' + a.alg)).sort();
+        const got = A.f2l.map(r => r[0] + '\u0000' + r[1]).sort();
+        ok('alglist 的 F2L 与库一致（' + got.length + ' 条：39 个情况，07 两条）',
+          want.length === 40 && JSON.stringify(want) === JSON.stringify(got),
+          '条数 ' + want.length + ' vs ' + got.length);
+      }
+      // 逐条和「公式来源」比对：pll / oll / f2l 的行数据都由库生成（页面里没有字面量了），
       // 所以两边都读库 —— oll 还要按页面 / emit_pages 的分组顺序排一遍。
       ['oll', 'pll'].forEach(k => {
         const file = k === 'pll' ? 'data/pll.json' : 'data/oll.json';
@@ -3018,25 +3071,54 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
           db.groups.forEach((g, i) => { order[g.key] = i; });
           cases = cases.slice().sort((a, b) => order[a.group] - order[b.group]);
         }
-        // pll 那一栏只收双手写法（ohl）；oll 的写法都是双手，全收
-        const want = cases.flatMap(c => c.views[0].algs
-          .filter(a => k !== 'pll' || a.uses.indexOf('2H') >= 0)
+        // pll / oll 这两栏都是「双手」列表（oll 也含挂在别的画面上的写法）；
+        // 单手的在 ohpll / oholl 两栏里，下面单独核。
+        const want = cases.flatMap(c => (k === 'oll' ? c.views.flatMap(v => v.algs) : c.views[0].algs)
+          .filter(a => a.uses.indexOf('2H') >= 0)
           .map(a => a.alg)).sort();
         const got = A[k].map(r => r[1]).sort();
         ok('alglist 的 ' + k.toUpperCase() + ' 与库一致（' + got.length + ' 条）',
           JSON.stringify(want) === JSON.stringify(got), '条数 ' + want.length + ' vs ' + got.length);
       });
+      // 单手那两栏：ohpll 第三项是图、oholl 第三项是画面号 —— 都只收 OH 的写法
+      {
+        const pdb = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data/pll.json'), 'utf8'));
+        const odb = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data/oll.json'), 'utf8'));
+        const wantOh = (db, tag) => db.cases.flatMap(c => c.views.flatMap(v =>
+          v.algs.filter(a => a.uses.indexOf('OH') >= 0 &&
+            (tag !== 'oholl' || true)).map(a => a.alg))).sort();
+        ok('alglist 的 OHPLL 与库一致（' + A.ohpll.length + ' 条，全是 OH）',
+          JSON.stringify(A.ohpll.map(r => r[1]).sort()) === JSON.stringify(wantOh(pdb, 'ohpll')) &&
+          A.ohpll.every(r => r[2] && /\.png$/.test(r[2])), String(A.ohpll.length));
+        ok('alglist 的 OHOLL 与库一致（' + A.oholl.length + ' 条，全是 OH；第三项是画面号）',
+          JSON.stringify(A.oholl.map(r => r[1]).sort()) === JSON.stringify(wantOh(odb, 'oholl')) &&
+          A.oholl.every(r => r[2] === 0 || (r[2] >= 0 && r[2] < 4)), String(A.oholl.length));
+        // 每个情况第一条 = 标了首选的那条（单手这一栏默认显示它）
+        ok('oholl 每情况第一条是 oholl-preferred 那条',
+          odb.cases.every(c => {
+            const pref = c.views.flatMap(v => v.algs)
+              .filter(a => (a.tags || []).indexOf('oholl-preferred') >= 0)[0];
+            const first = A.oholl.filter(r => r[0] === c.id)[0];
+            return !!pref && !!first && first[1] === pref.alg;
+          }));
+      }
       // 缩略图必须都存在
       let missing = [];
       ['f2l', 'oll', 'pll'].forEach(k => A[k].forEach(r => {
         const id = k === 'f2l' ? r[0] : (/^\d+$/.test(r[0]) && r[0].length < 2 ? '0' + r[0] : r[0]);
         const tone = k === 'oll' ? '-day' : '';
         const f = k === 'pll' ? 'img/pll/pll-' + id + '-v0-256x256.png'
-                              : 'img/' + k + '/' + k + '-' + id + (k === 'oll' ? '-v0' : '') + tone + '-' +
+                              : 'img/' + k + '/' + k + '-' + id +
+                                (k === 'oll' ? '-v' + (r[2] == null ? 0 : r[2]) : '') + tone + '-' +
                                 (k === 'f2l' ? '256x258' : '256x256') + '.png';
         if (!fs.existsSync(path.join(__dirname, '..', f))) missing.push(f);
       }));
-      ok('缩略图文件都存在（' + (A.f2l.length + A.oll.length + A.pll.length) + ' 张）',
+      ['oholl'].forEach(k => A[k].forEach(r => {
+        const id = (/^\d+$/.test(r[0]) && r[0].length < 2 ? '0' + r[0] : r[0]);
+        const f = 'img/oll/oll-' + id + '-v' + (r[2] == null ? 0 : r[2]) + '-day-256x256.png';
+        if (!fs.existsSync(path.join(__dirname, '..', f))) missing.push(f);
+      }));
+      ok('缩略图文件都存在（' + (A.f2l.length + A.oll.length + A.pll.length + A.oholl.length) + ' 张）',
         missing.length === 0, missing.slice(0, 3).join(', '));
     }
 

@@ -6,6 +6,7 @@
 <title>六面 · F2L 公式合集</title>
 <link rel="icon" type="image/x-icon" href="cube-64x64.ico">
 <link rel="stylesheet" href="css/theme.css">
+<script src="js/f2ldata.js"></script>
 <style>
   /* 默认浅色（白底）；点右上角按钮切夜晚。不跟随系统 —— 这是打印/速查用的表。
      两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
@@ -26,7 +27,7 @@
 
   h1{margin:0;font-size:20px;letter-spacing:.02em}
   header p{margin:6px 0 0;color:var(--muted);font-size:12.5px}
-  main{max-width:1180px;margin:0 auto;padding:10px 16px 60px}
+  main{max-width:880px;margin:0 auto;padding:10px 16px 60px}   /* 和 PLL / OLL 同宽 —— 左边目录才会落在同一个位置 */
 
   section{margin:26px 0 0;background:var(--card);border:1px solid var(--line);
           border-radius:12px;overflow:hidden}
@@ -35,12 +36,14 @@
   section > h2 .cnt{float:right;color:var(--muted);font-weight:400;font-size:12.5px}
 
   table{width:100%;border-collapse:collapse;table-layout:fixed}
-  col.side{width:110px}
+  col.side{width:96px}
   col.formula{width:auto}
+  col.pick{width:38px}          /* 展开键那一列（打印时收成 0，不留空列） */
   th{padding:9px 12px;font-size:12.5px;font-weight:600;border-bottom:1px solid var(--line);
      border-right:1px solid var(--line);background:var(--chip)}
   th.red{color:var(--head-red)} th.green{color:var(--head-green)}
   th:last-child{border-right:none}
+  th.fh{border-right:0}                      /* 表头里「公式列」那格：和 td.f 一样不留框（那边框属于展开键那列） */
   td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:middle}
   td:last-child{border-right:none}
   tr:last-child td{border-bottom:none}
@@ -48,14 +51,19 @@
   td.pic{padding:6px;text-align:center}
   td.pic .box{position:relative;display:inline-block;line-height:0}
   /* 给图片预留高度（F2L 的图是 256x258），否则懒加载完成后整行会被撑高 */
-  td.pic img{width:96px;height:auto;aspect-ratio:256/258;display:block;margin:0 auto;
+  td.pic img{width:84px;height:auto;aspect-ratio:256/258;display:block;margin:0 auto;
              image-rendering:auto;border-radius:6px}
   /* 编号角标，和 oll/pll 一致 */
   td.pic .no{position:absolute;left:3px;top:1px;font-size:11px;font-weight:600;
              color:var(--muted);line-height:1;background:var(--badge);
              padding:1px 3px;border-radius:4px}
-  td.f{padding:10px 14px}
-  td.empty{background:var(--chip)}
+  td.f{padding:9px 12px;border-right:0}      /* 展开键左边不留那道表格框（和 PLL / OLL / 二阶一致） */
+  td.pickCell{padding:4px 2px;text-align:center;width:38px}
+  /* 空白格 = 单图形行（07/08/09）的另一半：图片列一格 + 公式/展开键两列合成一格。
+     左边那道框（和左边那半的分界）显式留着，免得哪天左边那格的右边框一改就跟着缺口；
+     合成的那格（.emptyTail）左边不要再画线 —— 正常行里「公式格 / 展开键格」之间本来就没有框。 */
+  td.empty{background:var(--chip);border-left:1px solid var(--line)}
+  td.emptyTail{border-left:0}
 
   /* 公式：等宽，点一下复制 */
   code{font:13.5px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -77,6 +85,37 @@
            border-color:var(--accent);transform:translateY(-1px);box-shadow:0 2px 7px #00000026}
   @media (hover:none){a.tocalc{opacity:1}}
   .fw{display:flex;flex-wrap:wrap;align-items:baseline;margin:2px 0}
+  /* 兜底：一格只显示第一条写法（脚本没跑起来 / 库里写法变多时也不会挤在一起） */
+  td.f .fw ~ .fw{display:none}
+
+  /* 展开键（换一条写法）：和 a.tocalc 同一套语言的小圆钮，摆在公式格右边那一列。
+     只有一条写法时加 .off（淡掉、点不动）。 */
+  button.pick{display:inline-flex;align-items:center;justify-content:center;font:inherit;
+         width:30px;height:26px;border-radius:8px;vertical-align:middle;
+         color:var(--text);background:none;border:0;outline-offset:2px;
+         opacity:.62;cursor:pointer;transition:opacity .14s,color .14s,background .14s}
+  button.pick svg{width:18px;height:18px;display:block}
+  tr:hover button.pick,button.pick:hover{opacity:1;color:var(--accent-text)}
+  button.pick.on{opacity:1;color:var(--accent-text);background:var(--chip)}
+  button.pick.off{opacity:.22;pointer-events:none;cursor:default}
+  tr:hover button.pick.off{opacity:.22;color:var(--text)}
+  /* 候选面板：缩略图 + 编号 + 公式，一列排开。开合要能过渡，
+     所以不用 display:none 切换 —— 用透明度 / 位移把隐藏态演出来。 */
+  .pickbox{position:absolute;z-index:9;display:flex;flex-direction:column;gap:2px;padding:6px;
+           max-width:430px;max-height:52vh;overflow:auto;text-align:left;
+           background:var(--panel);border:1px solid var(--line);border-radius:10px;
+           box-shadow:0 12px 30px #00000026;
+           opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);transform-origin:top right;
+           transition:opacity .16s ease,transform .16s ease,visibility .16s}
+  .pickbox.up{transform:translateY(6px) scale(.98);transform-origin:bottom right}
+  .pickbox.on{opacity:1;visibility:visible;transform:none}
+  .pickbox button{display:flex;align-items:center;gap:8px;padding:4px 6px;border:0;border-radius:8px;
+                  background:none;color:var(--text);font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;
+                  text-align:left;cursor:pointer}
+  .pickbox button:hover{background:var(--chip)}
+  .pickbox img{width:34px;height:34px;flex:none;border-radius:5px}
+  .pickbox .idx{flex:none;min-width:16px;text-align:right;color:var(--muted);
+                font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
 
   /* 复制提示 */
   #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);
@@ -89,29 +128,36 @@
      ⚠ 这一页的表格里有 <col class="side">（F2L 那种「图 + 公式」两列），
      所以这里的规则必须限定成 nav.side，不能裸写 .side —— 否则打印时
      「.side{display:none}」会把那两列一起藏掉，列宽全乱。 */
-  /* 这一页正文宽 1180（F2L 表要两列「图 + 公式」），比别的公式页（880）宽一截，
-     目录得跟着往左让，否则会压在表上：
-       正文左边缘 = 50% - 1180/2 = 50% - 590
-       目录左边   = 正文左边缘 - 152（目录宽）- 16（留白）= 50% - 758
-     窄到两边放不下（< 1544px）就整条收起来。 */
+  /* 目录和 PLL / OLL / 二阶那两页**同一个位置**：正文都是 880 宽，
+       正文左边缘 = 50% - 440，目录左边 = 再往左让 152（目录宽）+ 16（留白）= 50% - 616；
+       窄到两边放不下（< 1240px）就整条收起来 —— 阈值也和那几页一致。 */
   nav.side{position:fixed;width:152px;display:flex;flex-direction:column;gap:2px;z-index:3;
-        top:calc(var(--nav-h, 63px) + 16px);left:max(14px, calc(50% - 758px));
+        top:calc(var(--nav-h, 63px) + 16px);left:max(14px, calc(50% - 616px));
         align-items:flex-start}
   nav.side a{color:var(--muted);text-decoration:none;font-size:12.5px;line-height:1.5;
           padding:4px 9px;border-radius:7px;border-left:2px solid transparent;white-space:nowrap}
   nav.side a:hover{color:var(--accent-text);background:var(--chip)}
   nav.side a.on{color:var(--text);border-left-color:var(--accent);background:var(--chip)}
-  @media (max-width:1544px){ nav.side{display:none} }
+  @media (max-width:1240px){ nav.side{display:none} }
 
   @media (max-width:720px){
-    col.side{width:78px}
-    td.pic img{width:64px}
-    td.f{padding:8px 10px}
-    code{font-size:12.5px}
+    col.side{width:64px}
+    col.pick{width:32px}
+    td.pic img{width:56px}
+    td.f{padding:8px 9px}
+    td.pickCell{width:32px}
+    code{font-size:12px}
   }
   @media print{
     body{background:#fff;color:#000}
     .themebtn,.printbtn,nav.side{display:none}
+    .pickbox,button.pick{display:none}
+    /* ⚠ 展开键那一格**不能 display:none**：这张表一行有两组「图 / 公式 / 键」，
+       抽掉格子会让这一行后面的格子整体左移串列 —— 右半边的公式会挤进 0 宽的列里，
+       纸上就整片空白（用户报过「打印右边一半公式都消失了」）。
+       收成 0 宽的空格即可；框线留给它（和屏幕上一个道理）。 */
+    td.pickCell{padding:0;width:0}
+    col.pick{width:0}
     a.tocalc{display:none}
     /* 打印分页：卡片别拦着分页 —— break-inside:avoid + overflow:hidden 会让整张表
        变成「不可拆分的一块」，这一页装不下就整节推到下一页，标题也跟着单独占一页。
@@ -124,6 +170,11 @@
     /* 打印：纸上比屏幕费眼 —— 表格框线加粗、公式文字调大 */
     table{border:2px solid #333}
     th,td{border:1px solid #333}
+    /* 这两条要在上面那条之后：打印时也和屏幕上一样，公式格 / 表头那格右边不留框 */
+    td.f{border-right:0}
+    th.fh{border-right:0}
+    td.empty{border-left:1px solid #333}     /* 空白格左边那道框，纸上也留着 */
+    td.emptyTail{border-left:0}
     th{border-bottom-width:2px}
     code{font-size:15px;font-weight:600}
     thead{display:table-header-group}   /* 换页后红/绿 F 表头再来一遍 */
@@ -159,82 +210,26 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 <div id="toast"></div>
 
 <script>
-/* 数据：三节，每节若干行；每行左右两格（左=a 红色为F面，右=b 绿色为F面）。
-   图片取自 img/f2l/ 目录，文件名形如 f2l-01a-256x258.png。
-   公式严格照原表誊录（含原表的 U'2 / L'2 这类写法）。 */
-var SECTIONS = [
-  {
-    title: '需要特殊处理的几种情况',
-    rows: [
-      { a: '01a', b: '01b',
-        af: "(R U' R' U)(R U' R' U2)(R U' R')",
-        bf: "(L' U L U')(L' U L U2)(L' U L)" },
-      { a: '02a', b: '02b',
-        af: "(l U)(L F' L' U' l')",
-        bf: "(r' U')(R' F R U r)" },
-      { a: '03a', b: '03b',
-        af: "(R2 U'2)(R' U' R U')(R' U2 R')",
-        bf: "(L'2 U2)(L U L' U)(L U2 L)" },
-      { a: '04a', b: '04b',
-        af: "(R U' R' F')(L' U'2 L F)",
-        bf: "(L' U L F)(R U2 R' F')" },
-      { a: '05a', b: '05b',
-        af: "(R U R' U')(R U R')",
-        bf: "(L' U' L U)(L' U' L)" },
-      { a: '06a', b: '06b',
-        af: "(R U')(R2 F R F')",
-        bf: "(L' U)(L2 F' L' F)" },
-      // 这一行左格有两条公式，右格为空
-      { a: '07', b: null,
-        af: "(R U R' U2)(R U2 R' U)y'(R' U R)\n(R' F R F')(R U' R' U)(R U' R' U2 R U' R')",
-        bf: null }
-    ]
-  },
-  {
-    title: '白色朝上的情况',
-    rows: [
-      { a: '08', b: null, af: "(R U R' U')(R U R' U')(R U R')", bf: null },
-      { a: '09', b: null, af: "(R U' R' U)y(L' U L)", bf: null },
-      { a: '10a', b: '10b',
-        af: "(R U R' U'2)(R U R' U')(R U R')",
-        bf: "(L' U' L U2)(L' U' L U)(L' U' L)" },
-      { a: '11a', b: '11b',
-        af: "(R U2 R' U')(R U R')",
-        bf: "(L' U2 L U)(L' U' L)" },
-      { a: '12a', b: '12b',
-        af: "(R U' R' U2)(R U R')",
-        bf: "(L' U L U2)(L' U' L)" },
-      { a: '13a', b: '13b',
-        af: "U(R U'2 R' U)(R U' R')",
-        bf: "U'(L' U2 L U')(L' U L)" }
-    ]
-  },
-  {
-    title: '简单情况',
-    rows: [
-      { a: '14a', b: '14b', af: "(R U R')", bf: "(L' U' L)" },
-      { a: '15a', b: '15b',
-        af: "U'(R U' R' U)(R U R')",
-        bf: "U(L' U L U')(L' U' L)" },
-      { a: '16a', b: '16b',
-        af: "U'(R U R' U)(R U R')",
-        bf: "U(L' U' L U')(L' U' L)" },
-      { a: '17a', b: '17b', af: "(U R U' R')", bf: "(U' L' U L)" },
-      { a: '18a', b: '18b',
-        af: "U'(R U R' U2)(R U' R')",
-        bf: "U(L' U' L U2)(L' U L)" },
-      { a: '19a', b: '19b',
-        af: "U'(R U2 R' U2)(R U' R')",
-        bf: "U(L' U2 L U2)(L' U L)" },
-      { a: '20a', b: '20b',
-        af: "U'(R U' R' U2)(R U' R')",
-        bf: "U(L' U L U2)(L' U L)" },
-      { a: '21a', b: '21b',
-        af: "(U' R U R')y(U L' U' L)",
-        bf: "(U L' U' L)y'(U' R U R')" }
-    ]
-  }
-];
+/* 行数据来自数据库（data/f2l.json → js/f2ldata.js，tools/emit_pages.py 生成）：
+   三节，每节若干行；每行左右两格（左 = 红色为 F 面，右 = 绿色为 F 面，没有右格就是 null）。
+   **F2L 不做转体**：一个情况一张固定视角的图（img/f2l/f2l-<编号>-256x258.png），
+   一个情况可以有多条写法（现在只有 07 有两条）。
+   公式严格照原表誊录（含原表的 U'2 / L'2 这类写法）—— 改公式请改库再重跑生成器，别改这里。 */
+var F2L = (typeof F2L_DB !== 'undefined' && F2L_DB.cases) ? F2L_DB : { sections: [], cases: [] };
+var F2L_BY_ID = {};
+F2L.cases.forEach(function (c) { F2L_BY_ID[c.id] = c; });
+/* 首屏一格只显示**第一条**写法（和 PLL / OLL / 二阶那几页一样），
+   其余写法在展开键里换 —— 以前这里是几条并排铺在一格，容易看花。
+   （formulas() 本来就按换行拆多条，这里给一条就是一条；CSS 里也留了「只显示第一个 .fw」的兜底。） */
+function algText(id) {
+  var c = id ? F2L_BY_ID[id] : null;
+  return c && c.algs.length ? c.algs[0].alg : null;
+}
+var SECTIONS = (F2L.sections || []).map(function (sec) {
+  return { title: sec.title, rows: (sec.rows || []).map(function (r) {
+    return { a: r[0], b: r[1], af: algText(r[0]), bf: algText(r[1]) };
+  }) };
+});
 
 var IMG = function (name) { return 'img/f2l/f2l-' + name + '-256x258.png'; };
 
@@ -254,6 +249,14 @@ var CALC_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
   '<circle cx="14.6" cy="12.3" r="1.35" fill="currentColor"/>' +
   '<circle cx="9.4" cy="16.6" r="1.35" fill="currentColor"/>' +
   '<circle cx="14.6" cy="16.6" r="1.35" fill="currentColor"/></svg>';
+/* 展开键的图标：三行「点 + 圆头条」，和 PLL / OLL / 单手 / 二阶那几页一致 */
+var PICK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+  '<circle cx="6.4" cy="7" r="2.1" fill="currentColor" stroke="none"/>' +
+  '<circle cx="6.4" cy="12" r="2.1" fill="currentColor" stroke="none"/>' +
+  '<circle cx="6.4" cy="17" r="2.1" fill="currentColor" stroke="none"/>' +
+  '<rect x="10.6" y="5.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/>' +
+  '<rect x="10.6" y="10.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/>' +
+  '<rect x="10.6" y="15.6" width="11" height="2.8" rx="1.4" fill="currentColor" stroke="none"/></svg>';
 /* 一行里可能有多条公式（换行分隔），逐条渲染成可点的 code */
 function toCalc(alg, id) {
   // F2L 的 **b 版**是「绿色为 F 面」写的（01b、02b…），要告诉计算器，让它按 y 公式 y' 执行。
@@ -272,11 +275,31 @@ function formulas(text, id) {
     return '<span class="fw"><code>' + esc(line) + '</code>' + toCalc(line, id) + '</span>';
   }).join('');
 }
+/* 展开键那一格：情况只有一条写法时模板里就是淡态（.off + disabled），
+   有别的写法时脚本会把 .off 摘掉（改库加写法后自动亮）。 */
+function pickCell(id) {
+  var c = id ? F2L_BY_ID[id] : null;
+  var one = !c || (c.algs || []).length < 2;
+  if (!id) return '<td class="empty"></td>';
+  return '<td class="pickCell"><button type="button" class="pick' + (one ? ' off' : '') +
+         '"' + (one ? ' disabled' : '') + ' data-f2l="' + esc(id) + '" title="' +
+         (one ? '这个情况只有一条写法' : '换一条写法') + '" aria-label="换一条写法">' +
+         PICK_ICON + '</button></td>';
+}
+/* 半边：有情况就是「图 + 公式 + 展开键」三格。
+   没有情况（07/08/09 的另一半）分**两格**：图片列单独一格（**保住它右边那道竖格线**，
+   和上面几行的列线对齐），公式 + 展开键那两列合成一格（不要框 —— 最右边原本那个小格子很难看）。 */
+function side(id, text) {
+  if (!id) return '<td class="empty"></td><td class="empty emptyTail" colspan="2"></td>';
+  return pic(id, text) + '<td class="f" data-f2l="' + esc(id) + '">' + formulas(text, id) + '</td>' +
+         pickCell(id);
+}
 function pic(name, alt) {
   if (!name) return '<td class="empty"></td>';
   // 角标去掉前导 0（01a -> 1a）；文件名不能动，磁盘上就叫 01a
   var label = name.replace(/^0+/, '');
-  return '<td class="pic"><span class="box"><img src="' + IMG(name) + '" data-zoom alt="' +
+  return '<td class="pic"><span class="box"><img src="' + IMG(name) + '" data-zoom data-f2l="' +
+         esc(name) + '" alt="' +
          esc(alt) + '" loading="lazy"><span class="no">' + esc(label) +
          '</span></span></td>';
 }
@@ -285,21 +308,167 @@ var html = '';
 SECTIONS.forEach(function (sec) {
   html += '<section><h2>' + esc(sec.title) +
           '<span class="cnt">' + sec.rows.length + '</span></h2><table>' +
-          '<colgroup><col class="side"><col class="formula">' +
-          '<col class="side"><col class="formula"></colgroup>' +
+          '<colgroup><col class="side"><col class="formula"><col class="pick">' +
+          '<col class="side"><col class="formula"><col class="pick"></colgroup>' +
           '<thead><tr>' +
-          '<th class="red">红 F</th><th></th>' +
-          '<th class="green">绿 F</th><th></th>' +
+          '<th class="red">红 F</th><th class="fh"></th><th></th>' +
+          '<th class="green">绿 F</th><th class="fh"></th><th></th>' +
           '</tr></thead><tbody>';
   sec.rows.forEach(function (r) {
-    html += '<tr>' +
-      pic(r.a, r.af) + '<td class="f">' + formulas(r.af, r.a) + '</td>' +
-      pic(r.b, r.bf) + '<td class="f">' + formulas(r.bf, r.b) + '</td>' +
-      '</tr>';
+    html += '<tr>' + side(r.a, r.af) + side(r.b, r.bf) + '</tr>';
   });
   html += '</tbody></table></section>';
 });
 document.getElementById('app').innerHTML = html;
+/* ---------- 每一格的「展开选写法」 ----------
+   和 PLL / OLL / 单手 / 二阶那几页同一套（公式格右边那一列的小圆钮）：
+   候选 = 库里这个情况的其它写法（正在显示的那条不列进去），行内写法兜底；
+   再点同一个键收起；展开时键亮起来；开合有过渡；点别处 / Esc / 缩放收回（滚动不收回）。
+   **F2L 不做转体**：换写法时图不动 —— 一个情况就一张图。
+   持久化键 cube-pick:f2l:<编号>。 */
+(function () {
+  'use strict';
+  var KEY = 'cube-pick:f2l:';
+  var byId = {};
+  ((typeof F2L_DB !== 'undefined' && F2L_DB.cases) || []).forEach(function (c) { byId[c.id] = c; });
+  var open = null;
+
+  /* 「同一条公式」的判据：忽略括号和空白（库里带括号、别处可能不带） */
+  function algKey(a) { return String(a).replace(/[()\s]/g, ''); }
+  function load(id) { try { return localStorage.getItem(KEY + id) || ''; } catch (e) { return ''; } }
+  function save(id, v) { try { localStorage.setItem(KEY + id, v); } catch (e) {} }
+  /* 这条写法在 case 内的编号（库里唯一；找不到就退回面板顺序号） */
+  function noOf(id, alg) {
+    var c = byId[id];
+    if (!c) return 0;
+    var k = algKey(alg);
+    var hit = (c.algs || []).filter(function (a) { return algKey(a.alg) === k; })[0];
+    return hit ? (hit.no || 0) : 0;
+  }
+  /* 这一格能不能显示这条写法（存档里可能留着旧数据：写法被删了 / 改了） */
+  function usable(id, alg) {
+    var c = byId[id];
+    if (!c) return false;
+    var k = algKey(alg);
+    return (c.algs || []).some(function (a) { return algKey(a.alg) === k; });
+  }
+  /* 候选：库里这个情况的其它写法；本格原有的写法兜底。
+     去重的写和读必须是同一个键（都用 algKey）—— OH 页踩过：写 seen[alg] 查 seen[algKey]
+     会把本行那条再加一遍，展开后就是两个一模一样的候选。 */
+  function candidates(id, own, cur) {
+    var out = [], seen = {};
+    function add(alg) {
+      if (!alg || algKey(alg) === algKey(cur) || seen[algKey(alg)]) return;
+      seen[algKey(alg)] = 1;
+      out.push(alg);
+    }
+    var c = byId[id];
+    if (c) (c.algs || []).forEach(function (a) { add(a.alg); });
+    (own || []).forEach(add);
+    return out;
+  }
+  function close() {
+    if (!open) return;
+    open.box.classList.remove('on');
+    open.pick.classList.remove('on');
+    open = null;
+  }
+  /* 点别处收回 —— 但「正在展开的那个键」和面板自己不算别处，
+     否则捕获阶段先清掉 open，再点同一个键就变成「重新打开」，收不起来。 */
+  function closeIfOutside(t) {
+    if (!open || !t) return;
+    var p = open.pick, b = open.box;
+    if (t === p || t === b) return;
+    if (p.contains && p.contains(t)) return;
+    if (b.contains && b.contains(t)) return;
+    close();
+  }
+  function shown(cell) { var cd = cell.querySelector('code'); return cd ? cd.textContent : ''; }
+  function ownAlgs(cell) {
+    var out = [];
+    Array.prototype.forEach.call(cell.querySelectorAll('code'), function (cd) {
+      if (out.indexOf(cd.textContent) < 0) out.push(cd.textContent);
+    });
+    return out;
+  }
+  /* 换成这条写法：公式格重画成一条（带「跳计算器」的钮，@g: 规则照旧），记进存档 */
+  function apply(row, alg) {
+    row.cell.innerHTML = '<span class="fw"><code>' + esc(alg) + '</code>' +
+                         toCalc(alg, row.id) + '</span>';
+    save(row.id, alg);
+  }
+  function buildBox(row) {
+    var list = candidates(row.id, ownAlgs(row.cell), shown(row.cell));
+    row.box.innerHTML = '';
+    list.forEach(function (alg, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.innerHTML = '<img src="' + IMG(row.id) + '" alt="">' +
+        '<b class="idx">' + (noOf(row.id, alg) || (i + 1)) + '</b><span>' + alg + '</span>';
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        apply(row, alg);
+        close();
+      });
+      row.box.appendChild(b);
+    });
+    return list.length;
+  }
+  /* 展开键和公式格用 data-f2l 对上（一格里一个键；单图形行的另一半是空单元格） */
+  var picks = {};
+  Array.prototype.forEach.call(document.querySelectorAll('button.pick[data-f2l]'), function (b) {
+    picks[b.getAttribute('data-f2l')] = b;
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#app td.f[data-f2l]'), function (cell) {
+    var id = cell.getAttribute('data-f2l');
+    var pick = id ? picks[id] : null;
+    if (!id || !pick) return;
+    var row = { id: id, cell: cell, pick: pick, box: document.createElement('div') };
+    row.box.className = 'pickbox';
+
+    /* 恢复上次的选择：存档里有、这一页现在还能显示、且不是正在显示的那条，就应用它 */
+    var cur = load(id);
+    if (cur && usable(id, cur) && algKey(cur) !== algKey(shown(cell))) apply(row, cur);
+
+    if (candidates(id, ownAlgs(cell), shown(cell)).length < 1) {
+      pick.title = '这个情况只有一条写法';
+      return;                                   // 保持模板里的淡态（.off + disabled）
+    }
+    pick.classList.remove('off');
+    pick.disabled = false;
+    pick.title = '换一条写法';
+
+    pick.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      if (open && open.pick === pick) { close(); return; }   // 再点同一个键 = 收起
+      close();
+      var n = buildBox(row);
+      if (!n) { pick.title = '这个情况只有一条写法'; close(); return; }
+      pick.title = '换一条写法（共 ' + n + ' 条）';
+      pick.classList.add('on');
+      document.body.appendChild(row.box);
+      var r = pick.getBoundingClientRect();
+      var sx = window.pageXOffset || document.documentElement.scrollLeft || 0;
+      var sy = window.pageYOffset || document.documentElement.scrollTop || 0;
+      row.box.style.left = Math.max(8, Math.min(r.left + sx - 380, sx + window.innerWidth - 440)) + 'px';
+      var below = r.bottom + 6, up = false;
+      if (below + row.box.offsetHeight > window.innerHeight) {
+        below = Math.max(8, r.top - row.box.offsetHeight - 6);
+        up = true;
+      }
+      row.box.style.top = (below + sy) + 'px';
+      row.box.classList.toggle('up', up);
+      void row.box.offsetWidth;                  // 先排一帧再挂 .on，否则是"蹦"出来
+      row.box.classList.add('on');
+      open = row;
+    });
+  });
+  /* 点别处（捕获阶段）/ Esc / 缩放收回；滚动**不**收回 */
+  document.addEventListener('click', function (e) { closeIfOutside(e.target); }, true);
+  window.addEventListener && window.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  window.addEventListener && window.addEventListener('resize', close);
+})();
+
 /* 下次从导航条 / 首页点「三阶公式」要回到这一次看的那一页（nav.js 读这个键）——
    和教程那两页、二阶那两页一个做法：键名是这一组的第一个页面 */
 try { localStorage.setItem('cube-last:f2l.html', 'f2l.html'); } catch (e) {}

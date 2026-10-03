@@ -15,14 +15,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SETS = [('data/pll.json', 'js/plldata.js', 'PLL_DB'),
         ('data/oll.json', 'js/olldata.js', 'OLL_DB'),
         ('data/oll2.json', 'js/oll2data.js', 'OLL2_DB'),
-        ('data/pbl2.json', 'js/pbl2data.js', 'PBL2_DB')]
+        ('data/pbl2.json', 'js/pbl2data.js', 'PBL2_DB'),
+        ('data/f2l.json', 'js/f2ldata.js', 'F2L_DB')]
 
 COMMENT = '''/* 公式表的共享数据，供计算器的「选公式」面板使用。
-   pll / ohpll / oll 三个键由 tools/emit_pages.py 从数据库（data/pll.json / data/oll.json）生成 ——
+   七个键全部由 tools/emit_pages.py 从数据库（data/*.json）生成 ——
    不要手改：改公式请改库，然后重跑生成器。
-   其余集合（f2l / oll2 / pbl2）暂时仍从对应页面抽出。
-   ohpll 的键是情况编号（Aa..Z），值是那只手能用的写法（uses 里有 OH 的）。
-   test/cubesim.js 有一条测试盯着 pll / oll / f2l 必须和库 / 页面一致。 */
+   pll / oll 是「双手」列表（uses 里有 2H 的），ohpll / oholl 是「单手」列表（有 OH 的；
+   单手那两栏每情况第一条就是标了首选的那条）。ohpll 的第三项是图，oll / oholl 的第三项是画面号。
+   test/cubesim.js 有一条测试盯着这些键必须和库 / 页面一致。 */
 '''
 
 
@@ -61,11 +62,19 @@ def emit(src, out, var):
                 o[k] = c[k]
         return o
 
+    def f2l_out(c):
+        # F2L 不做转体：一情况一图 + 写法，没有 views
+        return {'id': c['id'], 'no': c['no'], 'section': c.get('section', ''),
+                'img': c['img'], 'algs': [alg_out(a) for a in c['algs']]}
+
     payload = {
         'set': data['set'], 'v': data['v'],
         'generated': os.path.relpath(src, ROOT),
-        'cases': [case_out(c) for c in cases],
+        'cases': [f2l_out(c) for c in cases] if 'sections' in data
+                 else [case_out(c) for c in cases],
     }
+    if 'sections' in data:
+        payload['sections'] = data['sections']
     if 'groups' in data:
         payload['groups'] = data['groups']
     text = ('/* 由 tools/emit_pages.py 从 %s 生成 —— 不要手改：\n'
@@ -85,25 +94,39 @@ def emit(src, out, var):
 
 
 def emit_alglist():
-    """alglist.js：pll / ohpll / oll / oll2 / pbl2 从数据库来，其余集合仍从页面抽（还没搬完）。"""
+    """alglist.js：七个键（pll / ohpll / oll / oholl / oll2 / pbl2 / f2l）全部从数据库来。"""
     import json as _json
     import re as _re
     pdb = _json.load(open(os.path.join(ROOT, 'data/pll.json'), encoding='utf-8'))
     odb = _json.load(open(os.path.join(ROOT, 'data/oll.json'), encoding='utf-8'))
     o2db = _json.load(open(os.path.join(ROOT, 'data/oll2.json'), encoding='utf-8'))
     p2db = _json.load(open(os.path.join(ROOT, 'data/pbl2.json'), encoding='utf-8'))
-    # 其余集合还没搬完：沿用现文件里的（页面抽出来的那几份），原样保留
-    src = open(os.path.join(ROOT, 'js', 'alglist.js'), encoding='utf-8').read()
-    old = _json.loads(_re.search(r'var ALG_LIST = (\{.*\});', src, _re.S).group(1))
+    fdb = _json.load(open(os.path.join(ROOT, 'data/f2l.json'), encoding='utf-8'))
     data = {}
     # 两个二阶库都是「一个情况一条写法」，按页面顺序铺开
     data['oll2'] = [[c['id'], a['alg']] for c in o2db['cases'] for a in c['views'][0]['algs']]
     data['pbl2'] = [[c['id'], a['alg']] for c in p2db['cases'] for a in c['algs']]
     # oll 这一栏按页面上的分组顺序（十字 → 单点 → 一字 → 拐角）铺开 ——
-    # 和页面字面量原来的顺序一致（practice 的洗牌顺序不会因此变）
+    # 和页面字面量原来的顺序一致（practice 的洗牌顺序不会因此变；它按题号去重、只取第一行）。
+    # **写法可能挂在别的画面上**（开头带 y/y' 的写法本来就属于那个画面），
+    # 所以逐画面铺开，并把画面号放进第三项（计算器的缩略图跟着它走）。
     order = {g['key']: i for i, g in enumerate(odb['groups'])}
     ocases = sorted(odb['cases'], key=lambda c: order.get(c.get('group'), 99))
-    data['oll'] = [[c['id'], a['alg']] for c in ocases for a in c['views'][0]['algs']]
+    # 双手页（oll.html）只显示 2H 的写法，所以这一栏也只收 2H 的
+    data['oll'] = [[c['id'], a['alg'], v['view']]
+                   for c in ocases for v in c['views'] for a in v['algs']
+                   if '2H' in a.get('uses', [])]
+    # oholl 这一栏 = 单手能用的（oh-oll.html 那一页）：被合并成 2H+OH 的那几条也算
+    # （确实单手也能做）。每情况标了 oholl-preferred 的排最前。第三项是**画面号**
+    # （和 oll 一样，计算器的缩略图跟着这一行所属的画面走）。
+    data['oholl'] = []
+    for c in ocases:
+        oh = [(a, v) for v in c['views'] for a in v['algs'] if 'OH' in a.get('uses', [])]
+        if not oh:                              # 一个情况一条单手写法都没有时回退双手
+            oh = [(a, c['views'][0]) for a in c['views'][0]['algs'] if '2H' in a.get('uses', [])]
+        oh.sort(key=lambda t: 0 if 'oholl-preferred' in (t[0].get('tags') or []) else 1)
+        for a, v in oh:
+            data['oholl'].append([c['id'], a['alg'], v['view']])
     # pll 这一栏是「双手」列表（和页面一致）；两种手性都行的公式（Aa/Ab/T）也在这里
     data['pll'] = [[c['id'], a['alg']] for c in pdb['cases'] for a in c['views'][0]['algs']
                    if '2H' in a.get('uses', [])]
@@ -120,16 +143,15 @@ def emit_alglist():
         oh.sort(key=lambda t: 0 if 'ohpll-preferred' in (t[0].get('tags') or []) else 1)
         for a, v in oh:
             data['ohpll'].append([c['id'], a['alg'], v['img']])
-    if 'f2l' in old:
-        data['f2l'] = old['f2l']
+    # f2l 这一栏：三阶公式页那 39 个情况（读序），一情况多条写法就铺成多条
+    # （顺带修好了旧版从页面抽时的漏抽：07 / 08 / 09 三条以前不在表里）
+    data['f2l'] = [[c['id'], a['alg']] for c in fdb['cases'] for a in c['algs']]
     text = COMMENT + 'var ALG_LIST = ' + _json.dumps(data, ensure_ascii=False) + ';\n'
     with open(os.path.join(ROOT, 'js', 'alglist.js'), 'w', encoding='utf-8') as f:
         f.write(text)
-    print('alglist.js：pll %d、ohpll %d、oll %d、oll2 %d、pbl2 %d（库），其余 %d 条（页面）'
-          % (len(data['pll']), len(data['ohpll']), len(data['oll']),
-             len(data['oll2']), len(data['pbl2']),
-             sum(len(v) for k, v in data.items()
-                 if k not in ('pll', 'ohpll', 'oll', 'oll2', 'pbl2'))))
+    print('alglist.js（全部来自库）：pll %d、ohpll %d、oll %d、oholl %d、oll2 %d、pbl2 %d、f2l %d'
+          % (len(data['pll']), len(data['ohpll']), len(data['oll']), len(data['oholl']),
+             len(data['oll2']), len(data['pbl2']), len(data['f2l'])))
 
 
 def main():

@@ -708,6 +708,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
         <button data-pick="oll" data-for="3" type="button">OLL</button>
         <button data-pick="pll" data-for="3" type="button">PLL</button>
         <button data-pick="ohpll" data-for="3" type="button">OH-PLL</button>
+        <button data-pick="oholl" data-for="3" type="button">OH-OLL</button>
         <button data-pick="oll2" data-for="2" type="button">二阶 OLL</button>
         <button data-pick="pbl2" data-for="2" type="button">二阶 PBL</button>
       </div>
@@ -845,9 +846,15 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     // PLL 的缩略图也从库里来（img/pll/pll-<编号>-v0-…）：根目录那个 pll/ 之后就删了
     if (kind === 'pll') return 'img/pll/pll-' + f + '-v0-256x256.png';
     var size = kind === 'f2l' ? '256x258' : '256x256';
-    // OLL 有昼夜两版（白天紫顶 / 夜晚黄顶）
-    var tone = kind === 'oll' ? (document.documentElement.dataset.theme === 'dark' ? '-night' : '-day') : '';
-    return 'img/' + kind + '/' + kind + '-' + f + (kind === 'oll' ? '-v0' : '') + tone + '-' + size + '.png';
+    // OLL / 单手 OLL 有昼夜两版（白天紫顶 / 夜晚黄顶）；缩略图的画面取这一行自带的那一个
+    // （row[2] = 这条写法属于哪个画面；开头带 y/y' 的写法可能不在 v0）
+    if (kind === 'oll' || kind === 'oholl') {
+      var tv = row[2] == null ? 0 : row[2];
+      var to = document.documentElement.dataset.theme === 'dark' ? '-night' : '-day';
+      return 'img/oll/oll-' + f + '-v' + tv + to + '-256x256.png';
+    }
+    var tone = '';
+    return 'img/' + kind + '/' + kind + '-' + f + tone + '-' + size + '.png';
   }
 
   var pickKind = null;

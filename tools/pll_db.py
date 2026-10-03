@@ -15,6 +15,7 @@
     python3 tools/pll_db.py --check     # 只校验（默认）
 """
 import json
+
 import os
 import re
 import sys
@@ -24,6 +25,8 @@ import cubesim as sim                      # noqa: E402
 import signature as sig                    # noqa: E402
 import verify as V                         # noqa: E402
 
+# 写法不该以整体转体 y / y' / y2 开头（它属于哪个画面由画面表达，见 AGENTS §4.4）
+Y_LEAD = re.compile(r"^\s*y(?:2|'|'2)?\s*")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB = os.path.join(ROOT, 'data', 'pll.json')
 LIB = os.path.join(ROOT, 'tools', 'data', 'pll.js')
@@ -313,6 +316,9 @@ def check(path=DB):
                 nalg += 1
                 if a['n'] != len(a.get('moves') or []):
                     bad.append('%s/%s：n 与 moves 不一致' % (cid, a.get('alg')))
+                if Y_LEAD.match(a['alg']):
+                    bad.append('%s/%s：写法不该以 y / y\' / y2 开头（去掉它、归到对应的画面）'
+                               % (cid, a['alg']))
                 try:
                     # frame 只是这个角度的名字；公式要对得上的是**这个角度自己的图**，
                     # 所以直接拿 sig 造出的局面做公式（别再按 frame 转一次 —— 那是旧模型的残留）

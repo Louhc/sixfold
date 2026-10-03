@@ -122,7 +122,7 @@ console.log('\n[6] 回到顶部按钮');
   const withBtn = [...js.matchAll(/\['([^']+)',\s*'[^']*',\s*1[,\]]/g)].map(m => m[1]);
   ok('长页才需要它：教程、三阶公式（管三页）和单手公式（' +
      withBtn.slice().sort().join(',') + '）',
-    withBtn.slice().sort().join(',') === 'f2l.html,oh-pll.html,tutorial-basic.html',
+    withBtn.slice().sort().join(',') === 'f2l.html,oh-oll.html,tutorial-basic.html',
     withBtn.join(','));
 }
 
@@ -151,6 +151,147 @@ console.log('\n[8] F2L 角标：显示去掉前导 0，文件名不动');
   ok('磁盘上仍是 01a 这种命名（' + imgs.length + ' 张）',
     imgs.includes('f2l-01a-256x258.png') && imgs.includes('f2l-21b-256x258.png'),
     imgs.slice(0, 3).join(','));
+}
+
+console.log('\n[8b] F2L 库（data/f2l.json）：分节 + 一情况一图，**不做转体**');
+{
+  const db = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/f2l.json'), 'utf8'));
+  const h = fs.readFileSync(path.join(ROOT, 'f2l.html'), 'utf8');
+  ok('F2L 库的形状：set/v 对、有 sections 和 cases',
+    db.set === 'f2l' && db.v === 1 && Array.isArray(db.sections) && Array.isArray(db.cases),
+    Object.keys(db).join(','));
+  ok('F2L 不做转体：库里（含每个情况）都不该有 views / frame',
+    !('views' in db) && db.cases.every(c => !('views' in c) && !('frame' in c)));
+  ok('39 个情况：编号 1..39 连续、id 不重复、每个情况至少一条写法',
+    db.cases.length === 39 &&
+    db.cases.map(c => c.no).join(',') === db.cases.map((_, i) => i + 1).join(',') &&
+    new Set(db.cases.map(c => c.id)).size === 39 &&
+    db.cases.every(c => c.algs.length >= 1) &&
+    db.cases.every(c => c.algs.map(a => a.no).join(',') === c.algs.map((_, i) => i + 1).join(',')),
+    db.cases.length + ' 情况 / ' +
+      db.cases.reduce((n, c) => n + c.algs.length, 0) + ' 条写法');
+  ok('40 条写法；07 有两条（页面里那一格是换行分开的两条）',
+    db.cases.reduce((n, c) => n + c.algs.length, 0) === 40 &&
+    db.cases.filter(c => c.id === '07')[0].algs.length === 2,
+    JSON.stringify(db.cases.filter(c => c.id === '07')[0].algs.map(a => a.alg)));
+  const covered = db.sections.flatMap(s => s.rows.flat()).filter(Boolean);
+  const singles = db.sections.flatMap(s => s.rows).filter(r => r[1] === null).map(r => r[0]);
+  ok('分节的行正好覆盖全部 39 个情况（每行左右两格；07/08/09 是单图形行）',
+    covered.length === 39 && new Set(covered).size === 39 &&
+    covered.slice().sort().join(',') === db.cases.map(c => c.id).sort().join(',') &&
+    singles.join(',') === '07,08,09',
+    covered.length + ' 格 / 单图形行 ' + singles.join(','));
+  const missImg = db.cases.filter(c => !fs.existsSync(path.join(ROOT, c.img)));
+  ok('每个情况的图都在（img/f2l/f2l-<编号>-256x258.png）', missImg.length === 0,
+    missImg.slice(0, 2).map(c => c.img).join(','));
+  // 页面这一侧：读库渲染，没有 SECTIONS 字面量了
+  ok('f2l.html 引了 js/f2ldata.js、SECTIONS 由库生成（页面里没有字面量）',
+    /<script src="js\/f2ldata\.js"><\/script>/.test(h) &&
+    /typeof F2L_DB !== 'undefined' && F2L_DB\.cases/.test(h) &&
+    !/var SECTIONS = \[\s*\n\s*\{/.test(h) &&
+    /var SECTIONS = \(F2L\.sections \|\| \[\]\)/.test(h));
+  ok('生成物 js/f2ldata.js 里也是 39 情况 / 40 条（固定视角）',
+    /var F2L_DB = \{/.test(fs.readFileSync(path.join(ROOT, 'js', 'f2ldata.js'), 'utf8')) &&
+    !/"views"/.test(fs.readFileSync(path.join(ROOT, 'js', 'f2ldata.js'), 'utf8')));
+}
+
+console.log('\n[8b2] jperm 的 OLL 清单也并进来了（data/oll.json）');
+{
+  const db = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'oll.json'), 'utf8'));
+  const cs = id => db.cases.filter(c => c.id === id)[0];
+  const algs = id => cs(id).views[0].algs;
+  const total = db.cases.reduce((n, c) => n + c.views.reduce((m, v) => m + v.algs.length, 0), 0);
+  const all = id => cs(id).views.flatMap(v => (v.algs || []).map(a =>
+    ({ v: v.view, alg: a.alg, verified: a.verified || '' })));
+  ok('OLL 库 162 条写法 / 57 个情况（jperm 的双手 + 单手两批都并进来了）',
+    total === 162 && db.cases.length === 57, total + ' 条 / ' + db.cases.length + ' 情况');
+  ok('原样对得上的条目进来了（1 号那条）',
+    algs('1').some(a => a.alg === "R U2 R' R' F R F' U2 R' F R F'"),
+    JSON.stringify(algs('1').map(a => a.alg)));
+  ok('开头带 y 的写法：去掉 y、归到它自己那个画面（26 号：`(R U2 R\') U\' R U\' R\'` → v1），不硬塞 AUF',
+    all('26').some(a => a.v === 1 && a.alg === "(R U2 R') U' R U' R'" && /归到 v1/.test(a.verified)) &&
+    !all('26').some(a => /^\s*y/.test(a.alg)),
+    JSON.stringify(all('26').map(a => [a.v, a.alg, a.verified])));
+  ok('确实有写法挂在非基准画面上（57 条落在 v1 / v2 / v3）',
+    db.cases.reduce((n, c) => n + c.views.slice(1).reduce((m, v) => m + v.algs.length, 0), 0) === 57,
+    String(db.cases.reduce((n, c) => n + c.views.slice(1).reduce((m, v) => m + v.algs.length, 0), 0)));
+  ok('每条写法都有 verified 来源说明',
+    db.cases.every(c => c.views.every(v => v.algs.every(a => a.verified))));
+  ok('分组没被导入搅乱（还是页面那四个分组）',
+    db.groups.map(g => g.key).join(',') === 'cross,dot,line,corner');
+}
+
+console.log('\n[8b4] PLL F：和单手首选只差一个 R\' 的那条重复写法已经删掉');
+{
+  const db = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'pll.json'), 'utf8'));
+  const c = db.cases.filter(x => x.id === 'F')[0];
+  const all = c.views.flatMap(v => (v.algs || []).map(a => Object.assign({ view: v.view }, a)));
+  const dup = "R U R' U' R' U R U2 R' L' U R U' L U' R U' R'";
+  const key = a => a.replace(/[^A-Za-z0-9']/g, '');
+  ok('F 现在 2 条写法（双手首选 + jperm 那条合并成的 2H+OH，以及单手首选）',
+    all.length === 2 && all.map(a => a.no).join(',') === '1,2',
+    JSON.stringify(all.map(a => [a.no, a.uses, a.tags, a.alg])));
+  ok('那条「和单手首选只差一个 R\'」的重复写法不在了',
+    !all.some(a => key(a.alg) === key(dup)), JSON.stringify(all.map(a => a.alg)));
+  ok('1 号是合并后的那条：2H+OH + preferred，文本已经约掉多余的 F\' F（= 18 步）',
+    all[0].uses.join('+') === '2H+OH' && all[0].tags.indexOf('preferred') >= 0 &&
+    all[0].n === 18 && all[0].alg === "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
+    JSON.stringify([all[0].uses, all[0].tags, all[0].n, all[0].alg]));
+  ok('F 的每条写法里都不再有「相邻两步互相抵消」（F / F\' 这种）',
+    all.every(a => !(a.moves || []).some((t, i) => {
+      const u = (a.moves || [])[i + 1];
+      return !!u && t[0] === u[0] && (t.indexOf("'") >= 0) !== (u.indexOf("'") >= 0);
+    })), JSON.stringify(all.map(a => a.moves)));
+  ok('2 号是 v3 的单手首选',
+    all[1].view === 3 && all[1].uses.join('+') === 'OH' && all[1].tags.indexOf('ohpll-preferred') >= 0,
+    JSON.stringify([all[1].view, all[1].uses, all[1].tags]));
+}
+
+console.log('\n[8b3] 写法不该以整体转体 y / y\' / y2 开头（画面已经表达了）');
+{
+  // 开头带 y 的写法是有语义的 —— 正因如此它属于「另一个画面」：
+  // 存进库时要去掉 y、搬到那个画面去（用户拍板）。这里盯着三本有画面层的库。
+  const Y = /^\s*y(?:2|'|'2)?\s*/;
+  ['data/pll.json', 'data/oll.json', 'data/oll2.json'].forEach(f => {
+    const db = JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
+    const bad = db.cases.flatMap(c => (c.views || [c]).flatMap(v =>
+      (v.algs || []).filter(a => Y.test(a.alg)).map(a => c.id + ':' + a.alg)));
+    ok(f + '：没有以 y / y\' / y2 开头的写法', bad.length === 0, bad.slice(0, 3).join(' | '));
+  });
+}
+
+console.log('\n[8c] F2L 页的目录和 PLL / OLL 在同一个位置（正文同宽）');
+{
+  const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
+  const one = (h, re) => (h.match(re) || [])[1] || '';
+  const files = ['pll.html', 'oll.html', 'f2l.html'];
+  const w = files.map(p => one(read(p), /main\{max-width:(\d+)px/));
+  const left = files.map(p => one(read(p), /nav\.side\{[^}]*?left:max\(14px, calc\(50% - (\d+)px\)\)/s));
+  const bp = files.map(p => one(read(p), /@media \(max-width:(\d+)px\)\{ nav\.side\{display:none\} \}/));
+  ok('三个页面的正文同宽（F2L 以前 1180，太宽把目录挤到更左边）',
+    w.every(x => x === '880') && w.length === 3, w.join('/'));
+  ok('三个页面的目录 left 和「窄屏收起」阈值都一样',
+    left.every(x => x && x === left[0]) && bp.every(x => x && x === bp[0]),
+    left.join('/') + ' | ' + bp.join('/'));
+  ok('F2L 打印：展开键 / 面板不印、那一列收成 0 宽',
+    /\.pickbox,button\.pick\{display:none\}/.test(read('f2l.html')) &&
+    /td\.pickCell\{padding:0;width:0\}/.test(read('f2l.html')) &&
+    /col\.pick\{width:0\}/.test(read('f2l.html')));
+  ok('F2L 打印：展开键那一格**不能** display:none（一行有两组，抽掉格子会让右半边串列消失）',
+    !/td\.pickCell\{display:none\}/.test(read('f2l.html')));
+  const f2lSrc = read('f2l.html');
+  ok('F2L 空白半边：图片列一格（保住列线）+ 其余两列合成一格（末格不再画左边框）',
+    /td\.empty\{background:var\(--chip\);border-left:1px solid var\(--line\)\}/.test(f2lSrc) &&
+    /td\.emptyTail\{border-left:0\}/.test(f2lSrc) &&
+    /<td class="empty"><\/td><td class="empty emptyTail" colspan="2"><\/td>/.test(f2lSrc) &&
+    /td\.emptyTail\{border-left:0\}/.test(f2lSrc));
+  ok('展开键左边不留表格框：单元格（td.f）和表头那格（th.fh）的右边框都去掉',
+    /td\.f\{padding:[^}]*border-right:0\}/.test(f2lSrc) &&
+    /th\.fh\{border-right:0\}/.test(f2lSrc) &&
+    /<th class="red">红 F<\/th><th class="fh"><\/th><th><\/th>/.test(f2lSrc));
+  ok('一格只显示第一条写法：脚本取 algs[0]，CSS 也有兜底（.fw ~ .fw 藏掉）',
+    /return c && c\.algs\.length \? c\.algs\[0\]\.alg : null;/.test(f2lSrc) &&
+    /td\.f \.fw ~ \.fw\{display:none\}/.test(f2lSrc));
 }
 
 console.log('\n[9] 公式页的数据源：两个库都是合法 JSON、结构齐全');
@@ -722,7 +863,17 @@ console.log('\n[14b] 悬停导航项展开「二级目录」（教程 / 二阶�
     s2 ? s2.children.map(c => c.textContent + '->' + c.getAttribute('href')).join(' | ') : '没有目录');
   ok('只有「一项管好几页」的入口才有二级目录（其它项没有）',
     !r.linkTo('首页')._sub && !r.linkTo('编辑器')._sub && !r.linkTo('计算器')._sub &&
-    !r.linkTo('练习')._sub && !r.linkTo('计时器')._sub && !r.linkTo('单手公式')._sub);
+    !r.linkTo('练习')._sub && !r.linkTo('计时器')._sub);
+  // 单手公式也成了两页一组（OH-OLL / OH-PLL）：二级目录得有两条，当前页高亮
+  const g3 = run('oh-oll.html');
+  g3.domReady();
+  const s3 = g3.linkTo('单手公式')._sub;
+  ok('「单手公式」也有二级目录：OH-OLL / OH-PLL，当前这页高亮',
+    !!s3 && s3.children.length === 2 &&
+    s3.children[0].getAttribute('href') === 'oh-oll.html' &&
+    s3.children[1].getAttribute('href') === 'oh-pll.html' &&
+    s3.children[0].className === 'on' && !s3.children[1].className,
+    s3 ? s3.children.map(c => c.textContent + '->' + c.getAttribute('href')).join(' | ') : '没有目录');
   ok('二级目录里的链接也认得出是哪个入口（点了蓝框会滑到那一项）',
     !!s2.children[0]._pages && s2.children[0]._pages.indexOf('oll2.html') >= 0 &&
     s2.children[0]._pages.indexOf('pbl2.html') >= 0);
@@ -1745,23 +1896,26 @@ console.log('\n[19h] 单手 PLL 页（oh-pll.html）：公式和本页的图逐�
     const mWithOh = jp.cases.flatMap(c => c.views.flatMap(v => v.algs.map(a => [c.id, a])))
       .filter(([, a]) => a.uses.indexOf('OH') >= 0 &&
         a.moves.some(t => M_MOVE.test(t)));
-    ok('带 M 层的写法都不带 OH（H 的 M2 那条、Z 的 y M 那条都改成 2H 了）',
+    ok('带 M 层的写法都不带 OH（H 的 M2 那条就是 2H）',
       mWithOh.length === 0 &&
       cs('H').views.flatMap(v => v.algs).filter(a => a.alg === "M2 U' M2 U2 M2 U' M2")[0]
-        .uses.join('+') === '2H' &&
-      cs('Z').views.flatMap(v => v.algs)
-        .filter(a => a.alg === "y M' U' M2 U' M2 U' M' U2 M2")[0].uses.join('+') === '2H',
+        .uses.join('+') === '2H',
       JSON.stringify(mWithOh.map(([id, a]) => id + ':' + a.alg)));
+    ok('jperm 的 `y M\' …` 那条：去掉开头的 y 之后哪个画面都对不上 → 按规矩丢掉（库里不再有它）',
+      !cs('Z').views.flatMap(v => v.algs).some(a => a.alg.indexOf("y M'") === 0) &&
+      cs('Z').views.flatMap(v => v.algs).some(a => a.alg === "M' U M2 U M2 U M' U2 M2 U'"),
+      JSON.stringify(cs('Z').views.flatMap(v => v.algs).map(a => a.alg)));
     ok('jperm 只有 1 条没进来（H 的 x\' R r … u U\' …，里面有中层转、在我们模型里不是纯 PLL）',
       !has('H', "x' R r U2 R' r' u U' R2 U D"));
   }
 
   const nav = fs.readFileSync(path.join(ROOT, 'js', 'nav.js'), 'utf8');
-  ok('导航条里加在「三阶公式」右边、「二阶公式」左边',
-    /'oh-pll\.html',\s*'单手公式',\s*1\]/.test(nav) &&
-    nav.indexOf("'oh-pll.html'") > nav.indexOf("'f2l.html'") &&
-    nav.indexOf("'oh-pll.html'") < nav.indexOf("'oll2.html'"),
-    nav.slice(nav.indexOf("'oh-pll.html'") - 40, nav.indexOf("'oh-pll.html'") + 40));
+  ok('导航条里「单手公式」加在「三阶公式」右边、「二阶公式」左边（现在管 OH-OLL / OH-PLL 两页）',
+    /'oh-oll\.html',\s*'单手公式',\s*1,/.test(nav) &&
+    nav.indexOf("'oh-oll.html'") > nav.indexOf("'f2l.html'") &&
+    nav.indexOf("'oh-oll.html'") < nav.indexOf("'oll2.html'") &&
+    /\['oh-oll\.html', 'OH-OLL · 57 种'\], \['oh-pll\.html', 'OH-PLL · 21 种'\]/.test(nav),
+    nav.slice(nav.indexOf("'oh-oll.html'") - 40, nav.indexOf("'oh-oll.html'") + 160));
 }
 
 console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡（PLL / 单手 / OLL 同一套）');
@@ -1878,6 +2032,35 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
     !ohStale.err && ohStale.shown === GA[0] &&
     ohStale.labels.join('|') === GA.slice(1).join('|'),
     ohStale.err ? String(ohStale.err) : JSON.stringify([ohStale.shown, ohStale.labels]));
+  // 单手 OLL 页（oh-oll.html）：13 有两条单手写法，候选就是另一条
+  const OLLDB = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'oll.json'), 'utf8'));
+  const cs2 = id => OLLDB.cases.filter(c => c.id === id)[0];
+  const ohPool = id => cs2(id).views.flatMap(v => v.algs).filter(a => a.uses.indexOf('OH') >= 0);
+  const ooh13 = ohPool('13');
+  const oohFirst = ooh13.filter(a => (a.tags || []).indexOf('oholl-preferred') >= 0)[0] || o13[0];
+  const oohRest = [oohFirst].concat(ooh13.filter(a => a !== oohFirst));
+  const oo = probe('oh-oll.html', 'js/olldata.js', 'data-oholl', '13', oohRest.map(a => a.alg));
+  ok('单手 OLL 页展开 13：候选是另一条单手写法（本行那条不再重复列出来），号取自库里',
+    !oo.err && oo.opened && oo.labels.join('|') === oohRest.slice(1).map(a => a.alg).join('|') &&
+    oo.idx.join(',') === oohRest.slice(1).map(a => String(a.no)).join(','),
+    oo.err ? String(oo.err) : JSON.stringify([oo.labels, oo.idx]));
+  ok('单手 OLL 页再点同一个展开键：收起', oo.closed);
+  // 存档里留着「不是 OH 的」写法时，单手页不能把它当默认显示出来
+  const ooh2h = cs2('13').views[0].algs.filter(a => a.uses.indexOf('OH') < 0)[0].alg;
+  const ooStale = probe('oh-oll.html', 'js/olldata.js', 'data-oholl', '13', oohRest.map(a => a.alg),
+                        c => c.localStorage.setItem('cube-pick:oh-oll:13', ooh2h));
+  ok('单手 OLL 页不认存档里不是 OH 的写法（13 仍显示 oholl-preferred 那条）',
+    !ooStale.err && ooStale.shown === oohRest[0].alg,
+    ooStale.err ? String(ooStale.err) : ooStale.shown);
+  // 反过来：双手 OLL 页也不能认单手专属写法（57 那条只有 OH）
+  const o57oh = ohPool('57')[0];
+  const o57main = cs2('57').views[0].algs.filter(a => a.uses.indexOf('2H') >= 0)[0].alg;
+  const olStale = probe('oll.html', 'js/olldata.js', 'data-oll', '57', [o57main],
+                        c => c.localStorage.setItem('cube-pick:oll:57', o57oh.alg));
+  ok('双手 OLL 页不认单手专属写法（57 仍显示双手那条）',
+    !olStale.err && olStale.shown === o57main && o57oh.uses.join('+') === 'OH',
+    olStale.err ? String(olStale.err) : JSON.stringify([olStale.shown, o57oh.uses]));
+
   // 反过来：双手 PLL 页也不能认单手专属写法（Gc 的第 3 条）
   const GC_OH = "R2 u' R U' R U R' D x' U2 r U' r'";
   const GC_MAIN = "(R2 U') (R U' R U R' U R2 U D') (R U' R') D U'";
@@ -1886,13 +2069,14 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
   ok('双手 PLL 页不认存档里的单手专属写法（Gc 仍显示 2H 主写法）',
     !plStale.err && plStale.shown === GC_MAIN,
     plStale.err ? String(plStale.err) : plStale.shown);
-  // OLL 页 13：库里也是两条写法
-  const ol = probe('oll.html', 'js/olldata.js', 'data-oll', '13',
-                   ["(r U' r') (U' r U r') (F' U F)",
-                    "(L F') (L' U' L F L') (F' U F)"]);
-  ok('OLL 页展开 13：候选只有 1 条（第一条写法不再重复列出来）',
-    !ol.err && ol.opened && ol.labels.length === 1 && ol.labels[0].indexOf("L F'") >= 0,
-    ol.err ? String(ol.err) : ol.labels.length + ' 条: ' + ol.labels.join(' | ').slice(0, 80));
+  // OLL 页 13：候选 = 库里这个情况的其它写法（正在显示的那条不列进来），编号取库里的
+  const o13 = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/oll.json'), 'utf8'))
+    .cases.filter(c => c.id === '13')[0].views[0].algs;
+  const ol = probe('oll.html', 'js/olldata.js', 'data-oll', '13', [o13[0].alg]);
+  ok('OLL 页展开 13：候选是库里另外几条（本行已经在显示的那条不再重复列出来），编号取库里',
+    !ol.err && ol.opened && ol.labels.join('|') === o13.slice(1).map(a => a.alg).join('|') &&
+    ol.idx.join(',') === o13.slice(1).map(a => String(a.no)).join(','),
+    ol.err ? String(ol.err) : JSON.stringify([ol.labels, ol.idx]));
   ok('OLL 页再点同一个展开键：收起', ol.closed);
 
   // 每条写法挂在自己所属的画面上（v3 的写法就挂 v3）；换到它时图要跟着切到那个画面
@@ -2006,8 +2190,101 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
     ok('四个库里，写法编号在 case 内唯一且连续（1..n）', badNo.length === 0, badNo.slice(0, 3).join(' '));
   }
 
+  // ---------- F2L：一格里一个展开键（公式格右边那一列） ----------
+  const probeF2L = (id, algs, store, inject) => {
+    const h = fs.readFileSync(path.join(ROOT, 'f2l.html'), 'utf8');
+    const blocks = [...h.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
+    const cell = mkEl('td');
+    cell._codes = algs.map(t => { const c = mkEl('code'); c.textContent = t; return c; });
+    const liveCodes = () => cell._codes.filter(c => c.tagName === 'code');
+    cell.querySelector = sel => sel === 'code' ? (liveCodes()[0] || null)
+                          : sel === 'a.tocalc' ? mkEl('a') : null;
+    cell.querySelectorAll = sel => sel === 'code' ? liveCodes() : [];
+    cell.appendChild = c => { cell._codes.push(c); return c; };
+    cell.getAttribute = k => (k === 'data-f2l' ? id : cell[k]);
+    // apply() 会整格重画：桩里也要跟着换掉 <code>，否则 shown() 还是旧的
+    Object.defineProperty(cell, 'innerHTML', {
+      get() { return ''; },
+      set(v) {
+        const m = /<code>([^<]*)<\/code>/.exec(String(v));
+        const c = mkEl('code'); c.textContent = m ? m[1] : '';
+        cell._codes = m ? [c] : [];
+      },
+    });
+    const pick = mkEl('button');
+    pick.getAttribute = k => (k === 'data-f2l' ? id : pick[k]);
+    pick.classList.add('off'); pick.disabled = true;      // 模板里的初始态（只有一条写法时就这样）
+    const els = {};
+    const st = store || {};
+    const doc = { getElementById: i => els[i] || (els[i] = mkEl('div')), createElement: mkEl,
+      documentElement: { dataset: {}, scrollLeft: 0, scrollTop: 0 },
+      querySelectorAll: sel => sel === 'button.pick[data-f2l]' ? [pick]
+                            : sel === '#app td.f[data-f2l]' ? [cell] : [],
+      addEventListener() {}, body: mkEl('body') };
+    const ctx = { console, JSON, Math, Array, String, Object, setTimeout: () => 0, clearTimeout() {},
+      document: doc, navigator: {},
+      localStorage: { getItem: k => (k in st ? st[k] : null), setItem: (k, v) => { st[k] = String(v); } },
+      window: { print() {}, isSecureContext: false, addEventListener() {},
+                pageXOffset: 0, pageYOffset: 0, innerWidth: 1200, innerHeight: 800 },
+      location: {} };
+    ctx.globalThis = ctx;
+    vm.createContext(ctx);
+    let err = null;
+    try {
+      vm.runInContext(fs.readFileSync(path.join(ROOT, 'js/f2ldata.js'), 'utf8'), ctx);
+      if (inject) inject(ctx);
+      blocks.forEach(b => vm.runInContext(b, ctx));
+    } catch (e) { err = e; }
+    const shown0 = (cell.querySelector('code') || {}).textContent || '';
+    const boxOf = () => doc.body.children[doc.body.children.length - 1] || mkEl('div');
+    pick.fire('click');
+    const labels = (boxOf().children || []).map(c =>
+      ((c.innerHTML || '').match(/<span>([^<]*)<\/span>/) || [])[1] || '');
+    const idx = (boxOf().children || []).map(c =>
+      ((c.innerHTML || '').match(/<b class="idx">(\d+)<\/b>/) || [])[1] || '');
+    const opened = pick.classList.contains('on') && boxOf().classList.contains('on');
+    pick.fire('click');
+    const closed = !pick.classList.contains('on') && !boxOf().classList.contains('on');
+    let applied = '';
+    if (labels.length) {
+      pick.fire('click');
+      const first = (boxOf().children || [])[0];
+      if (first) first.fire('click');
+      applied = ((cell.querySelector('code') || {}).textContent) || '';
+    }
+    return { err, labels, idx, opened, closed, applied, store: st, shown: shown0, cell, pick };
+  };
+  const A07 = ["(R U R' U2)(R U2 R' U)y'(R' U R)", "(R' F R F')(R U' R' U)(R U' R' U2 R U' R')"];
+  const f07 = probeF2L('07', [A07[0]]);
+  ok('F2L 展开键：07 有两条写法 → 键点亮，候选是另一条（编号取库里的 2）',
+    !f07.err && f07.opened && !f07.pick.classList.contains('off') && !f07.pick.disabled &&
+    f07.labels.length === 1 && f07.labels[0] === A07[1] && f07.idx.join(',') === '2',
+    f07.err ? String(f07.err) : JSON.stringify([f07.labels, f07.idx]));
+  ok('F2L 展开键：再点同一个键收起', f07.closed);
+  ok('F2L 展开键：点候选就换过去，并写进 cube-pick:f2l:07',
+    f07.applied === A07[1] && f07.store['cube-pick:f2l:07'] === A07[1],
+    JSON.stringify([f07.applied, f07.store]));
+  const f14 = probeF2L('14a', ["(R U R')"]);
+  ok('F2L 展开键：只有一条写法的情况保持淡态（.off + disabled 不摘掉）',
+    !f14.err && f14.labels.length === 0 && f14.pick.classList.contains('off') && f14.pick.disabled,
+    f14.err ? String(f14.err) : JSON.stringify(f14.labels));
+  const f01 = probeF2L('01a', ["(R U' R' U)(R U' R' U2)(R U' R')"], null,
+                       c => c.F2L_DB.cases.filter(x => x.id === '01a')[0].algs
+                         .push({ no: 3, alg: "(R U' R' U2)(R U' R' U)(R U' R')", n: 11, moves: [] }));
+  ok('F2L 展开键：库里补一条写法 → 键自动亮，编号显示库里给的 3（不是面板第 1 条）',
+    !f01.err && f01.labels.length === 1 && f01.idx.join(',') === '3' &&
+    !f01.pick.classList.contains('off'),
+    f01.err ? String(f01.err) : JSON.stringify([f01.labels, f01.idx]));
+  const fStale = probeF2L('01a', ["(R U' R' U)(R U' R' U2)(R U' R')"],
+                          { 'cube-pick:f2l:01a': '这条早就不在库里了' });
+  ok('F2L 展开键：存档里已经不存在的写法不当默认（usable 挡掉）',
+    !fStale.err && fStale.shown === "(R U' R' U)(R U' R' U2)(R U' R')", fStale.shown);
+  const fRestore = probeF2L('07', [A07[0]], { 'cube-pick:f2l:07': A07[1] });
+  ok('F2L 展开键：存档里那条还能显示 → 首屏就换成它',
+    !fRestore.err && fRestore.shown === A07[1], fRestore.shown);
+
   // 三个页面同一套：展开态样式 + 开合过渡（不用 display:none，否则没法过渡）+ 打印不留空列
-  ['pll.html', 'oh-pll.html', 'oll.html', 'oll2.html', 'pbl2.html'].forEach(p => {
+  ['pll.html', 'oh-pll.html', 'oll.html', 'oh-oll.html', 'oll2.html', 'pbl2.html'].forEach(p => {
     const s = fs.readFileSync(path.join(ROOT, p), 'utf8');
     ok(p + '：展开键有单独的展开态样式（底色 + 主色）',
       /button\.pick\.on\{[^}]*background:var\(--chip\)/.test(s));
@@ -2029,6 +2306,50 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
   });
 }
 
+console.log('\n[19h2] 单手 OLL 页（oh-oll.html）：每个情况显示它的单手写法');
+{
+  const h = fs.readFileSync(path.join(ROOT, 'oh-oll.html'), 'utf8');
+  const db = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'oll.json'), 'utf8'));
+  // 和页面同一套规则：先把 OH 的挑出来（oholl-preferred 排前面），一条都没有才回退双手
+  const pick = c => {
+    let oh = [];
+    (c.views || []).forEach(v => (v.algs || []).forEach(a => {
+      if (a.uses.indexOf('OH') >= 0) {
+        oh.push({ alg: a.alg, pref: (a.tags || []).indexOf('oholl-preferred') >= 0, moves: a.moves });
+      }
+    }));
+    if (!oh.length) (c.views[0].algs || []).forEach(a => {
+      if (a.uses.indexOf('2H') >= 0) oh.push({ alg: a.alg, pref: false, moves: a.moves });
+    });
+    oh.sort((x, y) => (y.pref ? 1 : 0) - (x.pref ? 1 : 0));
+    return oh;
+  };
+  const rows = db.cases.map(c => [c.id, pick(c)]).filter(r => r[1].length);
+  ok('页面读 olldata.js；页头写「单手 OLL」+ 英文全称',
+    /<script src="js\/olldata\.js"><\/script>/.test(h) &&
+    /<h1>单手 OLL<\/h1>\s*<p>OH · Orientation of the Last Layer<\/p>/.test(h));
+  ok('57 个情况每个都有一条单手写法（' + rows.length + ' 条）', rows.length === 57, String(rows.length));
+  ok('一个情况里「首选」只有一条（oholl-preferred），面板/首屏默认就是它',
+    db.cases.every(c => {
+      const pref = (c.views || []).flatMap(v => v.algs || [])
+        .filter(a => (a.tags || []).indexOf('oholl-preferred') >= 0);
+      return pref.length === 1 && pick(c)[0].pref;
+    }));
+  ok('单手写法里没有带 M 层的（带 M 的按规矩只算双手）',
+    rows.every(r => r[1].every(x => !(x.moves || []).some(t => /^M[2']?$/.test(t)))));
+  ok('按库里的四个分组铺行（十字 / 单点 / 一字 / 拐角）',
+    /OLL_DB\.groups/.test(h) && /byKey\[c\.group\]/.test(h));
+  ok('存档键是 cube-pick:oh-oll:<编号>', /var KEY = 'cube-pick:oh-oll:'/.test(h));
+  ok('行里的图带 data-oholl（展开键靠它找到这一行），图跟着写法所属的画面走',
+    /data-zoom data-oholl="/.test(h) && /viewOfAlg\(/.test(h));
+  ok('单手页没有左边那条「三阶公式」目录（和 oh-pll.html 一致）',
+    !/nav\.side\{/.test(h) && !/<nav class="side"/.test(h));
+  ok('「单手公式」这一组两页写同一个分组键 cube-last:oh-oll.html',
+    /setItem\('cube-last:oh-oll\.html', 'oh-oll\.html'\)/.test(h) &&
+    /setItem\('cube-last:oh-oll\.html', 'oh-pll\.html'\)/.test(
+      fs.readFileSync(path.join(ROOT, 'oh-pll.html'), 'utf8')));
+}
+
 console.log('\n[19i] 首页卡片：顺序和导航条一致，单手那张也在');
 {
   const idx = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -2046,12 +2367,13 @@ console.log('\n[19i] 首页卡片：顺序和导航条一致，单手那张也�
     JSON.stringify(cards) === JSON.stringify(entries),
     '卡片: ' + cards.join(',') + ' / 导航: ' + entries.join(','));
   ok('单手那张卡片在「三阶公式」后面、「二阶公式」前面',
-    cards.indexOf('oh-pll.html') === cards.indexOf('f2l.html') + 1 &&
-    cards.indexOf('oh-pll.html') === cards.indexOf('oll2.html') - 1);
-  const card = (idx.match(/<a class="card" href="oh-pll.html">[\s\S]{0,300}?<\/a>/) || [''])[0];
-  ok('单手卡片：图取自 img/pll/，标题写「单手 PLL」+ 21',
-    /<img src="img\/pll\/pll-[\w]+-v\d-256x256\.png" alt="单手公式"/.test(card) &&
-    /<h2>单手 PLL<span class="n">21<\/span><\/h2>/.test(card), card.replace(/\s+/g, ' ').slice(0, 80));
+    cards.indexOf('oh-oll.html') === cards.indexOf('f2l.html') + 1 &&
+    cards.indexOf('oh-oll.html') === cards.indexOf('oll2.html') - 1);
+  const card = (idx.match(/<div class="card">\s*<a class="stretch" href="oh-oll\.html"[\s\S]{0,400}?<\/div>/) || [''])[0];
+  ok('单手卡片：图取自 img/oll/（跟着主题换昼夜），标题「单手 OLL · PLL」两个入口',
+    /<img src="img\/oll\/oll-[\w]+-v\d-day-256x256\.png" alt="单手公式"/.test(card) &&
+    /<h2>单手 <a href="oh-oll\.html">OLL<\/a> · <a href="oh-pll\.html">PLL<\/a><\/h2>/.test(card) &&
+    /getElementById\('oHthumb'\)/.test(idx), card.replace(/\s+/g, ' ').slice(0, 100));
 }
 
 console.log('\n[19e] 公式页页头：缩写 + 英文全称');
@@ -2166,8 +2488,11 @@ console.log('\n[20] OLL 图的昼夜两版 + 图片尺寸/体积');
   ['practice.html', 'calc.html'].forEach(p => {
     const h = fs.readFileSync(path.join(ROOT, p), 'utf8');
     ok(p + ' 的 OLL 缩略图也分昼夜两版',
-      /kind === 'oll' \? \(?document\.documentElement\.dataset\.theme === 'dark' \? '-night' : '-day'\)?/.test(h));
+      /kind === 'oll' \? \(?document\.documentElement\.dataset\.theme === 'dark' \? '-night' : '-day'\)?/.test(h) ||
+      /var to = document\.documentElement\.dataset\.theme === 'dark' \? '-night' : '-day'/.test(h));
   });
+  ok('计算器的 OLL 缩略图跟着「这条写法属于哪个画面」走（写法可能不在 v0）',
+    /var tv = row\[2\] == null \? 0 : row\[2\]/.test(fs.readFileSync(path.join(ROOT, 'calc.html'), 'utf8')));
 
   // 图片本身：尺寸、存在、体积
   const pngSize = f => {
@@ -2203,8 +2528,8 @@ console.log('\n[20] OLL 图的昼夜两版 + 图片尺寸/体积');
     days + ' / ' + nights);
   // 引用的文件都得在
   const refs = new Set();
-  ['f2l.html', 'oll.html', 'oll2.html', 'pll.html', 'oh-pll.html', 'practice.html', 'calc.html',
-   'index.html']
+  ['f2l.html', 'oll.html', 'oh-oll.html', 'oll2.html', 'pll.html', 'oh-pll.html', 'practice.html',
+   'calc.html', 'index.html']
     .forEach(p => {
       const h = fs.readFileSync(path.join(ROOT, p), 'utf8');
       // 目录名要整段匹配：写成 (?:f2l|oll|pll)\/ 的话，「oll2/…」会被当成「oll/…」，

@@ -172,8 +172,8 @@ console.log('\n[4] 哪些图能点开：能点的都标了，点击有别的用�
     /'<img src="' \+ thumb\(pickKind, r\) \+ '" alt="" loading="lazy" data-zoom>'/.test(read('calc.html')));
   ok('练习页：题目那张图标了',
     /id="qimg" alt="要解决的图形" data-zoom/.test(read('practice.html')));
-  ok('F2L 公式表：那一列图标了',
-    /'<td class="pic"><span class="box"><img src="' \+ IMG\(name\) \+ '" data-zoom alt="/.test(read('f2l.html')));
+  ok('F2L 公式表：那一列图标了（图上还带 data-f2l，展开键要和格子对上）',
+    /'<td class="pic"><span class="box"><img src="' \+ IMG\(name\) \+ '" data-zoom data-f2l="/.test(read('f2l.html')));
   ['oll.html', 'pll.html'].forEach(p => {
     const h = read(p);
     // 原来表格里那张图点一下是「展开这一条的其他写法」——那套连数据带代码都没有了
