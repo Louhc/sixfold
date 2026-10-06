@@ -323,18 +323,33 @@ var AlgPicks = (function () {
     if (api && api.find) FIND[page] = api.find;
     var header = document.querySelector ? document.querySelector('header') : null;
     if (!header || !header.appendChild) return null;
-    var mk = function (id, right, title, svg) {
+    var mk = function (id, order, title, svg) {
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'toolbtn';
       b.id = id;
       b.title = title;
       b.setAttribute('aria-label', title);
-      b.style.right = right + 'px';
+      b.style.position = 'static';          // 位置交给 .apbar
       b.innerHTML = svg;
-      header.appendChild(b);
+      /* 顺序：清空 / 恢复 / 导出 / 导入 一路排在 打印 / 主题 **左边**
+         （每次都插在打印键前面，所以就是创建顺序） */
+      var anchor = printBtn || themeBtn || null;
+      bar.insertBefore(b, anchor);
       return b;
     };
+    /* 所有表头按键（含页面原本的打印 / 主题键）都收进这一条 flex 行：
+       桌面用绝对定位贴在右上角（和以前一样），窄屏（手机）整条掉到标题下面居中 —— 
+       以前六个键平铺在最右边，手机上会压到中间的标题（用户报过）。 */
+    var bar = document.createElement('div');
+    bar.className = 'apbar';
+    bar.style.cssText = 'position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:8px';
+    /* 页面上原有的两个键：搬进来（元素身份不变，#printbtn / #themebtn 照样能用） */
+    var printBtn = document.getElementById ? document.getElementById('printbtn') : null;
+    var themeBtn = document.getElementById ? document.getElementById('themebtn') : null;
+    header.appendChild(bar);
+    if (printBtn && printBtn.parentNode) bar.appendChild(printBtn);
+    if (themeBtn && themeBtn.parentNode) bar.appendChild(themeBtn);
     var bReset = mk('algreset', 188, '恢复默认公式', ICON.reset);
     var bExport = mk('algexport', 152, '导出 CSV', ICON.export);
     var bImport = mk('algimport', 116, '导入 CSV', ICON.import);
@@ -582,6 +597,12 @@ var AlgPicks = (function () {
       '.pickbox .custom-open:hover,.pickbox .custom-item:hover{background:var(--field-hover,#f0f2f5);color:var(--text,#111)}',
       '.pickbox .del{flex:none;padding:0 4px;color:var(--muted,#666);font-size:15px;line-height:1}',
       '.pickbox .del:hover{color:var(--accent-text,#7a4a58)}',
+      // 手机 / 窄屏：表头按键整排掉到标题下面居中，不再压住标题
+      '@media (max-width:720px){',
+      '  .apbar{position:static !important;margin:10px auto 0;flex-wrap:wrap;justify-content:center}',
+      '  header .opts{position:static !important;margin-top:8px;justify-content:center}',
+      '}',
+      '@media (max-width:380px){.apbar{gap:6px}.apbar .toolbtn,.apbar .printbtn,.apbar .themebtn{width:26px;height:26px}}',
       // 自定义条目里的「自」：跟库里的编号同一格，颜色淡一点（一眼看出是自己加的）
       '.pickbox .custom-item.cur,.pickbox .custom-open.cur{background:var(--field-hover,#f0f2f5)}'
     ].join('');

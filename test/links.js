@@ -3626,6 +3626,13 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
       JSON.stringify({ r, left: Object.keys(st6) }));
   }
 
+  /* 表头按键收在一条 .apbar 里：桌面上贴右上角，窄屏（手机）整条掉到标题下面 ——
+     以前六个键平铺在最右边，手机上会压住中间的标题（用户报过）。 */
+  ok('表头按键在一条 .apbar 里，并且带窄屏媒体查询（手机上不再压标题）',
+    /className = 'apbar'/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&
+    /@media \(max-width:720px\)\{[\s\S]{0,200}?\.apbar\{position:static !important/.test(
+      fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')));
+
   ok('三个图标键的 id 与图标都在模块里（内联 SVG，不是字符）',
     /'algreset'/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&
     /ICON = \{/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&

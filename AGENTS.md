@@ -258,8 +258,11 @@
   存档 `calc-state-v1` 也是三份一起存（`orders` + 顶层的 `dur` / `skip`，`frames` 由 `base` + `steps` 重算）。
 - **每个公式页表头都有三个图标键**（都在打印键左边，纯图标 + `title`/`aria-label`）：
   `#algimport` 导入 CSV · `#algexport` 导出 CSV · `#algreset` 恢复默认公式 ·
-  `#algclear` 清空自定义公式（四个；先 `#algclear` 再往左 `#algreset` / `#algexport` / `#algimport`，
-  right 依次 224 / 188 / 152 / 116）。
+  `#algclear` 清空自定义公式（四个）——**都收在一条 `.apbar` flex 行里**，页面原本的
+  `#printbtn` / `#themebtn` 也被搬进这一行（元素身份不变，JS 照旧按 id 找得到），
+  顺序：清空 / 恢复 / 导出 / 导入 / 打印 / 主题。桌面这条行绝对定位贴在右上角（`top:16px;right:16px`）；
+  **窄屏（`max-width:720px`）整条改成文档流、落到标题下面居中**，页面里的 `.opts`（显示颜色开关）
+  也跟着不再绝对定位 —— 不然六个键平铺在最右边会压住中间的标题（手机上用户报过）。
   逻辑全在 **`js/algpicks.js`**（普通 `<script>`，七个页各引一次、各调一行 `AlgPicks.mountTools('<页>', {...})`）——
   **这个 `<script>` 必须排在页面自己的脚本之前**：页面那句 `mountTools` 有 `typeof` 保护，
   顺序反了会被静默跳过，表现就是「这一页没有那几个按键」（`oh-pll.html` 踩过，`test/links.js` 现在盯着顺序）：
