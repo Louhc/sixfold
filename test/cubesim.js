@@ -1018,6 +1018,66 @@ console.log('\n[11e] 「跳计算器」链接的朝向标记：只有 F2L 的 b 
     const picks = [...oholl.matchAll(/class="pick off" type="button" disabled data-pick="/g)];
     ok('单手 OLL 页：57 个展开键（模板默认淡态，脚本再按有没有别的写法点亮）',
       picks.length === 57, String(picks.length));
+    // 用户清过 5 / 7 号：单手首选都换成了 z 开头的版本
+    {
+      const rowsOf = id => rows.filter(r => r.indexOf('data-oholl="' + id + '"') >= 0)[0] || '';
+      ok('单手 OLL 页的 5 号行显示 z 版的单手首选',
+        rowsOf('5').indexOf("z u' R2 U R U' R u") >= 0,
+        rowsOf('5').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 9 号行显示镜像 + z 变换后的单手首选',
+        rowsOf('9').indexOf("z U' R' U R' U F' U' F U' R2 U") >= 0,
+        rowsOf('9').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 11 号行显示镜像 + z 变换后的单手首选',
+        rowsOf('11').indexOf("z u' U2 R U' R U R2 U' R u U'") >= 0,
+        rowsOf('11').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 42 号行显示镜像 + z 变换后的单手首选',
+        rowsOf('42').indexOf("z U' R' U R' U' R2 U F' U' R' U R F") >= 0,
+        rowsOf('42').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 29 号行显示镜像 + z 变换后的单手首选',
+        rowsOf('29').indexOf("z F' R' U' R2 U R U' R2 U R F") >= 0,
+        rowsOf('29').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 47 号行显示 z 变换后的单手首选',
+        rowsOf('47').indexOf("z F' U' R' U R U' R' U R F") >= 0,
+        rowsOf('47').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 49 号行显示 z 变换后的单手首选',
+        rowsOf('49').indexOf("z u R' u'2 R u2 R u'2 R' u") >= 0,
+        rowsOf('49').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 50 号行显示 1 号那条（它也是单手首选）',
+        rowsOf('50').indexOf("(r' U) (r2 U' r2 U' r2) (U r')") >= 0,
+        rowsOf('50').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 54 号行显示 z 变换后的单手首选',
+        rowsOf('54').indexOf("z u R U' R U R' U' R U R2 u'") >= 0,
+        rowsOf('54').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 52 号行显示新的单手首选',
+        rowsOf('52').indexOf("R' U' R U' R' U F' U F R") >= 0,
+        rowsOf('52').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 36 号行显示新的单手首选（就是 1 号那条）',
+        rowsOf('36').indexOf("(R U'2 R'2 F2) (r U' R U'2) r' F") >= 0,
+        rowsOf('36').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 38 号行显示 z 变换后的单手首选',
+        rowsOf('38').indexOf("z U' R'2 U2 F'2 u' R U' R2 u F'") >= 0,
+        rowsOf('38').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 39 号行显示 z 版的单手首选',
+        rowsOf('39').indexOf("z U F' U' R' U R F R' U'") >= 0,
+        rowsOf('39').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+      ok('单手 OLL 页的 7 号行显示 z 版的单手首选（这条只算单手）',
+        rowsOf('7').indexOf("z u R U' R U R2 u'") >= 0,
+        rowsOf('7').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+    }
+    // 用户清过 15 号：3 号（L 版）去掉、1/2 号合并成一条 —— 单手页那一行就显示这一条
+    {
+      const row15 = rows.filter(r => r.indexOf('data-oholl="15"') >= 0)[0] || '';
+      ok('单手 OLL 页的 15 号行显示合并后的那条（(r\' U\' r) …）',
+        row15.indexOf("(r' U' r) (R' U' R U) (r' U r)") >= 0,
+        row15.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+    }
+    // 用户指定：14 号的单手首选是 13 号那条的镜像（z 打头、R↔U / L↔D 互换）
+    {
+      const row14 = rows.filter(r => r.indexOf('data-oholl="14"') >= 0)[0] || '';
+      ok('单手 OLL 页的 14 号行显示的是那条镜像公式（z 打头，页面上默认就是它）',
+        row14.indexOf("z F' R' U' R U2 F U' R' U' R U") >= 0,
+        row14.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 90));
+    }
     ok('单手 OLL 页一条 @g: 都没有（@g: 只属于 F2L 的 b 版）',
       (oholl.match(/href="calc\.html#[^"]*"/g) || []).every(h => h.indexOf('@g:') < 0));
   }

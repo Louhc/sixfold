@@ -125,30 +125,7 @@
           "algs": [
             {
               "no": 1,
-              "alg": "(R U'2) (R'2 U' R2 U') (R'2 U'2 R)",
-              "moves": [
-                "R",
-                "U'2",
-                "R'2",
-                "U'",
-                "R2",
-                "U'",
-                "R'2",
-                "U'2",
-                "R"
-              ],
-              "n": 9,
-              "uses": [
-                "2H"
-              ],
-              "verified": "oll_db.py: sig 复原",
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "R U2 (R2 U' R2 U' R2) U2 R",
+              "alg": "(R U2) (R2 U' R2 U') (R2 U2 R)",
               "moves": [
                 "R",
                 "U2",
@@ -165,10 +142,11 @@
                 "2H",
                 "OH"
               ],
+              "verified": "oll_db.py: sig 复原｜用户报重复后合并：(R U'2) (R'2 U' R2 U') (R'2 U'2 R) / R U2 (R2 U' R2 U' R2) U2 R",
               "tags": [
+                "preferred",
                 "oholl-preferred"
-              ],
-              "verified": "jperm OLL｜来源 jperm OH OLL"
+              ]
             }
           ]
         },
@@ -1654,29 +1632,31 @@
           "algs": [
             {
               "no": 1,
-              "alg": "(r U R') (U R U'2) (r'2 U' R U' R' U'2 r)",
+              "alg": "(r U R') (U R U2) (r2 U' R U' R' U2 r)",
               "moves": [
                 "r",
                 "U",
                 "R'",
                 "U",
                 "R",
-                "U'2",
-                "r'2",
+                "U2",
+                "r2",
                 "U'",
                 "R",
                 "U'",
                 "R'",
-                "U'2",
+                "U2",
                 "r"
               ],
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜用户报重复后合并：(r U R') (U R U'2) (r'2 U' R U' R' U'2 r) / r U R' U R U2 r2 U' R U' R' U2 r",
               "tags": [
-                "preferred"
+                "preferred",
+                "oholl-preferred"
               ]
             },
             {
@@ -1704,33 +1684,6 @@
               ],
               "tags": [],
               "verified": "jperm OLL"
-            },
-            {
-              "no": 3,
-              "alg": "r U R' U R U2 r2 U' R U' R' U2 r",
-              "moves": [
-                "r",
-                "U",
-                "R'",
-                "U",
-                "R",
-                "U2",
-                "r2",
-                "U'",
-                "R",
-                "U'",
-                "R'",
-                "U2",
-                "r"
-              ],
-              "n": 13,
-              "uses": [
-                "OH"
-              ],
-              "tags": [
-                "oholl-preferred"
-              ],
-              "verified": "jperm OH OLL"
             }
           ]
         },
@@ -1745,7 +1698,7 @@
           "img-night": "img/oll/oll-18-v1-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "R U2 R' R' F R F' U2 M' (U R U' r')",
               "moves": [
                 "R",
@@ -1770,7 +1723,7 @@
               "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
             },
             {
-              "no": 5,
+              "no": 4,
               "alg": "R U2 R' R' F R F' U2 R' r (U R U' r')",
               "moves": [
                 "R",
@@ -1808,7 +1761,7 @@
           "img-night": "img/oll/oll-18-v2-night-256x256.png",
           "algs": [
             {
-              "no": 6,
+              "no": 5,
               "alg": "r' U' R U' R' U2 r2 U R' U R U2 r'",
               "moves": [
                 "r'",
@@ -2385,10 +2338,34 @@
               "uses": [
                 "OH"
               ],
+              "tags": [],
+              "verified": "jperm OH OLL"
+            },
+            {
+              "no": 4,
+              "alg": "z F' R' U' R U2 F U' R' U' R U",
+              "moves": [
+                "z",
+                "F'",
+                "R'",
+                "U'",
+                "R",
+                "U2",
+                "F",
+                "U'",
+                "R'",
+                "U'",
+                "R",
+                "U"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ],
-              "verified": "jperm OH OLL"
+              "verified": "用户提供：13 号那条（F U R U' R2 F' R U R U' R'）的镜像（最前面加 z，R↔U / L↔D 互换并翻方向）"
             }
           ]
         },
@@ -2462,36 +2439,14 @@
               ],
               "n": 10,
               "uses": [
-                "2H"
-              ],
-              "verified": "oll_db.py: sig 复原",
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "r' U' R' r U' R U r' U r",
-              "moves": [
-                "r'",
-                "U'",
-                "R'",
-                "r",
-                "U'",
-                "R",
-                "U",
-                "r'",
-                "U",
-                "r"
-              ],
-              "n": 10,
-              "uses": [
+                "2H",
                 "OH"
               ],
+              "verified": "oll_db.py: sig 复原｜与 jperm OH OLL 那条（r' U' R' r U' R U r' U r）本质上是一回事（同一情况、同一个 AUF，只是 r/R' 的写法不同），合并成一条",
               "tags": [
-                "oholl-preferred"
-              ],
-              "verified": "jperm OH OLL"
+                "oholl-preferred",
+                "preferred"
+              ]
             }
           ]
         },
@@ -2515,31 +2470,7 @@
           ],
           "img-day": "img/oll/oll-15-v2-day-256x256.png",
           "img-night": "img/oll/oll-15-v2-night-256x256.png",
-          "algs": [
-            {
-              "no": 3,
-              "alg": "l' U' l L' U' L U l' U l",
-              "moves": [
-                "l'",
-                "U'",
-                "l",
-                "L'",
-                "U'",
-                "L",
-                "U",
-                "l'",
-                "U",
-                "l"
-              ],
-              "n": 10,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
-            }
-          ]
+          "algs": []
         },
         {
           "view": 3,
@@ -2925,10 +2856,32 @@
               "uses": [
                 "OH"
               ],
+              "tags": [],
+              "verified": "jperm OH OLL"
+            },
+            {
+              "no": 3,
+              "alg": "z U F' U' R' U R F R' U'",
+              "moves": [
+                "z",
+                "U",
+                "F'",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "F",
+                "R'",
+                "U'"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ],
-              "verified": "jperm OH OLL"
+              "verified": "用户提供：40 号 1 号（(R' F) (R U R' U') F' (U R)）的镜像的 z 变换（L→U、U→R、F 不变，撇号照搬，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -2954,7 +2907,7 @@
           "img-night": "img/oll/oll-39-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "R B' R' U' R U B U' R'",
               "moves": [
                 "R",
@@ -3370,9 +3323,7 @@
                 "2H"
               ],
               "verified": "oll_db.py: sig 复原",
-              "tags": [
-                "preferred"
-              ]
+              "tags": []
             },
             {
               "no": 2,
@@ -3417,10 +3368,34 @@
                 "2H",
                 "OH"
               ],
+              "tags": [],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
+            },
+            {
+              "no": 4,
+              "alg": "R' U' R U' R' U F' U F R",
+              "moves": [
+                "R'",
+                "U'",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "F'",
+                "U",
+                "F",
+                "R"
+              ],
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
               "tags": [
+                "preferred",
                 "oholl-preferred"
               ],
-              "verified": "jperm OLL｜来源 jperm OH OLL"
+              "verified": "用户提供：同时作为双手首选 + 单手首选"
             }
           ]
         },
@@ -3446,7 +3421,7 @@
           "img-night": "img/oll/oll-52-v2-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 5,
               "alg": "R' F' U' F U' (R U R' U) R",
               "moves": [
                 "R'",
@@ -3503,32 +3478,7 @@
           "algs": [
             {
               "no": 1,
-              "alg": "(R U'2 R'2 U') (R U' R' U2) (F R F')",
-              "moves": [
-                "R",
-                "U'2",
-                "R'2",
-                "U'",
-                "R",
-                "U'",
-                "R'",
-                "U2",
-                "F",
-                "R",
-                "F'"
-              ],
-              "n": 11,
-              "uses": [
-                "2H"
-              ],
-              "verified": "oll_db.py: sig 复原",
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "R U2 R2 U' R U' R' U2 F R F'",
+              "alg": "(R U2 R2 U') (R U' R' U2) (F R F')",
               "moves": [
                 "R",
                 "U2",
@@ -3547,10 +3497,11 @@
                 "2H",
                 "OH"
               ],
+              "verified": "oll_db.py: sig 复原｜用户报重复后合并：(R U'2 R'2 U') (R U' R' U2) (F R F') / R U2 R2 U' R U' R' U2 F R F'",
               "tags": [
+                "preferred",
                 "oholl-preferred"
-              ],
-              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+              ]
             }
           ]
         },
@@ -3565,7 +3516,7 @@
           "img-night": "img/oll/oll-55-v1-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 2,
               "alg": "R' F R U R U' R2 F' R2 U' R' U R U R'",
               "moves": [
                 "R'",
@@ -3832,17 +3783,18 @@
             },
             {
               "no": 2,
-              "alg": "l' U2 L U L' U l",
+              "alg": "z u' R2 U R U' R u",
               "moves": [
-                "l'",
-                "U2",
-                "L",
+                "z",
+                "u'",
+                "R2",
                 "U",
-                "L'",
-                "U",
-                "l"
+                "R",
+                "U'",
+                "R",
+                "u"
               ],
-              "n": 7,
+              "n": 8,
               "uses": [
                 "2H",
                 "OH"
@@ -3850,7 +3802,7 @@
               "tags": [
                 "oholl-preferred"
               ],
-              "verified": "jperm OLL｜来源 jperm OH OLL"
+              "verified": "用户提供：原来 2 号（l' U2 L U L' U l）改成 z 开头 —— L→U、U→R（宽转 l→u），并作为单手首选"
             }
           ]
         },
@@ -4026,6 +3978,28 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z u R U' R U R2 u'",
+              "moves": [
+                "z",
+                "u",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R2",
+                "u'"
+              ],
+              "n": 8,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：8 号 2 号（r' U' R U' R' U2 r）的镜像的 z 变换（L→U'、U→R'，宽转 l→u'）；只作为单手写法"
             }
           ]
         },
@@ -4051,7 +4025,7 @@
           "img-night": "img/oll/oll-07-v2-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "r U R' U R U2 r'",
               "moves": [
                 "r",
@@ -4067,9 +4041,7 @@
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
             }
           ]
@@ -4107,28 +4079,7 @@
           "algs": [
             {
               "no": 1,
-              "alg": "(r' U' R) (U' R' U'2 r)",
-              "moves": [
-                "r'",
-                "U'",
-                "R",
-                "U'",
-                "R'",
-                "U'2",
-                "r"
-              ],
-              "n": 7,
-              "uses": [
-                "2H"
-              ],
-              "verified": "oll_db.py: sig 复原",
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "r' U' R U' R' U2 r",
+              "alg": "(r' U' R) (U' R' U2 r)",
               "moves": [
                 "r'",
                 "U'",
@@ -4143,10 +4094,34 @@
                 "2H",
                 "OH"
               ],
+              "verified": "oll_db.py: sig 复原｜用户报重复后合并：(r' U' R) (U' R' U'2 r) / r' U' R U' R' U2 r",
               "tags": [
+                "preferred",
                 "oholl-preferred"
+              ]
+            },
+            {
+              "no": 2,
+              "alg": "(r' U' r) (U' R' U R) (r' U r)",
+              "moves": [
+                "r'",
+                "U'",
+                "r",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "r'",
+                "U",
+                "r"
               ],
-              "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm OH OLL"
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "用户提供：15 号 1 号公式（(r' U' r) (R' U' R U) (r' U r)）的逆"
             }
           ]
         },
@@ -4173,26 +4148,6 @@
           "algs": [
             {
               "no": 3,
-              "alg": "l' U' L U' L' U2 l",
-              "moves": [
-                "l'",
-                "U'",
-                "L",
-                "U'",
-                "L'",
-                "U2",
-                "l"
-              ],
-              "n": 7,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
-            },
-            {
-              "no": 4,
               "alg": "R U2 R' U2 R' F R F'",
               "moves": [
                 "R",
@@ -4210,6 +4165,27 @@
               ],
               "tags": [],
               "verified": "jperm OLL（归到 v2）"
+            },
+            {
+              "no": 4,
+              "alg": "z u' R' U R' U' R2 u",
+              "moves": [
+                "z",
+                "u'",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R2",
+                "u"
+              ],
+              "n": 8,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [],
+              "verified": "用户提供：原来 8 号的 3 号（l' U' L U' L' U2 l）改成 z 开头 —— L→U、U→R（宽转 l→u）"
             }
           ]
         },
@@ -4301,9 +4277,7 @@
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
             }
           ]
@@ -4328,7 +4302,34 @@
           ],
           "img-day": "img/oll/oll-09-v3-day-256x256.png",
           "img-night": "img/oll/oll-09-v3-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "z U' R' U R' U F' U' F U' R2 U",
+              "moves": [
+                "z",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "U",
+                "F'",
+                "U'",
+                "F",
+                "U'",
+                "R2",
+                "U"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：10 号 2 号（R U R' U R' F R F' R U2 R'）的镜像的 z 变换（镜像 = R↔L 并翻方向；再套 L→U、U→R、R→D、D→L、F/B 不变，前面加 z）；只作为单手写法"
+            }
+          ]
         }
       ]
     },
@@ -4530,10 +4531,34 @@
                 "2H",
                 "OH"
               ],
+              "tags": [],
+              "verified": "jperm OLL｜来源 jperm OH OLL"
+            },
+            {
+              "no": 3,
+              "alg": "z u' U2 R U' R U R2 U' R u U'",
+              "moves": [
+                "z",
+                "u'",
+                "U2",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R2",
+                "U'",
+                "R",
+                "u",
+                "U'"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ],
-              "verified": "jperm OLL｜来源 jperm OH OLL"
+              "verified": "用户提供：12 号唯一那条单手写法（r R2 U' R U' R' U2 R U' r' R）的镜像的 z 变换（镜像 = R↔L、r↔l 并翻方向；再套 L→U、U→R、R→D、D→L、F/B 不变，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -4559,7 +4584,7 @@
           "img-night": "img/oll/oll-11-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "r' R2 U R' U R U2 R' U M'",
               "moves": [
                 "r'",
@@ -4581,7 +4606,7 @@
               "verified": "jperm OLL（去掉开头的 y（它属于哪个画面由画面表达））"
             },
             {
-              "no": 4,
+              "no": 5,
               "alg": "r' R2 U R' U R U2 R' U R' r",
               "moves": [
                 "r'",
@@ -4786,6 +4811,30 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "(r' U' R U) R' r (U' R' U R)",
+              "moves": [
+                "r'",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "r",
+                "U'",
+                "R'",
+                "U",
+                "R"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：把 1 号的 M' 展开成 R' r（M' = R' r），只作为单手写法、并作单手首选"
             }
           ]
         },
@@ -4800,7 +4849,7 @@
           "img-night": "img/oll/oll-28-v1-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "r U R' U' r' R U R U' R'",
               "moves": [
                 "r",
@@ -4819,9 +4868,7 @@
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
             }
           ]
@@ -4919,6 +4966,32 @@
               ],
               "verified": "oll_db.py: sig 复原",
               "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "z F' R' U' R2 U R U' R2 U R F",
+              "moves": [
+                "z",
+                "F'",
+                "R'",
+                "U'",
+                "R2",
+                "U",
+                "R",
+                "U'",
+                "R2",
+                "U",
+                "R",
+                "F"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：30 号唯一的单手写法（F U (R U2 R' U') R U2 R' U' F'）的镜像的 z 变换（镜像 = R↔L 并翻方向；再套 L→U、U→R、R→D、D→L、F/B 不变，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -4955,7 +5028,7 @@
           "img-night": "img/oll/oll-29-v3-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "R U R' U' R U' R' F' U' F R U R'",
               "moves": [
                 "R",
@@ -4977,9 +5050,7 @@
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OLL（归到 v3）｜来源 jperm OH OLL"
             }
           ]
@@ -5507,10 +5578,12 @@
               ],
               "n": 10,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "oll_db.py: sig 复原",
+              "verified": "oll_db.py: sig 复原｜用户指定：这条也标 OH 并作单手首选",
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             },
@@ -5560,9 +5633,7 @@
               "uses": [
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OH OLL"
             }
           ]
@@ -5769,6 +5840,31 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z U' R'2 U2 F'2 u' R U' R2 u F'",
+              "moves": [
+                "z",
+                "U'",
+                "R'2",
+                "U2",
+                "F'2",
+                "u'",
+                "R",
+                "U'",
+                "R2",
+                "u",
+                "F'"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：38 号 1 号做 z 变换（L→U、U→R、F 不变，宽转 l→u，撇号照搬，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -5794,7 +5890,7 @@
           "img-night": "img/oll/oll-38-v2-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "R U R' U R U' R' U' R' F R F'",
               "moves": [
                 "R",
@@ -5815,9 +5911,7 @@
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
             }
           ]
@@ -5963,6 +6057,34 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z U' R' U R' U' R2 U F' U' R' U R F",
+              "moves": [
+                "z",
+                "U'",
+                "R'",
+                "U",
+                "R'",
+                "U'",
+                "R2",
+                "U",
+                "F'",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "F"
+              ],
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：41 号唯一那条单手写法（(R U R') (U R U2 R') F (R U R' U') F'）的镜像的 z 变换（镜像 = R↔L 并翻方向；再套 L→U、U→R、R→D、D→L、F/B 不变，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -5988,7 +6110,7 @@
           "img-night": "img/oll/oll-42-v2-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "R' U' R U' R' U2 R F R U R' U' F'",
               "moves": [
                 "R'",
@@ -6010,9 +6132,7 @@
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OLL（归到 v2）｜来源 jperm OH OLL"
             }
           ]
@@ -6280,12 +6400,10 @@
               ],
               "n": 10,
               "uses": [
-                "2H",
-                "OH"
+                "2H"
               ],
-              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL",
+              "verified": "oll_db.py: sig 复原｜来源 jperm OH OLL｜用户指定：撤掉 OH（单手改用 1 号的 z 变换那条）",
               "tags": [
-                "oholl-preferred",
                 "preferred"
               ]
             },
@@ -6338,6 +6456,31 @@
               ],
               "tags": [],
               "verified": "jperm OH OLL"
+            },
+            {
+              "no": 4,
+              "alg": "z F' U' R' U R U' R' U R F",
+              "moves": [
+                "z",
+                "F'",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "U'",
+                "R'",
+                "U",
+                "R",
+                "F"
+              ],
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：47 号 1 号（F' (L' U' L U) (L' U' L U) F）的 z 变换（L→U、U→R、R→D、D→L、F/B 不变，撇号照搬，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -6374,7 +6517,7 @@
           "img-night": "img/oll/oll-47-v3-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 5,
               "alg": "F U R U' R' F' R U R' U R U2 R'",
               "moves": [
                 "F",
@@ -6545,10 +6688,32 @@
               "uses": [
                 "OH"
               ],
+              "tags": [],
+              "verified": "jperm OH OLL"
+            },
+            {
+              "no": 3,
+              "alg": "z u R' u'2 R u2 R u'2 R' u",
+              "moves": [
+                "z",
+                "u",
+                "R'",
+                "u'2",
+                "R",
+                "u2",
+                "R",
+                "u'2",
+                "R'",
+                "u"
+              ],
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ],
-              "verified": "jperm OH OLL"
+              "verified": "用户提供：49 号 1 号（(l U') (l'2 U l2 U l'2) (U' l)）的 z 变换（L→U、U→R、F 不变，宽转 l→u，撇号照搬，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -6574,7 +6739,7 @@
           "img-night": "img/oll/oll-49-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "r U' r2 U r2 U r2 U' r",
               "moves": [
                 "r",
@@ -6630,30 +6795,7 @@
           "algs": [
             {
               "no": 1,
-              "alg": "(r' U) (r2 U' r'2 U' r2) (U r')",
-              "moves": [
-                "r'",
-                "U",
-                "r2",
-                "U'",
-                "r'2",
-                "U'",
-                "r2",
-                "U",
-                "r'"
-              ],
-              "n": 9,
-              "uses": [
-                "2H"
-              ],
-              "verified": "oll_db.py: sig 复原",
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "r' U r2 U' r2 U' r2 U r'",
+              "alg": "(r' U) (r2 U' r2 U' r2) (U r')",
               "moves": [
                 "r'",
                 "U",
@@ -6670,10 +6812,11 @@
                 "2H",
                 "OH"
               ],
+              "verified": "oll_db.py: sig 复原｜用户报重复后合并：(r' U) (r2 U' r'2 U' r2) (U r') / r' U r2 U' r2 U' r2 U r'｜用户指定：作单手首选",
               "tags": [
+                "preferred",
                 "oholl-preferred"
-              ],
-              "verified": "jperm OLL｜来源 jperm OH OLL"
+              ]
             }
           ]
         },
@@ -6885,6 +7028,32 @@
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z u R U' R U R' U' R U R2 u'",
+              "moves": [
+                "z",
+                "u",
+                "R",
+                "U'",
+                "R",
+                "U",
+                "R'",
+                "U'",
+                "R",
+                "U",
+                "R2",
+                "u'"
+              ],
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ],
+              "verified": "用户提供：54 号 1 号（(l U) (L' U L U') (L' U L U2) l'）的 z 变换（L→U、U→R、F 不变，宽转 l→u，撇号照搬，前面加 z）；只作为单手写法"
             }
           ]
         },
@@ -6899,7 +7068,7 @@
           "img-night": "img/oll/oll-54-v1-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "(r U2 R' U') R U R' U' R U' r'",
               "moves": [
                 "r",
@@ -6919,9 +7088,7 @@
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ],
+              "tags": [],
               "verified": "jperm OLL（归到 v1）｜来源 jperm OH OLL"
             }
           ]
@@ -6937,7 +7104,7 @@
           "img-night": "img/oll/oll-54-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "r U R' U R U' R' U R U2 r'",
               "moves": [
                 "r",

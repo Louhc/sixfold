@@ -384,6 +384,9 @@ document.getElementById('app').addEventListener('click', function (e) {
                   background:none;color:var(--text);font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;
                   text-align:left;cursor:pointer}
   .pickbox button:hover{background:var(--chip)}
+  /* 当前这一行正在显示的那条也列在面板里，并高亮它 */
+  .pickbox button.cur{background:var(--chip);color:var(--accent-text);box-shadow:inset 2px 0 0 var(--accent)}
+
   .pickbox button.on{background:var(--accent);color:var(--on-accent, #fff)}
   .pickbox img{width:34px;height:34px;flex:none;border-radius:5px}
   .pickbox .idx{flex:none;min-width:16px;text-align:right;color:var(--muted);
@@ -424,7 +427,7 @@ document.getElementById('app').addEventListener('click', function (e) {
   function candidates(id, own, current) {
     var out = [], seen = {};
     function add(alg, view, uses) {
-      if (!alg || algKey(alg) === algKey(current) || seen[algKey(alg)]) return;
+      if (!alg || seen[algKey(alg)]) return;
       seen[algKey(alg)] = 1;
       out.push({alg: alg, view: view || null, uses: uses || []});
     }
@@ -519,6 +522,7 @@ document.getElementById('app').addEventListener('click', function (e) {
     list.forEach(function (it, i) {
       var b = document.createElement('button');
       b.type = 'button';
+      if (algKey(it.alg) === algKey(cur)) b.classList.add('cur');   // 当前这一行显示的就是它
       b.innerHTML = '<img src="' + imgOf(it.view, row.img.src) + '" alt="">' +
                     '<b class="idx">' + (noOf(row.id, it.alg) || (i + 1)) + '</b>' +
                     '<span>' + it.alg + '</span>' +
@@ -555,7 +559,7 @@ document.getElementById('app').addEventListener('click', function (e) {
       }
 
       // 有没有可换的，只看本行 + 数据库，不依赖任何异步
-      if (candidates(row.id, ownAlgs(row), shown(row)).length < 1) {
+      if (candidates(row.id, ownAlgs(row), shown(row)).length < 2) {
         pick.title = '这个情况只有一条写法';
         return;                                   // 保持模板里的淡态（disabled）
       }

@@ -81,24 +81,14 @@ var OLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "(R U'2) (R'2 U' R2 U') (R'2 U'2 R)",
-              "n": 9,
-              "uses": [
-                "2H"
-              ],
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "R U2 (R2 U' R2 U' R2) U2 R",
+              "alg": "(R U2) (R2 U' R2 U') (R2 U2 R)",
               "n": 9,
               "uses": [
                 "2H",
                 "OH"
               ],
               "tags": [
+                "preferred",
                 "oholl-preferred"
               ]
             }
@@ -1084,13 +1074,15 @@ var OLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "(r U R') (U R U'2) (r'2 U' R U' R' U'2 r)",
+              "alg": "(r U R') (U R U2) (r2 U' R U' R' U2 r)",
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
               "tags": [
-                "preferred"
+                "preferred",
+                "oholl-preferred"
               ]
             },
             {
@@ -1101,17 +1093,6 @@ var OLL_DB = {
                 "2H"
               ],
               "tags": []
-            },
-            {
-              "no": 3,
-              "alg": "r U R' U R U2 r2 U' R U' R' U2 r",
-              "n": 13,
-              "uses": [
-                "OH"
-              ],
-              "tags": [
-                "oholl-preferred"
-              ]
             }
           ]
         },
@@ -1126,7 +1107,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-18-v1-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "R U2 R' R' F R F' U2 M' (U R U' r')",
               "n": 13,
               "uses": [
@@ -1135,7 +1116,7 @@ var OLL_DB = {
               "tags": []
             },
             {
-              "no": 5,
+              "no": 4,
               "alg": "R U2 R' R' F R F' U2 R' r (U R U' r')",
               "n": 14,
               "uses": [
@@ -1156,7 +1137,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-18-v2-night-256x256.png",
           "algs": [
             {
-              "no": 6,
+              "no": 5,
               "alg": "r' U' R U' R' U2 r2 U R' U R U2 r'",
               "n": 13,
               "uses": [
@@ -1488,6 +1469,15 @@ var OLL_DB = {
               "uses": [
                 "OH"
               ],
+              "tags": []
+            },
+            {
+              "no": 4,
+              "alg": "z F' R' U' R U2 F U' R' U' R U",
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ]
@@ -1552,21 +1542,12 @@ var OLL_DB = {
               "alg": "(r' U' r) (R' U' R U) (r' U r)",
               "n": 10,
               "uses": [
-                "2H"
-              ],
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "r' U' R' r U' R U r' U r",
-              "n": 10,
-              "uses": [
+                "2H",
                 "OH"
               ],
               "tags": [
-                "oholl-preferred"
+                "oholl-preferred",
+                "preferred"
               ]
             }
           ]
@@ -1591,18 +1572,7 @@ var OLL_DB = {
           ],
           "img-day": "img/oll/oll-15-v2-day-256x256.png",
           "img-night": "img/oll/oll-15-v2-night-256x256.png",
-          "algs": [
-            {
-              "no": 3,
-              "alg": "l' U' l L' U' L U l' U l",
-              "n": 10,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": []
-            }
-          ]
+          "algs": []
         },
         {
           "view": 3,
@@ -1887,6 +1857,15 @@ var OLL_DB = {
               "uses": [
                 "OH"
               ],
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "z U F' U' R' U R F R' U'",
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ]
@@ -1915,7 +1894,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-39-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "R B' R' U' R U B U' R'",
               "n": 9,
               "uses": [
@@ -2247,9 +2226,7 @@ var OLL_DB = {
               "uses": [
                 "2H"
               ],
-              "tags": [
-                "preferred"
-              ]
+              "tags": []
             },
             {
               "no": 2,
@@ -2268,7 +2245,18 @@ var OLL_DB = {
                 "2H",
                 "OH"
               ],
+              "tags": []
+            },
+            {
+              "no": 4,
+              "alg": "R' U' R U' R' U F' U F R",
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
               "tags": [
+                "preferred",
                 "oholl-preferred"
               ]
             }
@@ -2296,7 +2284,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-52-v2-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 5,
               "alg": "R' F' U' F U' (R U R' U) R",
               "n": 10,
               "uses": [
@@ -2340,24 +2328,14 @@ var OLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "(R U'2 R'2 U') (R U' R' U2) (F R F')",
-              "n": 11,
-              "uses": [
-                "2H"
-              ],
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "R U2 R2 U' R U' R' U2 F R F'",
+              "alg": "(R U2 R2 U') (R U' R' U2) (F R F')",
               "n": 11,
               "uses": [
                 "2H",
                 "OH"
               ],
               "tags": [
+                "preferred",
                 "oholl-preferred"
               ]
             }
@@ -2374,7 +2352,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-55-v1-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 2,
               "alg": "R' F R U R U' R2 F' R2 U' R' U R U R'",
               "n": 15,
               "uses": [
@@ -2538,8 +2516,8 @@ var OLL_DB = {
             },
             {
               "no": 2,
-              "alg": "l' U2 L U L' U l",
-              "n": 7,
+              "alg": "z u' R2 U R U' R u",
+              "n": 8,
               "uses": [
                 "2H",
                 "OH"
@@ -2692,6 +2670,17 @@ var OLL_DB = {
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z u R U' R U R2 u'",
+              "n": 8,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
             }
           ]
         },
@@ -2717,16 +2706,14 @@ var OLL_DB = {
           "img-night": "img/oll/oll-07-v2-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "r U R' U R U2 r'",
               "n": 7,
               "uses": [
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         },
@@ -2763,26 +2750,26 @@ var OLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "(r' U' R) (U' R' U'2 r)",
-              "n": 7,
-              "uses": [
-                "2H"
-              ],
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "r' U' R U' R' U2 r",
+              "alg": "(r' U' R) (U' R' U2 r)",
               "n": 7,
               "uses": [
                 "2H",
                 "OH"
               ],
               "tags": [
+                "preferred",
                 "oholl-preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "(r' U' r) (U' R' U R) (r' U r)",
+              "n": 10,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": []
             }
           ]
         },
@@ -2809,20 +2796,20 @@ var OLL_DB = {
           "algs": [
             {
               "no": 3,
-              "alg": "l' U' L U' L' U2 l",
-              "n": 7,
+              "alg": "R U2 R' U2 R' F R F'",
+              "n": 8,
               "uses": [
-                "2H",
-                "OH"
+                "2H"
               ],
               "tags": []
             },
             {
               "no": 4,
-              "alg": "R U2 R' U2 R' F R F'",
+              "alg": "z u' R' U R' U' R2 u",
               "n": 8,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
               "tags": []
             }
@@ -2890,9 +2877,7 @@ var OLL_DB = {
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         },
@@ -2916,7 +2901,19 @@ var OLL_DB = {
           ],
           "img-day": "img/oll/oll-09-v3-day-256x256.png",
           "img-night": "img/oll/oll-09-v3-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 3,
+              "alg": "z U' R' U R' U F' U' F U' R2 U",
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
+            }
+          ]
         }
       ],
       "group": "corner"
@@ -3047,6 +3044,15 @@ var OLL_DB = {
                 "2H",
                 "OH"
               ],
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "z u' U2 R U' R U R2 U' R u U'",
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ]
@@ -3075,7 +3081,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-11-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "r' R2 U R' U R U2 R' U M'",
               "n": 10,
               "uses": [
@@ -3084,7 +3090,7 @@ var OLL_DB = {
               "tags": []
             },
             {
-              "no": 4,
+              "no": 5,
               "alg": "r' R2 U R' U R U2 R' U R' r",
               "n": 11,
               "uses": [
@@ -3221,6 +3227,17 @@ var OLL_DB = {
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "(r' U' R U) R' r (U' R' U R)",
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
             }
           ]
         },
@@ -3235,16 +3252,14 @@ var OLL_DB = {
           "img-night": "img/oll/oll-28-v1-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "r U R' U' r' R U R U' R'",
               "n": 10,
               "uses": [
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         },
@@ -3309,6 +3324,17 @@ var OLL_DB = {
                 "2H"
               ],
               "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "z F' R' U' R2 U R U' R2 U R F",
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
             }
           ]
         },
@@ -3345,16 +3371,14 @@ var OLL_DB = {
           "img-night": "img/oll/oll-29-v3-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "R U R' U' R U' R' F' U' F R U R'",
               "n": 13,
               "uses": [
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         }
@@ -3724,9 +3748,11 @@ var OLL_DB = {
               "alg": "(R U'2 R'2 F2) (r U' R U'2) r' F",
               "n": 10,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
               "tags": [
+                "oholl-preferred",
                 "preferred"
               ]
             },
@@ -3746,9 +3772,7 @@ var OLL_DB = {
               "uses": [
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         },
@@ -3903,6 +3927,17 @@ var OLL_DB = {
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z U' R'2 U2 F'2 u' R U' R2 u F'",
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
             }
           ]
         },
@@ -3928,16 +3963,14 @@ var OLL_DB = {
           "img-night": "img/oll/oll-38-v2-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "R U R' U R U' R' U' R' F R F'",
               "n": 12,
               "uses": [
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         },
@@ -4050,6 +4083,17 @@ var OLL_DB = {
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z U' R' U R' U' R2 U F' U' R' U R F",
+              "n": 14,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
             }
           ]
         },
@@ -4075,16 +4119,14 @@ var OLL_DB = {
           "img-night": "img/oll/oll-42-v2-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "R' U' R U' R' U2 R F R U R' U' F'",
               "n": 13,
               "uses": [
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         },
@@ -4292,11 +4334,9 @@ var OLL_DB = {
               "alg": "F' (L' U' L U) (L' U' L U) F",
               "n": 10,
               "uses": [
-                "2H",
-                "OH"
+                "2H"
               ],
               "tags": [
-                "oholl-preferred",
                 "preferred"
               ]
             },
@@ -4317,6 +4357,17 @@ var OLL_DB = {
                 "OH"
               ],
               "tags": []
+            },
+            {
+              "no": 4,
+              "alg": "z F' U' R' U R U' R' U R F",
+              "n": 11,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
             }
           ]
         },
@@ -4353,7 +4404,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-47-v3-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 5,
               "alg": "F U R U' R' F' R U R' U R U2 R'",
               "n": 13,
               "uses": [
@@ -4470,6 +4521,15 @@ var OLL_DB = {
               "uses": [
                 "OH"
               ],
+              "tags": []
+            },
+            {
+              "no": 3,
+              "alg": "z u R' u'2 R u2 R u'2 R' u",
+              "n": 10,
+              "uses": [
+                "OH"
+              ],
               "tags": [
                 "oholl-preferred"
               ]
@@ -4498,7 +4558,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-49-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "r U' r2 U r2 U r2 U' r",
               "n": 9,
               "uses": [
@@ -4542,24 +4602,14 @@ var OLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "(r' U) (r2 U' r'2 U' r2) (U r')",
-              "n": 9,
-              "uses": [
-                "2H"
-              ],
-              "tags": [
-                "preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "r' U r2 U' r2 U' r2 U r'",
+              "alg": "(r' U) (r2 U' r2 U' r2) (U r')",
               "n": 9,
               "uses": [
                 "2H",
                 "OH"
               ],
               "tags": [
+                "preferred",
                 "oholl-preferred"
               ]
             }
@@ -4717,6 +4767,17 @@ var OLL_DB = {
               "tags": [
                 "preferred"
               ]
+            },
+            {
+              "no": 2,
+              "alg": "z u R U' R U R' U' R U R2 u'",
+              "n": 12,
+              "uses": [
+                "OH"
+              ],
+              "tags": [
+                "oholl-preferred"
+              ]
             }
           ]
         },
@@ -4731,16 +4792,14 @@ var OLL_DB = {
           "img-night": "img/oll/oll-54-v1-night-256x256.png",
           "algs": [
             {
-              "no": 2,
+              "no": 3,
               "alg": "(r U2 R' U') R U R' U' R U' r'",
               "n": 11,
               "uses": [
                 "2H",
                 "OH"
               ],
-              "tags": [
-                "oholl-preferred"
-              ]
+              "tags": []
             }
           ]
         },
@@ -4755,7 +4814,7 @@ var OLL_DB = {
           "img-night": "img/oll/oll-54-v2-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 4,
               "alg": "r U R' U R U' R' U R U2 r'",
               "n": 11,
               "uses": [

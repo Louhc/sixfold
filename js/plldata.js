@@ -112,7 +112,7 @@ var PLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "x' (R U' R) D2 (R' U R) D2 R'2",
+              "alg": "x' (R U' R) D2 (R' U R) D2 R2",
               "n": 10,
               "uses": [
                 "2H",
@@ -122,16 +122,6 @@ var PLL_DB = {
                 "preferred",
                 "ohpll-preferred"
               ]
-            },
-            {
-              "no": 2,
-              "alg": "x' R U' R D2 R' U R D2 R2",
-              "n": 10,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": []
             }
           ]
         },
@@ -144,7 +134,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Ab-v1-nc-night-256x256.png",
           "algs": [
             {
-              "no": 3,
+              "no": 2,
               "alg": "x' L2 D2 L U L' D2 L U' L",
               "n": 10,
               "uses": [
@@ -163,7 +153,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Ab-v2-nc-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "x L U' L D2 L' U L D2 L2",
               "n": 10,
               "uses": [
@@ -182,7 +172,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Ab-v3-nc-night-256x256.png",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "x R2 D2 R U R' D2 R U' R",
               "n": 10,
               "uses": [
@@ -353,10 +343,11 @@ var PLL_DB = {
             },
             {
               "no": 2,
-              "alg": "(R2 u) (R' U R' U' R u' R'2) y' (R' U R)",
+              "alg": "(R2 u) (R' U R' U' R u' R2) y' (R' U R)",
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
               "tags": []
             },
@@ -389,16 +380,6 @@ var PLL_DB = {
                 "OH"
               ],
               "tags": []
-            },
-            {
-              "no": 6,
-              "alg": "R2 u R' U R' U' R u' R2 y' R' U R",
-              "n": 13,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": []
             }
           ]
         },
@@ -420,7 +401,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Ga-v2-nc-night-256x256.png",
           "algs": [
             {
-              "no": 7,
+              "no": 6,
               "alg": "z U2 r U' R U' R' U r' U2 x' U' R U",
               "n": 14,
               "uses": [
@@ -469,7 +450,7 @@ var PLL_DB = {
             },
             {
               "no": 2,
-              "alg": "(R' U' R) y (R2 u) (R' U R U') (R u' R'2)",
+              "alg": "(R' U' R) y (R2 u) (R' U R U') (R u' R2)",
               "n": 13,
               "uses": [
                 "2H",
@@ -488,15 +469,6 @@ var PLL_DB = {
                 "OH"
               ],
               "tags": []
-            },
-            {
-              "no": 4,
-              "alg": "R' U' R y R2 u R' U R U' R u' R2",
-              "n": 13,
-              "uses": [
-                "OH"
-              ],
-              "tags": []
             }
           ]
         },
@@ -509,7 +481,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Gb-v1-nc-night-256x256.png",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "F' U' F R2 u R' U R U' R u' R2",
               "n": 12,
               "uses": [
@@ -568,10 +540,11 @@ var PLL_DB = {
             },
             {
               "no": 2,
-              "alg": "(R'2 u' R U' R) (U R' u R2) y (R U' R')",
+              "alg": "(R2 u' R U' R) (U R' u R2) y (R U' R')",
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
               "tags": []
             },
@@ -585,16 +558,6 @@ var PLL_DB = {
               "tags": [
                 "ohpll-preferred"
               ]
-            },
-            {
-              "no": 4,
-              "alg": "R2 u' R U' R U R' u R2 y R U' R'",
-              "n": 13,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": []
             }
           ]
         },
@@ -616,7 +579,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Gc-v2-nc-night-256x256.png",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "R2 F2 R U2 R U2 R' F R U R' U' R' F R2",
               "n": 15,
               "uses": [
@@ -666,16 +629,7 @@ var PLL_DB = {
             },
             {
               "no": 2,
-              "alg": "(R U R') y' (R'2 u' R U') (R' U R' u R2)",
-              "n": 13,
-              "uses": [
-                "2H"
-              ],
-              "tags": []
-            },
-            {
-              "no": 3,
-              "alg": "R U R' y' R2 u' R U' R' U R' u R2",
+              "alg": "(R U R') y' (R2 u' R U') (R' U R' u R2)",
               "n": 13,
               "uses": [
                 "2H",
@@ -731,7 +685,7 @@ var PLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "M'2 U M'2 U2 M'2 U M'2",
+              "alg": "M2 U M2 U2 M2 U M2",
               "n": 7,
               "uses": [
                 "2H"
@@ -754,15 +708,6 @@ var PLL_DB = {
             {
               "no": 3,
               "alg": "M2 U' M2 U2 M2 U' M2",
-              "n": 7,
-              "uses": [
-                "2H"
-              ],
-              "tags": []
-            },
-            {
-              "no": 4,
-              "alg": "M2 U M2 U2 M2 U M2",
               "n": 7,
               "uses": [
                 "2H"
@@ -984,21 +929,11 @@ var PLL_DB = {
                 "2H"
               ],
               "tags": []
-            }
-          ]
-        },
-        {
-          "view": 1,
-          "frame": "y",
-          "sig": "RRLBFFBBFRLL",
-          "img": "img/pll/pll-Na-v1-256x256.png",
-          "img-nc-day": "img/pll/pll-Na-v1-nc-256x256.png",
-          "img-nc-night": "img/pll/pll-Na-v1-nc-night-256x256.png",
-          "algs": [
+            },
             {
               "no": 4,
-              "alg": "L U' R U2 L' U R' L U' R U2 L' U R'",
-              "n": 14,
+              "alg": "L U' R U2 L' U R' L U' R U2 L' U R' U'",
+              "n": 15,
               "uses": [
                 "OH"
               ],
@@ -1008,8 +943,8 @@ var PLL_DB = {
             },
             {
               "no": 5,
-              "alg": "R U' L U2 R' U L' R U' L U2 R' U L'",
-              "n": 14,
+              "alg": "R U' L U2 R' U L' R U' L U2 R' U L' U'",
+              "n": 15,
               "uses": [
                 "OH"
               ],
@@ -1017,8 +952,8 @@ var PLL_DB = {
             },
             {
               "no": 6,
-              "alg": "z U R' D R2 U' R D' U R' D R2 U' R D'",
-              "n": 15,
+              "alg": "U z U R' D R2 U' R D' U R' D R2 U' R D'",
+              "n": 16,
               "uses": [
                 "2H"
               ],
@@ -1093,15 +1028,6 @@ var PLL_DB = {
               "tags": []
             }
           ]
-        },
-        {
-          "view": 1,
-          "frame": "y",
-          "sig": "LRRFFBFBBLLR",
-          "img": "img/pll/pll-Nb-v1-256x256.png",
-          "img-nc-day": "img/pll/pll-Nb-v1-nc-256x256.png",
-          "img-nc-night": "img/pll/pll-Nb-v1-nc-night-256x256.png",
-          "algs": []
         }
       ]
     },
@@ -1122,7 +1048,7 @@ var PLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "(R U R' F') (R U'2 R' U2) (R' F R U) (R U'2 R' U')",
+              "alg": "(R U R' F') (R U2 R' U2) (R' F R U) (R U2 R' U')",
               "n": 16,
               "uses": [
                 "2H"
@@ -1138,15 +1064,6 @@ var PLL_DB = {
               "uses": [
                 "2H",
                 "OH"
-              ],
-              "tags": []
-            },
-            {
-              "no": 3,
-              "alg": "R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
-              "n": 16,
-              "uses": [
-                "2H"
               ],
               "tags": []
             }
@@ -1179,7 +1096,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Ra-v3-nc-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "L U2 L' U2 L F' L' U' L U L F L2 U",
               "n": 14,
               "uses": [
@@ -1367,13 +1284,15 @@ var PLL_DB = {
           "algs": [
             {
               "no": 1,
-              "alg": "(R U' R) (U R) (U R U' R' U' R'2)",
+              "alg": "(R U' R) (U R) (U R U' R' U' R2)",
               "n": 11,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
               "tags": [
-                "preferred"
+                "preferred",
+                "ohpll-preferred"
               ]
             },
             {
@@ -1384,18 +1303,6 @@ var PLL_DB = {
                 "2H"
               ],
               "tags": []
-            },
-            {
-              "no": 3,
-              "alg": "R U' R U R U R U' R' U' R2",
-              "n": 11,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [
-                "ohpll-preferred"
-              ]
             }
           ]
         },
@@ -1417,7 +1324,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Ua-v2-nc-night-256x256.png",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "R2 U' R' U' R U R U R U' R",
               "n": 11,
               "uses": [
@@ -1785,15 +1692,6 @@ var PLL_DB = {
             },
             {
               "no": 2,
-              "alg": "M' U' M2 U' M2 U' M' U'2 M2 U",
-              "n": 10,
-              "uses": [
-                "2H"
-              ],
-              "tags": []
-            },
-            {
-              "no": 3,
               "alg": "M' U' M2 U' M2 U' M' U2 M2 U",
               "n": 10,
               "uses": [
@@ -1802,7 +1700,7 @@ var PLL_DB = {
               "tags": []
             },
             {
-              "no": 4,
+              "no": 3,
               "alg": "M2 U M2 U M' U2 M2 U2 M' U2",
               "n": 10,
               "uses": [
@@ -1821,7 +1719,7 @@ var PLL_DB = {
           "img-nc-night": "img/pll/pll-Z-v1-nc-night-256x256.png",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "R' U' R U' R U R U' R' U R U R2 U' R' U",
               "n": 16,
               "uses": [
@@ -1832,7 +1730,7 @@ var PLL_DB = {
               ]
             },
             {
-              "no": 6,
+              "no": 5,
               "alg": "M' U M2 U M2 U M' U2 M2 U'",
               "n": 10,
               "uses": [
@@ -1841,7 +1739,7 @@ var PLL_DB = {
               "tags": []
             },
             {
-              "no": 7,
+              "no": 6,
               "alg": "M2 U' M2 U' M' U2 M2 U2 M' U",
               "n": 10,
               "uses": [

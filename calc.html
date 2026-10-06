@@ -10,6 +10,10 @@
 <style>
   /* 两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
   *{box-sizing:border-box}
+  /* 手机上按钮默认走系统那套外观（iOS 的原生圆角 / 蓝底 / 点按高亮），和桌面不一样 ——
+     关掉它，只留我们自己画的底 / 边 / 投影；点按时的灰蓝色高亮也一并去掉。 */
+  button{-webkit-appearance:none;appearance:none}
+  html{-webkit-tap-highlight-color:transparent}
   html,body{height:100%;margin:0}
   body{
     background:var(--bg);color:var(--text);overflow:hidden;
@@ -320,6 +324,12 @@
               display:flex;align-items:center;justify-content:center;gap:6px;
               font:inherit;font-size:12.5px;letter-spacing:.02em;
               color:var(--text)}
+  /* ⚠ 这一对（以及下面步骤栏那四个）原来是 ↻ ↺ ⏮ ◀ ▶ ⏭ 这几个**字符**。
+     手机浏览器的字体常把这类符号换成彩色 emoji 或另一套字形 —— 同一个按钮在手机上
+     和电脑上长得不一样（大小、颜色、粗细全变）。所以图标一律内联 SVG：
+     形状写 fill:none + stroke:currentColor，颜色跟着按钮走，哪台机器都一样。 */
+  .run button i svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+                    stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
   .run button i{font-style:normal;font-size:15px;line-height:1;color:var(--muted);
                 transition:color .12s,transform .12s}
   .run button:hover:not(:disabled){border-color:var(--accent-text);color:var(--accent-text);
@@ -406,6 +416,10 @@
               box-shadow:none;filter:none;opacity:.5}
   .ctrl .play svg{width:25px;height:25px;display:block;fill:none;stroke:currentColor;
                   stroke-linejoin:round;stroke-linecap:round}
+  /* 步骤栏那四个（回开头 / 上一步 / 下一步 / 到最后）：字符图标换成了内联 SVG（见上） */
+  .ctrl button.step{display:grid;place-items:center}
+  .ctrl button.step svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+                        stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
 
   /* 步骤小片：一串公式有二十来个，要是每个都做成立体按钮，
      整列的「重量」就全糊在一起了 —— 所以它们是平的（一层浅底，没有渐变、
@@ -629,8 +643,12 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
           height="16.2" rx="2.6"/><path d="M9.6 3.3h4.8a1.35 1.35 0 0 1 0 2.7H9.6a1.35 1.35 0 0 1 0-2.7z"/></svg></button>
       </div>
       <div class="run">
-        <button id="fwd" type="button" title="按公式正向转动（在输入框里按回车同此）"><i>↻</i>正向</button>
-        <button id="rev" type="button" title="取逆执行：顺序倒过来，每一步再取反"><i>↺</i>反向</button>
+        <button id="fwd" type="button" title="按公式正向转动（在输入框里按回车同此）"
+                aria-label="按公式正向转动"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path
+          d="M13.97 4.66A7.6 7.6 0 1 1 6.63 6.63"/><polyline points="3.45 7.69 6.63 6.63 5.57 9.81"/></svg></i>正向</button>
+        <button id="rev" type="button" title="取逆执行：顺序倒过来，每一步再取反"
+                aria-label="取逆执行"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path
+          d="M10.03 4.66A7.6 7.6 0 1 0 17.37 6.63"/><polyline points="20.55 7.69 17.37 6.63 18.43 9.81"/></svg></i>反向</button>
       </div>
       <div class="ctrl">
         <button id="scramble" type="button">打乱</button>
@@ -680,11 +698,17 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
         <input type="checkbox" id="skip"> 跳过动画
       </label>
       <div class="ctrl">
-        <button id="first" type="button" title="回到开头">⏮</button>
-        <button id="prev"  type="button" title="上一步">◀</button>
+        <button class="step" id="first" type="button" title="回到开头" aria-label="回到开头"><svg
+          viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 6.5 10.5 12 18 17.5"/><path
+          d="M7.6 6.5v11"/></svg></button>
+        <button class="step" id="prev"  type="button" title="上一步" aria-label="上一步"><svg
+          viewBox="0 0 24 24" aria-hidden="true"><polyline points="16.2 6.2 8.6 12 16.2 17.8"/></svg></button>
         <button class="play" id="play" type="button" title="播放 / 暂停"></button>
-        <button id="next"  type="button" title="下一步">▶</button>
-        <button id="last"  type="button" title="到最后">⏭</button>
+        <button class="step" id="next"  type="button" title="下一步" aria-label="下一步"><svg
+          viewBox="0 0 24 24" aria-hidden="true"><polyline points="7.8 6.2 15.4 12 7.8 17.8"/></svg></button>
+        <button class="step" id="last"  type="button" title="到最后" aria-label="到最后"><svg
+          viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 6.5 13.5 12 6 17.5"/><path
+          d="M16.4 6.5v11"/></svg></button>
       </div>
       <div class="moves" id="moves"></div>
     </section>

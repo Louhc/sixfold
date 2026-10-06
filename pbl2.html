@@ -101,6 +101,9 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
                   background:none;color:var(--text);font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;
                   text-align:left;cursor:pointer}
   .pickbox button:hover{background:var(--chip)}
+  /* 当前这一行正在显示的那条也列在面板里，并高亮它 */
+  .pickbox button.cur{background:var(--chip);color:var(--accent-text);box-shadow:inset 2px 0 0 var(--accent)}
+
   .pickbox img{width:34px;height:34px;flex:none;border-radius:5px}
   .pickbox .idx{flex:none;min-width:16px;text-align:right;color:var(--muted);
                 font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
@@ -309,7 +312,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     function candidates(id, own, cur) {
       var out = [], seen = {};
       function add(alg) {
-        if (!alg || algKey(alg) === algKey(cur) || seen[algKey(alg)]) return;
+        if (!alg || seen[algKey(alg)]) return;
         seen[algKey(alg)] = 1;
         out.push(alg);
       }
@@ -378,11 +381,13 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     return 0;
   }
 
-      var list = candidates(row.id, ownAlgs(row), shown(row));
+      var cur = shown(row);
+      var list = candidates(row.id, ownAlgs(row), cur);
       row.box.innerHTML = '';
       list.forEach(function (alg, i) {
         var b = document.createElement('button');
         b.type = 'button';
+        if (algKey(alg) === algKey(cur)) b.classList.add('cur');  // 当前这一行显示的就是它
         b.innerHTML = '<img src="' + IMG(row.id) + '" alt="">' +
           '<b class="idx">' + (noOf(row.id, alg) || (i + 1)) + '</b><span>' + alg + '</span>';
         b.addEventListener('click', function (e) {
@@ -408,7 +413,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
       var cur = load(row.id);
       if (cur && usable(row.id, cur) && algKey(cur) !== algKey(shown(row))) apply(row, cur);
 
-      if (candidates(row.id, ownAlgs(row), shown(row)).length < 1) {
+      if (candidates(row.id, ownAlgs(row), shown(row)).length < 2) {
         pick.title = '这个情况只有一条写法';
         return;                                   // 保持模板里的淡态（disabled）
       }

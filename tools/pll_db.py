@@ -39,6 +39,8 @@ TOKEN = re.compile(r"[RLUDFBxyzMESurldfb]w?(?:['2]){0,2}")
 # 有自己的一张图和一条自己的公式（公式里因此**不需要**再写 AUF 前缀）。
 # 签名相同的角度并掉：对称图形会算出 2 个或 1 个，PLL 这 21 个都是 4 个。
 VIEW_FRAMES = ['', 'y', 'y2', "y'"]        # frame 只是给这个角度起个名（画面转角）
+# Na / Nb 的两种画面「颜色的相对位置」是一样的（箭头画出来不同）—— 用户拍板只留基准画面（见 AGENTS §4.5）
+MERGE_VIEWS = {'Na', 'Nb'}
 
 
 # ---------------- sig <-> 局面 ----------------
@@ -227,6 +229,8 @@ def build():
             arr = frozenset((sig_k[j], sig_k[perm0[j]]) for j in range(8) if perm0[j] != j)
             if arr in seen_arrow:
                 continue
+            if cid in MERGE_VIEWS and views:      # 只留基准画面
+                continue
             seen_arrow.append(arr)
             sig_seen.append(sg)
             v = {'view': len(views), 'frame': frame}
@@ -312,6 +316,9 @@ def check(path=DB):
                 if got != [sg for _, sg in orbit][:len(got)]:
                     bad.append('%s：角度序列 %s 与算法算出的 %s 不一致'
                                % (cid, got, [sg for _, sg in orbit][:len(got)]))
+                if cid in MERGE_VIEWS and len(c['views']) != 1:
+                    bad.append('%s：两种画面「颜色的相对位置」一样，只留基准画面（现在 %d 个）'
+                               % (cid, len(c['views'])))
             for a in v['algs']:
                 nalg += 1
                 if a['n'] != len(a.get('moves') or []):

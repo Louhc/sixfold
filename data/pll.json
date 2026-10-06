@@ -161,33 +161,7 @@
           "algs": [
             {
               "no": 1,
-              "alg": "x' (R U' R) D2 (R' U R) D2 R'2",
-              "moves": [
-                "x'",
-                "R",
-                "U'",
-                "R",
-                "D2",
-                "R'",
-                "U",
-                "R",
-                "D2",
-                "R'2"
-              ],
-              "n": 10,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "verified": "pll_db.py: sig→alg 复原",
-              "tags": [
-                "preferred",
-                "ohpll-preferred"
-              ]
-            },
-            {
-              "no": 2,
-              "alg": "x' R U' R D2 R' U R D2 R2",
+              "alg": "x' (R U' R) D2 (R' U R) D2 R2",
               "moves": [
                 "x'",
                 "R",
@@ -205,8 +179,11 @@
                 "2H",
                 "OH"
               ],
-              "tags": [],
-              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达））｜来源 jperm PLL"
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：x' (R U' R) D2 (R' U R) D2 R'2 / x' R U' R D2 R' U R D2 R2",
+              "tags": [
+                "preferred",
+                "ohpll-preferred"
+              ]
             }
           ]
         },
@@ -219,7 +196,7 @@
           "sig": "FLLRFRBBFBRL",
           "algs": [
             {
-              "no": 3,
+              "no": 2,
               "alg": "x' L2 D2 L U L' D2 L U' L",
               "moves": [
                 "x'",
@@ -251,7 +228,7 @@
           "sig": "RFRBRLFLLFBB",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "x L U' L D2 L' U L D2 L2",
               "moves": [
                 "x",
@@ -283,7 +260,7 @@
           "sig": "LRBFBBRFRLLF",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "x R2 D2 R U R' D2 R U' R",
               "moves": [
                 "x",
@@ -588,7 +565,7 @@
             },
             {
               "no": 2,
-              "alg": "(R2 u) (R' U R' U' R u' R'2) y' (R' U R)",
+              "alg": "(R2 u) (R' U R' U' R u' R2) y' (R' U R)",
               "moves": [
                 "R2",
                 "u",
@@ -598,7 +575,7 @@
                 "U'",
                 "R",
                 "u'",
-                "R'2",
+                "R2",
                 "y'",
                 "R'",
                 "U",
@@ -606,9 +583,10 @@
               ],
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "pll_db.py: sig→alg 复原",
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：(R2 u) (R' U R' U' R u' R'2) y' (R' U R) / R2 u R' U R' U' R u' R2 y' R' U R",
               "tags": []
             },
             {
@@ -695,32 +673,6 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL（补末尾 U）｜来源 jperm PLL"
-            },
-            {
-              "no": 6,
-              "alg": "R2 u R' U R' U' R u' R2 y' R' U R",
-              "moves": [
-                "R2",
-                "u",
-                "R'",
-                "U",
-                "R'",
-                "U'",
-                "R",
-                "u'",
-                "R2",
-                "y'",
-                "R'",
-                "U",
-                "R"
-              ],
-              "n": 13,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL｜来源 jperm PLL"
             }
           ]
         },
@@ -742,7 +694,7 @@
           "sig": "FFLRBLBRBFLR",
           "algs": [
             {
-              "no": 7,
+              "no": 6,
               "alg": "z U2 r U' R U' R' U r' U2 x' U' R U",
               "moves": [
                 "z",
@@ -823,7 +775,7 @@
             },
             {
               "no": 2,
-              "alg": "(R' U' R) y (R2 u) (R' U R U') (R u' R'2)",
+              "alg": "(R' U' R) y (R2 u) (R' U R U') (R u' R2)",
               "moves": [
                 "R'",
                 "U'",
@@ -837,14 +789,14 @@
                 "U'",
                 "R",
                 "u'",
-                "R'2"
+                "R2"
               ],
               "n": 13,
               "uses": [
                 "2H",
                 "OH"
               ],
-              "verified": "pll_db.py: sig→alg 复原",
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：(R' U' R) y (R2 u) (R' U R U') (R u' R'2) / R' U' R y R2 u R' U R U' R u' R2",
               "tags": [
                 "ohpll-preferred"
               ]
@@ -877,31 +829,6 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL（补末尾 U'）｜来源 jperm PLL"
-            },
-            {
-              "no": 4,
-              "alg": "R' U' R y R2 u R' U R U' R u' R2",
-              "moves": [
-                "R'",
-                "U'",
-                "R",
-                "y",
-                "R2",
-                "u",
-                "R'",
-                "U",
-                "R",
-                "U'",
-                "R",
-                "u'",
-                "R2"
-              ],
-              "n": 13,
-              "uses": [
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL"
             }
           ]
         },
@@ -914,7 +841,7 @@
           "sig": "FBFRLBLFBLRR",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "F' U' F R2 u R' U R U' R u' R2",
               "moves": [
                 "F'",
@@ -1007,9 +934,9 @@
             },
             {
               "no": 2,
-              "alg": "(R'2 u' R U' R) (U R' u R2) y (R U' R')",
+              "alg": "(R2 u' R U' R) (U R' u R2) y (R U' R')",
               "moves": [
-                "R'2",
+                "R2",
                 "u'",
                 "R",
                 "U'",
@@ -1025,9 +952,10 @@
               ],
               "n": 13,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "pll_db.py: sig→alg 复原",
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：(R'2 u' R U' R) (U R' u R2) y (R U' R') / R2 u' R U' R U R' u R2 y R U' R'",
               "tags": []
             },
             {
@@ -1056,32 +984,6 @@
                 "ohpll-preferred"
               ],
               "verified": "用户提供：单手 Gc，对得上 v0（签名解出 + 箭头一致）"
-            },
-            {
-              "no": 4,
-              "alg": "R2 u' R U' R U R' u R2 y R U' R'",
-              "moves": [
-                "R2",
-                "u'",
-                "R",
-                "U'",
-                "R",
-                "U",
-                "R'",
-                "u",
-                "R2",
-                "y",
-                "R",
-                "U'",
-                "R'"
-              ],
-              "n": 13,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "tags": [],
-              "verified": "jperm OH PLL｜来源 jperm PLL"
             }
           ]
         },
@@ -1103,7 +1005,7 @@
           "sig": "BLRLFRFRFBBL",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "R2 F2 R U2 R U2 R' F R U R' U' R' F R2",
               "moves": [
                 "R2",
@@ -1190,32 +1092,7 @@
             },
             {
               "no": 2,
-              "alg": "(R U R') y' (R'2 u' R U') (R' U R' u R2)",
-              "moves": [
-                "R",
-                "U",
-                "R'",
-                "y'",
-                "R'2",
-                "u'",
-                "R",
-                "U'",
-                "R'",
-                "U",
-                "R'",
-                "u",
-                "R2"
-              ],
-              "n": 13,
-              "uses": [
-                "2H"
-              ],
-              "verified": "pll_db.py: sig→alg 复原",
-              "tags": []
-            },
-            {
-              "no": 3,
-              "alg": "R U R' y' R2 u' R U' R' U R' u R2",
+              "alg": "(R U R') y' (R2 u' R U') (R' U R' u R2)",
               "moves": [
                 "R",
                 "U",
@@ -1236,8 +1113,8 @@
                 "2H",
                 "OH"
               ],
-              "tags": [],
-              "verified": "jperm OH PLL｜来源 jperm PLL"
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：(R U R') y' (R'2 u' R U') (R' U R' u R2) / R U R' y' R2 u' R U' R' U R' u R2",
+              "tags": []
             }
           ]
         },
@@ -1287,21 +1164,21 @@
           "algs": [
             {
               "no": 1,
-              "alg": "M'2 U M'2 U2 M'2 U M'2",
+              "alg": "M2 U M2 U2 M2 U M2",
               "moves": [
-                "M'2",
+                "M2",
                 "U",
-                "M'2",
+                "M2",
                 "U2",
-                "M'2",
+                "M2",
                 "U",
-                "M'2"
+                "M2"
               ],
               "n": 7,
               "uses": [
                 "2H"
               ],
-              "verified": "pll_db.py: sig→alg 复原",
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：M'2 U M'2 U2 M'2 U M'2 / M2 U M2 U2 M2 U M2",
               "tags": [
                 "preferred"
               ]
@@ -1349,25 +1226,6 @@
               ],
               "tags": [],
               "verified": "jperm OH PLL｜来源 jperm PLL"
-            },
-            {
-              "no": 4,
-              "alg": "M2 U M2 U2 M2 U M2",
-              "moves": [
-                "M2",
-                "U",
-                "M2",
-                "U2",
-                "M2",
-                "U",
-                "M2"
-              ],
-              "n": 7,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL"
             }
           ]
         }
@@ -1759,20 +1617,10 @@
               ],
               "tags": [],
               "verified": "jperm PLL"
-            }
-          ]
-        },
-        {
-          "view": 1,
-          "frame": "y",
-          "img": "img/pll/pll-Na-v1-256x256.png",
-          "img-nc-day": "img/pll/pll-Na-v1-nc-256x256.png",
-          "img-nc-night": "img/pll/pll-Na-v1-nc-night-256x256.png",
-          "sig": "RRLBFFBBFRLL",
-          "algs": [
+            },
             {
               "no": 4,
-              "alg": "L U' R U2 L' U R' L U' R U2 L' U R'",
+              "alg": "L U' R U2 L' U R' L U' R U2 L' U R' U'",
               "moves": [
                 "L",
                 "U'",
@@ -1787,20 +1635,21 @@
                 "U2",
                 "L'",
                 "U",
-                "R'"
+                "R'",
+                "U'"
               ],
-              "n": 14,
+              "n": 15,
               "uses": [
                 "OH"
               ],
-              "verified": "pll_db.py: sig→alg 复原",
+              "verified": "pll_db.py: sig→alg 复原｜原来挂在 Na 的另一种画面上（两种画面**颜色的相对位置一样**，用户拍板只留一种）：补末尾 U'",
               "tags": [
                 "ohpll-preferred"
               ]
             },
             {
               "no": 5,
-              "alg": "R U' L U2 R' U L' R U' L U2 R' U L'",
+              "alg": "R U' L U2 R' U L' R U' L U2 R' U L' U'",
               "moves": [
                 "R",
                 "U'",
@@ -1815,19 +1664,21 @@
                 "U2",
                 "R'",
                 "U",
-                "L'"
+                "L'",
+                "U'"
               ],
-              "n": 14,
+              "n": 15,
               "uses": [
                 "OH"
               ],
               "tags": [],
-              "verified": "jperm OH PLL"
+              "verified": "jperm OH PLL｜原来挂在 Na 的另一种画面上（两种画面**颜色的相对位置一样**，用户拍板只留一种）：补末尾 U'"
             },
             {
               "no": 6,
-              "alg": "z U R' D R2 U' R D' U R' D R2 U' R D'",
+              "alg": "U z U R' D R2 U' R D' U R' D R2 U' R D'",
               "moves": [
+                "U",
                 "z",
                 "U",
                 "R'",
@@ -1844,12 +1695,12 @@
                 "R",
                 "D'"
               ],
-              "n": 15,
+              "n": 16,
               "uses": [
                 "2H"
               ],
               "tags": [],
-              "verified": "jperm PLL"
+              "verified": "jperm PLL｜原来挂在 Na 的另一种画面上（两种画面**颜色的相对位置一样**，用户拍板只留一种）：补开头 U"
             }
           ]
         }
@@ -2017,15 +1868,6 @@
               "verified": "jperm PLL（补开头 U'）"
             }
           ]
-        },
-        {
-          "view": 1,
-          "frame": "y",
-          "img": "img/pll/pll-Nb-v1-256x256.png",
-          "img-nc-day": "img/pll/pll-Nb-v1-nc-256x256.png",
-          "img-nc-night": "img/pll/pll-Nb-v1-nc-night-256x256.png",
-          "sig": "LRRFFBFBBLLR",
-          "algs": []
         }
       ]
     },
@@ -2046,14 +1888,14 @@
           "algs": [
             {
               "no": 1,
-              "alg": "(R U R' F') (R U'2 R' U2) (R' F R U) (R U'2 R' U')",
+              "alg": "(R U R' F') (R U2 R' U2) (R' F R U) (R U2 R' U')",
               "moves": [
                 "R",
                 "U",
                 "R'",
                 "F'",
                 "R",
-                "U'2",
+                "U2",
                 "R'",
                 "U2",
                 "R'",
@@ -2061,7 +1903,7 @@
                 "R",
                 "U",
                 "R",
-                "U'2",
+                "U2",
                 "R'",
                 "U'"
               ],
@@ -2069,7 +1911,7 @@
               "uses": [
                 "2H"
               ],
-              "verified": "pll_db.py: sig→alg 复原",
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：(R U R' F') (R U'2 R' U2) (R' F R U) (R U'2 R' U') / R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
               "tags": [
                 "preferred"
               ]
@@ -2102,34 +1944,6 @@
               ],
               "verified": "pll_db.py: sig→alg 复原",
               "tags": []
-            },
-            {
-              "no": 3,
-              "alg": "R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
-              "moves": [
-                "R",
-                "U",
-                "R'",
-                "F'",
-                "R",
-                "U2",
-                "R'",
-                "U2",
-                "R'",
-                "F",
-                "R",
-                "U",
-                "R",
-                "U2",
-                "R'",
-                "U'"
-              ],
-              "n": 16,
-              "uses": [
-                "2H"
-              ],
-              "tags": [],
-              "verified": "jperm PLL（补末尾 U'）"
             }
           ]
         },
@@ -2160,7 +1974,7 @@
           "sig": "FRBRLBRFFLBL",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "L U2 L' U2 L F' L' U' L U L F L2 U",
               "moves": [
                 "L",
@@ -2474,7 +2288,7 @@
           "algs": [
             {
               "no": 1,
-              "alg": "(R U' R) (U R) (U R U' R' U' R'2)",
+              "alg": "(R U' R) (U R) (U R U' R' U' R2)",
               "moves": [
                 "R",
                 "U'",
@@ -2486,15 +2300,17 @@
                 "U'",
                 "R'",
                 "U'",
-                "R'2"
+                "R2"
               ],
               "n": 11,
               "uses": [
-                "2H"
+                "2H",
+                "OH"
               ],
-              "verified": "pll_db.py: sig→alg 复原",
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：(R U' R) (U R) (U R U' R' U' R'2) / R U' R U R U R U' R' U' R2",
               "tags": [
-                "preferred"
+                "preferred",
+                "ohpll-preferred"
               ]
             },
             {
@@ -2515,32 +2331,6 @@
               ],
               "verified": "pll_db.py: sig→alg 复原",
               "tags": []
-            },
-            {
-              "no": 3,
-              "alg": "R U' R U R U R U' R' U' R2",
-              "moves": [
-                "R",
-                "U'",
-                "R",
-                "U",
-                "R",
-                "U",
-                "R",
-                "U'",
-                "R'",
-                "U'",
-                "R2"
-              ],
-              "n": 11,
-              "uses": [
-                "2H",
-                "OH"
-              ],
-              "verified": "pll_db.py: sig→alg 复原｜来源 jperm PLL",
-              "tags": [
-                "ohpll-preferred"
-              ]
             }
           ]
         },
@@ -2562,7 +2352,7 @@
           "sig": "FRFRLRLFLBBB",
           "algs": [
             {
-              "no": 4,
+              "no": 3,
               "alg": "R2 U' R' U' R U R U R U' R",
               "moves": [
                 "R2",
@@ -3276,28 +3066,6 @@
             },
             {
               "no": 2,
-              "alg": "M' U' M2 U' M2 U' M' U'2 M2 U",
-              "moves": [
-                "M'",
-                "U'",
-                "M2",
-                "U'",
-                "M2",
-                "U'",
-                "M'",
-                "U'2",
-                "M2",
-                "U"
-              ],
-              "n": 10,
-              "uses": [
-                "2H"
-              ],
-              "verified": "pll_db.py: sig→alg 复原",
-              "tags": []
-            },
-            {
-              "no": 3,
               "alg": "M' U' M2 U' M2 U' M' U2 M2 U",
               "moves": [
                 "M'",
@@ -3315,11 +3083,11 @@
               "uses": [
                 "2H"
               ],
-              "tags": [],
-              "verified": "jperm OH PLL（去掉开头的 y（它属于哪个画面由画面表达）、补末尾 U）｜来源 jperm PLL"
+              "verified": "pll_db.py: sig→alg 复原｜用户报重复后合并：M' U' M2 U' M2 U' M' U'2 M2 U / M' U' M2 U' M2 U' M' U2 M2 U",
+              "tags": []
             },
             {
-              "no": 4,
+              "no": 3,
               "alg": "M2 U M2 U M' U2 M2 U2 M' U2",
               "moves": [
                 "M2",
@@ -3351,7 +3119,7 @@
           "sig": "LBLFRFBLBRFR",
           "algs": [
             {
-              "no": 5,
+              "no": 4,
               "alg": "R' U' R U' R U R U' R' U R U R2 U' R' U",
               "moves": [
                 "R'",
@@ -3381,7 +3149,7 @@
               ]
             },
             {
-              "no": 6,
+              "no": 5,
               "alg": "M' U M2 U M2 U M' U2 M2 U'",
               "moves": [
                 "M'",
@@ -3403,7 +3171,7 @@
               "verified": "jperm PLL（补末尾 U'）"
             },
             {
-              "no": 7,
+              "no": 6,
               "alg": "M2 U' M2 U' M' U2 M2 U2 M' U",
               "moves": [
                 "M2",

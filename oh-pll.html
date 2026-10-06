@@ -71,6 +71,9 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
                   background:none;color:var(--text);font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;
                   text-align:left;cursor:pointer}
   .pickbox button:hover{background:var(--chip)}
+  /* 当前这一行正在显示的那条也列在面板里，并高亮它 */
+  .pickbox button.cur{background:var(--chip);color:var(--accent-text);box-shadow:inset 2px 0 0 var(--accent)}
+
   .pickbox img{width:34px;height:34px;flex:none;border-radius:5px}
   .pickbox .idx{flex:none;min-width:16px;text-align:right;color:var(--muted);
                 font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
@@ -124,6 +127,17 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
          opacity:0;pointer-events:none;transition:.18s}
   #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* 左边这条「单手公式」目录：和「三阶公式」/「二阶公式」那两条同一套做法 ——
+     固定在正文左侧（导航条底下），窄屏收起；当前这一页那条高亮 */
+  nav.side{position:fixed;width:152px;display:flex;flex-direction:column;gap:2px;z-index:3;
+        top:calc(var(--nav-h, 63px) + 16px);left:max(14px, calc(50% - 616px));
+        align-items:flex-start}
+  nav.side a{color:var(--muted);text-decoration:none;font-size:12.5px;line-height:1.5;
+          padding:4px 9px;border-radius:7px;border-left:2px solid transparent;white-space:nowrap}
+  nav.side a:hover{color:var(--accent-text);background:var(--chip)}
+  nav.side a.on{color:var(--text);border-left-color:var(--accent);background:var(--chip)}
+  @media (max-width:1240px){ nav.side{display:none} }
+
   @media (max-width:720px){
     col.pic{width:86px}
     td.pic img{width:72px}
@@ -145,7 +159,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     th,td{border:1px solid #333}
     th{border-bottom-width:2px}
     code{font-size:15px;font-weight:600}
-    .themebtn,.printbtn{display:none}
+    .themebtn,.printbtn,nav.side{display:none}
     a.tocalc{display:none}
     code:hover{background:none}
     #toast{display:none}
@@ -170,6 +184,10 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 </style>
 </head>
 <body>
+  <nav class="side" aria-label="单手公式目录">
+    <a href="oh-oll.html">OH-OLL · 57 种</a>
+    <a class="on" href="oh-pll.html">OH-PLL · 21 种</a>
+  </nav>
 <script src="js/nav.js"></script>
 <header>
   <h1>单手 PLL</h1>
@@ -412,7 +430,7 @@ document.getElementById('app').addEventListener('click', function (e) {
        去重的写和读必须是同一个键（这里曾经写成 seen[alg] —— 于是本行那份会再加一遍，
        Ga–Gd 这种一行两条的展开后就是两个一模一样的候选）。 */
     function add(alg) {
-      if (!alg || algKey(alg) === algKey(cur) || seen[algKey(alg)]) return;
+      if (!alg || seen[algKey(alg)]) return;
       seen[algKey(alg)] = 1;
       out.push(alg);
     }
@@ -500,6 +518,7 @@ document.getElementById('app').addEventListener('click', function (e) {
     list.forEach(function (alg, i) {
       var b = document.createElement('button');
       b.type = 'button';
+      if (algKey(alg) === algKey(cur)) b.classList.add('cur');      // 当前这一行显示的就是它
       b.innerHTML = '<img src="' + IMG(row.id, alg) + '" alt="">' +
         '<b class="idx">' + (noOf(row.id, alg) || (i + 1)) + '</b><span>' + alg + '</span>';
       b.addEventListener('click', function (e) {
@@ -523,7 +542,7 @@ document.getElementById('app').addEventListener('click', function (e) {
     var cur = load(row.id);                      // 恢复上次的选择
     if (cur && usable(row.id, cur) && algKey(cur) !== algKey(shown(row))) apply(row, cur);
 
-    if (candidates(row.id, ownAlgs(row), shown(row)).length < 1) {
+    if (candidates(row.id, ownAlgs(row), shown(row)).length < 2) {
       pick.title = '这个情况只有一条写法';
       return;
     }
