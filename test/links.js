@@ -3628,9 +3628,17 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
 
   /* 表头按键收在一条 .apbar 里：桌面上贴右上角，窄屏（手机）整条掉到标题下面 ——
      以前六个键平铺在最右边，手机上会压住中间的标题（用户报过）。 */
-  ok('表头按键在一条 .apbar 里，并且带窄屏媒体查询（手机上不再压标题）',
+  ok('四个新键成一条 .apbar 行、贴在打印键左边；页面原有的打印 / 主题键不动（不搬进这条行 —— 搬过会错位）',
+    /right:116px;display:flex/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&
+    !/appendChild\(printBtn\)/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')));
+  ok('mountTools 一开始就注入 CSS（窄屏那条媒体查询在它里面；只在弹窗里注入 = 手机上一直是桌面布局）',
+    /if \(api && api\.find\) FIND\[page\] = api\.find;\s*\n\s*css\(\);/.test(
+      fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')));
+  ok('表头按键在一条 .apbar 里；窄屏时它贴到打印 / 主题键下面（第二排，不再掉到标题下面）',
     /className = 'apbar'/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&
-    /@media \(max-width:720px\)\{[\s\S]{0,200}?\.apbar\{position:static !important/.test(
+    /@media \(max-width:900px\)\{[\s\S]{0,220}?\.apbar\{top:52px !important;right:16px/.test(
+      fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&
+    !/max-width:900px\)\{[\s\S]{0,220}?\.apbar\{position:static/.test(
       fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')));
 
   ok('三个图标键的 id 与图标都在模块里（内联 SVG，不是字符）',

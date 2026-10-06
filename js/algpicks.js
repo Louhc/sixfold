@@ -321,6 +321,8 @@ var AlgPicks = (function () {
      api = { ids(id)->bool, rows()->[{id,alg,view}], onDone(text) } */
   function mountTools(page, api) {
     if (api && api.find) FIND[page] = api.find;
+    css();   /* ⚠ 一定要在这里就注入：窄屏「按键掉到标题下面」那条媒体查询就在这份 CSS 里，
+                以前只有打开「自定义…」弹窗时才注入 —— 手机上按键一直压着标题（用户报过好几次）。 */
     var header = document.querySelector ? document.querySelector('header') : null;
     if (!header || !header.appendChild) return null;
     var mk = function (id, order, title, svg) {
@@ -332,10 +334,6 @@ var AlgPicks = (function () {
       b.setAttribute('aria-label', title);
       b.style.position = 'static';          // 位置交给 .apbar
       b.innerHTML = svg;
-      /* 顺序：清空 / 恢复 / 导出 / 导入 一路排在 打印 / 主题 **左边**
-         （每次都插在打印键前面，所以就是创建顺序） */
-      var anchor = printBtn || themeBtn || null;
-      bar.insertBefore(b, anchor);
       return b;
     };
     /* 所有表头按键（含页面原本的打印 / 主题键）都收进这一条 flex 行：
@@ -343,17 +341,17 @@ var AlgPicks = (function () {
        以前六个键平铺在最右边，手机上会压到中间的标题（用户报过）。 */
     var bar = document.createElement('div');
     bar.className = 'apbar';
-    bar.style.cssText = 'position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:8px';
-    /* 页面上原有的两个键：搬进来（元素身份不变，#printbtn / #themebtn 照样能用） */
-    var printBtn = document.getElementById ? document.getElementById('printbtn') : null;
-    var themeBtn = document.getElementById ? document.getElementById('themebtn') : null;
+    bar.style.cssText = 'position:absolute;top:16px;right:116px;display:flex;align-items:center;gap:8px';
+    /* 页面原有的打印 / 主题键**不动**（它们本来就贴在右上角，不会压标题；
+       搬进这条行反而会因为页面自己的绝对定位 CSS 而错位 —— 试过一次，撤了）。
+       这条行放在打印键左边：right:116px = 打印键占的 80px + 28px + 8px 间隙。 */
     header.appendChild(bar);
-    if (printBtn && printBtn.parentNode) bar.appendChild(printBtn);
-    if (themeBtn && themeBtn.parentNode) bar.appendChild(themeBtn);
     var bReset = mk('algreset', 188, '恢复默认公式', ICON.reset);
     var bExport = mk('algexport', 152, '导出 CSV', ICON.export);
     var bImport = mk('algimport', 116, '导入 CSV', ICON.import);
     var bClear = mk('algclear', 224, '清空自定义公式', ICON.clear);
+    /* 四个新键按顺序插在 打印 / 主题 **左边**（逐个 insertBefore，顺序就是数组顺序） */
+    [bClear, bReset, bExport, bImport].forEach(function (b) { bar.appendChild(b); });
 
     bClear.addEventListener('click', function () {
       var r = clearCustoms(page);
@@ -597,12 +595,15 @@ var AlgPicks = (function () {
       '.pickbox .custom-open:hover,.pickbox .custom-item:hover{background:var(--field-hover,#f0f2f5);color:var(--text,#111)}',
       '.pickbox .del{flex:none;padding:0 4px;color:var(--muted,#666);font-size:15px;line-height:1}',
       '.pickbox .del:hover{color:var(--accent-text,#7a4a58)}',
-      // 手机 / 窄屏：表头按键整排掉到标题下面居中，不再压住标题
-      '@media (max-width:720px){',
-      '  .apbar{position:static !important;margin:10px auto 0;flex-wrap:wrap;justify-content:center}',
-      '  header .opts{position:static !important;margin-top:8px;justify-content:center}',
+      /* 窄屏（手机 / 平板 / 窄窗口）：四个键**贴到打印 / 主题键下面**成为第二排（右上角对齐），
+         不再跟标题抢地方（用户要求：别放到标题下面）。断点 900px —— 标题居中最多 ~300px，
+         右边那排要 136px（四个键）+ 108px（打印 / 主题），900px 以下排不开。 */
+      '@media (max-width:900px){',
+      '  header{padding-bottom:78px}',                        // 给第二排（和显示颜色）让出地方
+      '  .apbar{top:52px !important;right:16px !important;justify-content:flex-end}',
+      '  header .opts{top:96px !important}',
       '}',
-      '@media (max-width:380px){.apbar{gap:6px}.apbar .toolbtn,.apbar .printbtn,.apbar .themebtn{width:26px;height:26px}}',
+      '@media (max-width:430px){.apbar{gap:6px}.apbar .toolbtn,.apbar .printbtn,.apbar .themebtn{width:26px;height:26px}}',
       // 自定义条目里的「自」：跟库里的编号同一格，颜色淡一点（一眼看出是自己加的）
       '.pickbox .custom-item.cur,.pickbox .custom-open.cur{background:var(--field-hover,#f0f2f5)}'
     ].join('');
