@@ -1727,7 +1727,7 @@ console.log('\n[19] 公式页的打印按钮');
       /getElementById\('printbtn'\)\.addEventListener\('click', function \(\) \{ window\.print\(\); \}\)/.test(h));
     // 打印出来当然不能再印这个按钮（主题开关也一样）
     ok(p + ' 打印时不印按钮（主题开关、页面目录一起藏）',
-      /@media print\{[\s\S]*?\.themebtn,\.printbtn(,\.opts)?,nav\.side\{display:none\}/.test(h));
+      /@media print\{[\s\S]*?\.themebtn,\.printbtn(,\.opts)?,nav\.side(?:,\.toolbtn)?\{display:none\}/.test(h));
     // 摆在主题开关左边，别叠上去
     ok(p + ' 和主题开关并排、互不重叠',
       /\.themebtn\{position:absolute;right:16px;top:16px\}/.test(h) &&
@@ -1896,7 +1896,7 @@ console.log('\n[19d] 二阶 PBL 公式页（pbl2.html）');
   ok('目录的样式和教程页那条一样（固定在左侧、窄屏收起、打印不印）',
     /\.side\{position:fixed;[^}]*top:calc\(var\(--nav-h, 63px\) \+ 16px\)/.test(h) &&
     /\.side a\.on\{/.test(h) && /@media \(max-width:1240px\)\{ \.side\{display:none\} \}/.test(h) &&
-    /\.themebtn,\.printbtn,\.side\{display:none\}/.test(h));
+    /\.themebtn,\.printbtn,\.side(?:,\.toolbtn)?\{display:none\}/.test(h));
   // 导航条 / 首页：两页合成一个入口、一张卡片（和教程那套一样）
   const nav = fs.readFileSync(path.join(ROOT, 'js', 'nav.js'), 'utf8');
   const navGroup = nav.slice(nav.indexOf("'oll2.html'"), nav.indexOf(']]', nav.indexOf("'oll2.html'")));
@@ -2046,7 +2046,7 @@ console.log('\n[19g] 三阶公式页（f2l / oll / pll）：一个导航入口 +
     ok(p + '：目录的样式和教程 / 二阶那条一样（固定左侧、窄屏收起、打印不印）',
       /nav\.side\{position:fixed;/.test(h) && /nav\.side a\.on\{/.test(h) &&
       /@media \(max-width:1544px\)|@media \(max-width:1240px\)/.test(h) &&
-      /,nav\.side\{display:none\}/.test(h));
+      /,nav\.side(?:,\.toolbtn)?\{display:none\}/.test(h));
     ok(p + '：记下「三阶公式这个入口看的是自己」（和教程 / 二阶同一条规则）',
       new RegExp("localStorage\\.setItem\\('cube-last:f2l\\.html', '" + p + "'\\)").test(h));
   });
@@ -2062,7 +2062,7 @@ console.log('\n[19g] 三阶公式页（f2l / oll / pll）：一个导航入口 +
     ok(p + '：目录位置 / 窄屏收起 / 打印不印，和「三阶公式」那条一致',
       /left:max\(14px, calc\(50% - 616px\)\)/.test(h) &&
       /@media \(max-width:1240px\)\{ nav\.side\{display:none\} \}/.test(h) &&
-      /,nav\.side\{display:none\}/.test(h) &&
+      /,nav\.side(?:,\.toolbtn)?\{display:none\}/.test(h) &&
       /main\{max-width:880px/.test(h));
   });
 
@@ -2199,7 +2199,8 @@ console.log('\n[19h] 单手 PLL 页（oh-pll.html）：公式和本页的图逐�
     /classList\.add\('copied'\)/.test(h) && /id="toast"/.test(h));
   ok('有打印按钮 + 打印规则（图上分页、藏按钮、藏 toast）',
     /id="printbtn"/.test(h) && /@media print\{[\s\S]*?tr\{break-inside:avoid\}/.test(h) &&
-    /\.themebtn,\.printbtn(,nav\.side)?\{display:none\}/.test(h) && /a\.tocalc\{display:none\}/.test(h));
+    /\.themebtn,\.printbtn(,\.opts)?(,nav\.side)?(,\.toolbtn)?\{display:none\}/.test(h) &&
+    /\.toolbtn\{display:none\}/.test(h) && /a\.tocalc\{display:none\}/.test(h));
   ok('主题开关还在（页面底色跟着明暗走）',
     /id="themebtn"/.test(h) && /localStorage\.setItem\('cube-theme', t\)/.test(h));
   ok('单手这一页也有「显示颜色」开关，位置和 PLL 页一致（页头内、打印按钮之后）',
@@ -2595,12 +2596,13 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
     p2.applied === p2alt && p2.store['cube-pick:pbl2:dd'] === p2alt,
     p2.err ? String(p2.err) : JSON.stringify([p2.labels, p2.applied]));
   ok('二阶 PBL 再点同一个展开键：收起', p2.closed);
-  // 真实库里只有一条 → 键保持灰态（模板里就是 .off + disabled）
-  ['oll2.html', 'pbl2.html'].forEach(p => {
+  /* 每个展开键都能点（用户要求）：只有一条写法也点得开 —— 面板最后一行是「自定义…」，
+     可以在那儿自己填一条。所以脚本里不能再有「只有一条写法就 return、把键留在淡态」那段。 */
+  ['oll2.html', 'pbl2.html', 'oll.html', 'oh-oll.html', 'pll.html', 'oh-pll.html', 'f2l.html'].forEach(p => {
     const s = fs.readFileSync(path.join(ROOT, p), 'utf8');
-    ok(p + '：库里只有一条写法时展开键是灰的（.off + disabled）',
-      /<button class="pick off" type="button" disabled/.test(s) &&
-      /这个情况只有一条写法/.test(s));
+    ok(p + '：展开键一律可点（没有「只有一条写法就淡掉」那段）',
+      /pick\.classList\.remove\('off'\);/.test(s) && /pick\.disabled = false;/.test(s) &&
+      !/length < 2\)\s*\{[\s\S]{0,80}?return;/.test(s));
   });
 
   // 展开面板里每条候选显示它在 **case 内的编号**（库里唯一，不同写法不同号）
@@ -2727,8 +2729,9 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
     f07.applied === A07[1] && f07.store['cube-pick:f2l:07'] === A07[1],
     JSON.stringify([f07.applied, f07.store]));
   const f14 = probeF2L('14a', ["(R U R')"]);
-  ok('F2L 展开键：只有一条写法的情况保持淡态（.off + disabled 不摘掉）',
-    !f14.err && f14.labels.length === 0 && f14.pick.classList.contains('off') && f14.pick.disabled,
+  ok('F2L 展开键：只有一条写法也点得开（面板里有那一行 + 「自定义…」）',
+    !f14.err && !f14.pick.classList.contains('off') && !f14.pick.disabled &&
+    f14.labels.length === 1,
     f14.err ? String(f14.err) : JSON.stringify(f14.labels));
   const f01 = probeF2L('01a', ["(R U' R' U)(R U' R' U2)(R U' R')"], null,
                        c => c.F2L_DB.cases.filter(x => x.id === '01a')[0].algs
@@ -2789,9 +2792,11 @@ console.log('\n[19h2] 单手 OLL 页（oh-oll.html）：每个情况显示它的
     return oh;
   };
   const rows = db.cases.map(c => [c.id, pick(c)]).filter(r => r[1].length);
-  ok('页面读 olldata.js；页头写「单手 OLL」+ 英文全称',
+  ok('页面读 olldata.js；页头写「单手 OLL」+ 英文全称（和单手 PLL 一样用 One-Handed）',
     /<script src="js\/olldata\.js"><\/script>/.test(h) &&
-    /<h1>单手 OLL<\/h1>\s*<p>OH · Orientation of the Last Layer<\/p>/.test(h));
+    /<h1>单手 OLL<\/h1>\s*<p>One-Handed · Orientation of the Last Layer<\/p>/.test(h) &&
+    /<h1>单手 PLL<\/h1>\s*<p>One-Handed · Permutation of the Last Layer<\/p>/.test(
+      fs.readFileSync(path.join(ROOT, 'oh-pll.html'), 'utf8')));
   ok('57 个情况每个都有一条单手写法（' + rows.length + ' 条）', rows.length === 57, String(rows.length));
   ok('一个情况里「首选」只有一条（oholl-preferred），面板/首屏默认就是它',
     db.cases.every(c => {
@@ -2810,7 +2815,7 @@ console.log('\n[19h2] 单手 OLL 页（oh-oll.html）：每个情况显示它的
     /<nav class="side" aria-label="单手公式目录">\s*<a class="on" href="oh-oll\.html">OH-OLL · 57 种<\/a>\s*<a href="oh-pll\.html">OH-PLL · 21 种<\/a>/.test(h) &&
     /nav\.side\{position:fixed;/.test(h) &&
     /@media \(max-width:1240px\)\{ nav\.side\{display:none\} \}/.test(h) &&
-    /,nav\.side\{display:none\}/.test(h));
+    /,nav\.side(?:,\.toolbtn)?\{display:none\}/.test(h));
   ok('「单手公式」这一组两页写同一个分组键 cube-last:oh-oll.html',
     /setItem\('cube-last:oh-oll\.html', 'oh-oll\.html'\)/.test(h) &&
     /setItem\('cube-last:oh-oll\.html', 'oh-pll\.html'\)/.test(
@@ -3050,7 +3055,7 @@ console.log('\n[21] PLL 页的「显示颜色」开关 + 无色图');
     /function applyTheme\(t\)[\s\S]{0,160}?__pllRefreshImgs\(\)/.test(pll) &&
     /root\.dataset\.theme = t;[\s\S]{0,60}?__pllRefreshImgs\(\)/.test(pll));
   ok('打印时不印这个开关（连页面目录一起藏）',
-    /@media print\{[\s\S]*?\.themebtn,\.printbtn,\.opts,nav\.side\{display:none\}/.test(pll));
+    /@media print\{[\s\S]*?\.themebtn,\.printbtn,\.opts,nav\.side(?:,\.toolbtn)?\{display:none\}/.test(pll));
 
   // 图片：每个 PLL 编号三张 —— 彩色 / 无色白天（紫箭头）/ 无色夜晚（黄箭头）。
   // 编号和角度都从库里取（页面里的 SECTIONS 字面量已经没有了）。
@@ -3338,6 +3343,32 @@ console.log('\n[23] 五个库里都不许有重复写法（同一情况里两条
   ok('五个库里都没有重复写法（同一情况里没有两条一样的公式）', dup === 0, dup + ' 组重复');
 }
 
+console.log('\n[21b] 打印时页头那些开关（.opts 里的「显示颜色」）不印');
+{
+  /* 用户报过：OH-PLL 打印出来多了一个「显示颜色」开关。
+     开关在 <div class="opts"> 里，PLL 页的打印规则把 .opts 一起隐藏了，抄到 OH-PLL 时漏了。 */
+  let n = 0;
+  ['pll.html', 'oh-pll.html', 'oll.html', 'oh-oll.html', 'oll2.html', 'pbl2.html', 'f2l.html',
+   'calc.html', 'timer.html', 'practice.html', 'editor.html'].forEach(f => {
+    const h = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    if (!/class="opts"/.test(h)) return;
+    n++;
+    // 隐藏那一条和 .opts 写在同一行上，直接按行找（页面里 @media print 有好几处，整段正则容易抓错）
+    const hide = h.split('\n').filter(l => /\.opts/.test(l) && /display:none/.test(l))[0] || '';
+    ok(f + '：有 .opts 开关，打印规则里就要把它隐藏掉（别让开关印在纸上）',
+      !!hide, hide || '（没有一行同时含 .opts 和 display:none）');
+    /* ⚠ 光隐藏还不够：**必须写在 .opts 屏幕样式（display:flex）之后**。
+       同权重下后来的那条赢 —— OH-PLL 原来把隐藏写在前面，纸上照样有「显示颜色」（用户报过两次）。 */
+    const screenAt = h.search(/\.opts\{[^}]*display:flex/);
+    const printAt = Math.max(h.lastIndexOf('.opts{display:none}'),
+                             h.search(/\.opts[^\n]*\{display:none\}/));
+    ok(f + '：隐藏 .opts 的打印规则要写在 .opts 屏幕样式之后（同权重，写在前面会被盖掉）',
+      screenAt >= 0 && printAt > screenAt,
+      '屏幕 .opts 在 ' + screenAt + '，打印隐藏那条在 ' + printAt);
+  });
+  ok('至少有一个页面用 .opts（这条测试有东西可测）', n >= 1, String(n));
+}
+
 console.log('\n[22] 按钮图标一律内联 SVG（手机不会把字符渲染成 emoji / 另一套字形）');
 {
   /* 踩过的坑：计算器的正向 / 反向 / 步骤栏四个键原本是 ↻ ↺ ⏮ ◀ ▶ ⏭ 这几个**字符**，
@@ -3364,6 +3395,241 @@ console.log('\n[22] 按钮图标一律内联 SVG（手机不会把字符渲染�
     const bad = [...h.matchAll(/<button[^>]*>([^<]*)</g)].map(m => m[1].trim()).filter(t => GLYPH.test(t));
     ok(f + '：按钮里没有 ◀ ▶ ⏮ ⏭ ↺ ↻ 这类字符图标', bad.length === 0, bad.join(' | '));
   });
+}
+
+console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗（公式页那三个图标键的底座）');
+{
+  const vm = require('vm');
+  const store = {};
+  const fake = { get length() { return Object.keys(store).length; },
+                 key: i => Object.keys(store)[i],
+                 getItem: k => (k in store ? store[k] : null),
+                 setItem: (k, v) => { store[k] = String(v); },
+                 removeItem: k => { delete store[k]; } };
+  const ctx = { console, localStorage: fake, window: { localStorage: fake },
+                document: { querySelectorAll: () => [] } };
+  ctx.globalThis = ctx;
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8'), ctx);
+  const A = ctx.AlgPicks;
+
+  ok('CSV 表头是「页,情况,公式,view」',
+    A.csv('oll', []).trim() === '页,情况,公式,view', A.csv('oll', []).trim());
+  ok('CSV 导出带引号的公式也能原样解析回来',
+    (() => {
+      const csv = A.csv('oll', [{ id: '15', alg: 'R U2 R\' (U R)', view: 2 }]);
+      const rows = A.readCsv(csv);
+      return rows.length === 1 && rows[0].id === '15' && rows[0].alg === "R U2 R' (U R)" && rows[0].view === 2;
+    })());
+  ok('没有表头时按「第 1 列 = 情况、最后 1 列 = 公式」兜底（两列的手工表也能导）',
+    (() => { const r = A.readCsv('15,R U\n20,F R F\'\n');
+             return r.length === 2 && r[0].id === '15' && r[0].alg === 'R U' &&
+                    r[1].id === '20' && r[1].alg === "F R F'"; })());
+
+  // 导入：对得上库里的 → 选中；对不上 → 自定义（带当时那个 view）
+  const picked = {}, added = [];
+  const res = A.importCsv('页,情况,公式,view\noll,15,R U,2\noll,15,F R F\',3\noll,99,X,0\n', {
+    page: 'oll',
+    ids: id => id !== '99',
+    find: (id, alg) => (id === '15' && alg === 'R U' ? 2 : null)
+  });
+  ok('导入：对上库里的当「选中它」、对不上的当自定义、找不到情况的跳过',
+    res.got === 2 && res.picked === 1 && res.custom === 1 && res.skipped.length === 1 &&
+    /* 两条都写进了 cube-pick，所以最后一行（自定义那条）就是这一行显示的那条 */
+    A.readPick('oll', '15') === "F R F'" && A.customs('oll', '15').length === 1 &&
+    A.customs('oll', '15')[0].view === 3,
+    JSON.stringify(res));
+
+  /* 用户报过：已经有自定义公式时，再导入一条新的自定义导不进去 /
+     已有的那条自定义在面板里看不见（面板里「候选里出现过就不摆」那道挡把用户自己的东西挡掉了）。 */
+  ok('已有自定义时再导入一条新的：两条都在，选中换成新的那条',
+    (() => {
+      A.addCustom('oll', '21', '第一条自定义', 1);
+      A.writePick('oll', '21', '第一条自定义');
+      const r = A.importCsv('页,情况,公式,view\noll,21,第二条自定义,2',
+                            { page: 'oll', ids: id => id === '21', find: () => null });
+      const cs = A.customs('oll', '21');
+      return r.custom === 1 && cs.length === 2 &&
+             cs[0].alg === '第一条自定义' && cs[1].alg === '第二条自定义' &&
+             A.readPick('oll', '21') === '第二条自定义';
+    })(),
+    JSON.stringify(A.customs('oll', '21')));
+
+  /* 用户报过「导入 CSV 没生效」：Excel 存的分号 / 从表格粘的制表符、没表头的四列、
+     别的页导出来的文件，原来都会一条不剩地丢掉（而且提示跟着刷新一起没了，看着就像没反应）。 */
+  ok('分隔符不写死逗号：分号 / 制表符的 CSV 也认',
+    (() => {
+      const a = A.readCsv('页;情况;公式;view\noll;15;R U;2');
+      const b = A.readCsv('页\t情况\t公式\tview\noll\t15\tR U\t2');
+      return a.length === 1 && a[0].alg === 'R U' && a[0].view === 2 &&
+             b.length === 1 && b[0].id === '15' && b[0].alg === 'R U';
+    })());
+  ok('没表头时按列数猜：四列当「页,情况,公式,view」，两列当「情况,公式」',
+    (() => {
+      const a = A.readCsv('oll,15,R U,2'), b = A.readCsv('15,R U');
+      return a[0].id === '15' && a[0].alg === 'R U' && a[0].view === 2 &&
+             b[0].id === '15' && b[0].alg === 'R U';
+    })());
+  ok('导入：别的页的文件只要这一页有同一个情况也收（并计数），一条都没匹配上时给出提示',
+    (() => {
+      A.writePick('oll', '15', '');
+      const r = A.importCsv('页,情况,公式,view\noh-oll,15,R U,0\nzz,99,啥,0',
+                            { page: 'oll', ids: id => id === '15', find: () => 0 });
+      const none = A.importCsv('页,情况,公式\nzz,99,啥', { page: 'oll', ids: () => false, find: () => null });
+      return r.got === 1 && r.other === 1 && r.skipped.length === 1 && r.rows === 2 &&
+             A.readPick('oll', '15') === 'R U' &&          // 对不上库里的：当自定义，也要显示出来
+             none.got === 0 && none.rows === 1;
+    })());
+
+  /* 库里**有**这条 → 按以前那样选中它（用库里那条的**原文**与画面），**绝不新增自定义** ——
+     哪怕 CSV 里的 view 和库里那条不一样、哪怕用户自己敲的那串没空格。
+     这一段自带一份假 localStorage / 模块实例。 */
+  {
+    const st5 = {};
+    const fake5 = { get length() { return Object.keys(st5).length; },
+                    key: i => Object.keys(st5)[i],
+                    getItem: k => (k in st5 ? st5[k] : null),
+                    setItem: (k, v) => { st5[k] = String(v); },
+                    removeItem: k => { delete st5[k]; } };
+    const ctx5 = { console, localStorage: fake5, window: { localStorage: fake5 },
+                   document: { querySelectorAll: () => [] } };
+    ctx5.globalThis = ctx5;
+    vm.createContext(ctx5);
+    vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8'), ctx5);
+    const A3 = ctx5.AlgPicks;
+    const DB3 = "x L U' L D2 L' U L D2 L2";
+    const api3 = { page: 'pll', ids: id => id === 'Ab',
+                   find: (id, alg) => (alg === "xLU'LD2L'ULD2L2" ? { view: 0, alg: DB3 } : null) };
+    const r5 = A3.importCsv('页,情况,公式,view\npll,Ab,xLU\'LD2L\'ULD2L2,1', api3);
+    ok('匹配上库里：用库里那条的原文（带空格）与库里的画面，且**不新增自定义**',
+      r5.got === 1 && r5.picked === 1 && r5.custom === 0 &&
+      A3.readPick('pll', 'Ab') === DB3 && A3.customs('pll', 'Ab').length === 0,
+      JSON.stringify({ r5, pick: A3.readPick('pll', 'Ab'), cust: A3.customs('pll', 'Ab') }));
+  }
+
+  ok('自定义公式记着它自己挑的画面（库里的写法反查不到时会用到）',
+    A.customView('oll', '15', "FRF'") === 3 && A.customView('oll', '15', 'R U') === null);
+  ok('同一条再加一次不重复，只更新 view',
+    (() => { A.addCustom('oll', '15', "F R F'", 1); return A.customs('oll', '15').length === 1 &&
+             A.customView('oll', '15', "FRF'") === 1; })());
+
+  /* 恢复默认：只清这一页**选中的写法**，自己加的自定义公式留着（用户要求）；别的页更不动。
+     （用户还报过「点了没用」—— 原来是按前缀扫，不再依赖页面传 id。） */
+  A.writePick('pll', 'Aa', 'x');
+  const killed = A.resetPage('oll');
+  ok('恢复默认只清这一页的选中；自定义公式保留（别的页也不动）',
+    killed >= 1 && !Object.keys(store).some(k => k.indexOf('cube-pick:oll:') === 0) &&
+    store['cube-custom:oll:15'] && store['cube-pick:pll:Aa'] === 'x',
+    killed + ' 个键 / ' + JSON.stringify(Object.keys(store)));
+
+  // 七个公式页都挂上了那三个键 + 面板里的「自定义…」
+  ['pll.html', 'oh-pll.html', 'oll.html', 'oh-oll.html', 'oll2.html', 'pbl2.html', 'f2l.html'].forEach(f => {
+    const h = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    /* ⚠ algpicks.js 必须在**页面脚本之前**加载：页面里那句 mountTools 有 typeof 保护，
+       顺序反了会被静默跳过 —— 表现就是「这一页没有那几个按键」（单手 PLL 踩过）。 */
+    ok(f + '：algpicks.js 在页面脚本之前加载（否则 mountTools 会被静默跳过，键就没了）',
+      h.indexOf('<script src="js/algpicks.js"></script>') < h.indexOf('AlgPicks.mountTools('),
+      h.indexOf('<script src="js/algpicks.js"></script>') + ' < ' + h.indexOf('AlgPicks.mountTools('));
+    ok(f + '：引了 algpicks.js、挂了图标键、面板里有「自定义…」',
+      /<script src="js\/algpicks\.js"><\/script>/.test(h) &&
+      /AlgPicks\.mountTools\('[^']+', \{/.test(h) &&
+      /\.toolbtn\{/.test(h) && /AlgPicks\.decoratePanel\(/.test(h),
+      [/\.toolbtn\{/.test(h), /AlgPicks\.mountTools/.test(h), /decoratePanel/.test(h)].join(','));
+  });
+  // 面板里那条「已被选中的自定义公式」要按自定义的样子标（用户报过：样式和下面那条不一样）
+  {
+    const mk2 = t => ({
+      tagName: t, className: '', textContent: '', title: '', children: [], _on: {}, style: {},
+      classList: { _s: new Set(), add(c) { this._s.add(c); }, contains(c) { return this._s.has(c); } },
+      addEventListener(ev, fn) { (this._on[ev] = this._on[ev] || []).push(fn); },
+      appendChild(c) { this.children.push(c); c.parentNode = this; return c; },
+      querySelector() { return null; }, querySelectorAll() { return []; },
+      set innerHTML(v) { this._h = v; }, get innerHTML() { return this._h; }
+    });
+    const ctx2 = { console, localStorage: fake, window: { localStorage: fake },
+      document: { createElement: mk2, getElementById: () => null, head: null, body: mk2('body') } };
+    ctx2.globalThis = ctx2;
+    vm.createContext(ctx2);
+    vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8'), ctx2);
+    const A2 = ctx2.AlgPicks;
+    A2.addCustom('oll', '20', "R U R'", 2);          // 这条已经进了候选（= 正显示的那条）
+    A2.writePick('oll', '20', "R U R'");             // 添加时页面就是把它设成当前显示的那条
+    const box = mk2('div'), btn = mk2('button'), span = mk2('span'), idx = mk2('b');
+    span.textContent = "R U R'";
+    idx.className = 'idx';
+    btn.appendChild(idx); btn.appendChild(span); box.appendChild(btn);
+    box.querySelectorAll = sel => (sel === 'button' ? [btn] : (sel === 'span, code' ? [span] : []));
+    btn.querySelectorAll = sel => (sel === 'span' || sel === 'span, code' ? [span] : []);
+    btn.querySelector = sel => (sel === 'b.idx' ? idx : null);
+    let reloaded = false;
+    ctx2.window.location = { reload() { reloaded = true; } };
+    A2.decoratePanel(box, { page: 'oll', id: '20', views: 1, esc: t => t, imgOf: () => 'x.png',
+                            pick() {}, rebuild() {}, close() {} });
+    const rows = box.children.filter(c => c.className.indexOf('custom-item') === 0);
+    ok('选中的自定义公式：候选那一行藏掉，按自定义条目摆一条（带 cur），样式和别的自定义一致',
+      btn.style.display === 'none' && rows.length === 1 &&
+      rows[0].className.indexOf('cur') > 0 &&
+      /class="tag">view 2</.test(rows[0].innerHTML || '') &&
+      /class="del"/.test(rows[0].innerHTML || ''),
+      btn.style.display + ' / ' + rows.length + ' 条自定义: ' + (rows[0].innerHTML || '').slice(0, 60));
+
+    /* 用户报过的坑：自定义公式正好和库里的 2 号一样时，候选那一行**不能**被藏掉
+       （以前只按文本比，面板里就少了 2 号）。库里有的，候选留着，只补 view 标签 + ✕。 */
+    {
+      const box2 = mk2('div'), btn2 = mk2('button'), span2 = mk2('span');
+      span2.textContent = "R U R'";
+      btn2.appendChild(span2); box2.appendChild(btn2);
+      box2.querySelectorAll = sel => (sel === 'button' ? [btn2] : (sel === 'span, code' ? [span2] : []));
+      btn2.querySelectorAll = sel => (sel === 'span' || sel === 'span, code' ? [span2] : []);
+      btn2.querySelector = () => null;
+      A2.mountTools('oll', { ids: () => true, find: () => 2 });      // 这一页：库里**有**这条（挂在 v2）
+      A2.decoratePanel(box2, { page: 'oll', id: '20', views: 1, esc: t => t, imgOf: () => 'x.png',
+                               pick() {}, rebuild() {}, close() {} });
+      const rows2 = box2.children.filter(c => c.className.indexOf('custom-item') === 0);
+      ok('自定义/导入匹配上库里某条时：候选那一行留着，且和直接选中一样（不加 view、不加 ✕）',
+        btn2.style.display !== 'none' && !/ is-custom/.test(' ' + btn2.className) &&
+        !btn2.children.some(c => c.className === 'tag' || c.className === 'del') &&
+        rows2.length === 0,
+        btn2.className + ' / 子节点 ' + btn2.children.length + ' / 自定义条目 ' + rows2.length);
+    }
+
+    // 删掉「正显示的那条」自定义：选中也要撤掉（回默认），别在存档里留一条死公式
+    (rows[0]._on.click || []).forEach(f => f({ target: { className: 'del' },
+                                               preventDefault() {}, stopPropagation() {} }));
+    ok('删掉当前选中的自定义公式：cube-pick 清掉并刷新（表格回默认、练习页也不会再拿它练）',
+      A2.customs('oll', '20').length === 0 && A2.readPick('oll', '20') === '' && reloaded,
+      JSON.stringify({ customs: A2.customs('oll', '20'), pick: A2.readPick('oll', '20'), reloaded }));
+  }
+
+  /* 一键「清空自定义公式」：自定义全删；正选中那条自定义的行撤回默认；库里那条的选中不动 */
+  {
+    const st6 = {};
+    const fake6 = { get length() { return Object.keys(st6).length; },
+                    key: i => Object.keys(st6)[i],
+                    getItem: k => (k in st6 ? st6[k] : null),
+                    setItem: (k, v) => { st6[k] = String(v); },
+                    removeItem: k => { delete st6[k]; } };
+    const ctx6 = { console, localStorage: fake6, window: { localStorage: fake6 },
+                   document: { querySelectorAll: () => [] } };
+    ctx6.globalThis = ctx6;
+    vm.createContext(ctx6);
+    vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8'), ctx6);
+    const A4 = ctx6.AlgPicks;
+    A4.addCustom('oll', '15', '自定义A', 1); A4.writePick('oll', '15', '自定义A');
+    A4.addCustom('oll', '16', '自定义B', 2);
+    A4.writePick('oll', '17', 'R U');
+    const r = A4.clearCustoms('oll');
+    ok('清空自定义公式：自定义删光、正选中它的那行回默认、库里那条的选中不受影响',
+      r.removed === 2 && r.reset === 1 && A4.customs('oll', '15').length === 0 &&
+      A4.customs('oll', '16').length === 0 && A4.readPick('oll', '15') === '' &&
+      A4.readPick('oll', '17') === 'R U',
+      JSON.stringify({ r, left: Object.keys(st6) }));
+  }
+
+  ok('三个图标键的 id 与图标都在模块里（内联 SVG，不是字符）',
+    /'algreset'/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&
+    /ICON = \{/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')) &&
+    /reset: '<svg/.test(fs.readFileSync(path.join(ROOT, 'js', 'algpicks.js'), 'utf8')));
 }
 
 console.log('\n结果: ' + pass + ' 通过, ' + fail + ' 失败');

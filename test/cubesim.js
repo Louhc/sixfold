@@ -683,8 +683,14 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       /function applyTheme\(t\) \{\s*\n\s*root\.dataset\.theme = t;\s*\n\s*syncThumb\(\);/.test(html));
     ok('题图文件名按昼夜挑（只有 OLL 有两版）',
       /kind === 'oll' \? \(document\.documentElement\.dataset\.theme === 'dark' \? '-night' : '-day'\) : ''/.test(html));
-    ok('练习页的 OLL 缩略图带 -v0（它只取每题第一行 = 主公式，一定在基准画面）',
-      /kind === 'oll' \? '-v0' : ''/.test(html));
+    /* 练习页现在练的是「公式页里当前展示的那条」（含自定义公式），它可能挂在 v1/v2/v3，
+       所以题图也要跟着行里的画面号走 —— 写死 v0 的话图就和公式对不上了。 */
+    ok('练习页的缩略图用行里带的画面号（题图跟着公式所在的画面）',
+      /function thumbOf\(kind, id, view\)/.test(html) && /'-v' \+ v/.test(html) &&
+      /thumbOf\(scope, r\[0\], r\[2\]\)/.test(html));
+    ok('练习页题库优先用 cube-pick:<页>:<情况>（公式页当前展示的那条），自定义的带自己的画面',
+      /localStorage\.getItem\('cube-pick:' \+ kind \+ ':' \+ r\[0\]\)/.test(html) &&
+      /cube-custom:' \+ kind/.test(html));
     ok('计算器的 OLL 缩略图用行里带的画面号（row[2]，可能是 v1/v2/v3）',
       /var tv = row\[2\] == null \? 0 : row\[2\]/.test(
         fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')));
@@ -1192,7 +1198,7 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
   const calcSrc = fs.readFileSync(path.join(__dirname, '..', 'calc.html'), 'utf8')
     .match(/<script>([\s\S]*?)<\/script>/g).map(x => x.replace(/<\/?script>/g, ''))
     .filter(x => x.includes('M3'))[0];
-  const boot = (hash, seed) => {
+  const boot = (hash, seed, timers) => {
     const store = seed || {}, els = {};
     const mkEl = (t, init) => {
       const e = { tagName: t, children: [], dataset: {}, _h: '', _t: '',
@@ -1217,8 +1223,8 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
     els.stage.clientWidth = 600;
     els.stage.clientHeight = 600;
     const ctx = { console, navigator: {}, window: { addEventListener() {} },
-      // 动画的定时器不排：这一节只看「一进来摆成什么样」，不等它播
-      setTimeout: () => 0, clearTimeout() {},
+      // 定时器默认不排（只看「一进来摆成什么样」）；给了 timers 就攒起来，测试里手动放
+      setTimeout: timers ? (fn => { timers.push(fn); return 0; }) : (() => 0), clearTimeout() {},
       CubeSim: S, CubeSim4: S4T, performance: { getEntriesByType: () => [] },
       localStorage: { getItem: k => (k in store ? store[k] : null),
                       setItem: (k, v) => { store[k] = String(v); }, removeItem: k => { delete store[k]; } },
@@ -1325,14 +1331,17 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
     demo.els.mode3.classList.contains('on') &&
     demo.els.mode3['_a_aria-pressed'] === 'true' &&
     demo.els.mode2['_a_aria-pressed'] === 'false');
-  ok('换阶数不动局面：八个角块上的贴纸和刚才一模一样',
-    eqState(cornerOnly(drawn3), drawn2),
+  ok('切到三阶：看到的是三阶自己那一份现场（干净、复原态），不是把二阶的局面搬过来',
+    eqState(cornerOnly(drawn3), cornerOnly(S.solved())) && !eqState(cornerOnly(drawn3), drawn2),
     JSON.stringify(cornerOnly(drawn3)).slice(0, 70));
   demo.els.mode2.fire('click');
   ok('再点「二阶」切回来（舞台 class、按钮高亮、存档一起回）',
     posOf(demo.els.cube.innerHTML).length === 8 &&
     demo.els.stage.classList.contains('m2') &&
     demo.els.mode2.classList.contains('on') && demo.store['calc-cube-v1'] === '2');
+  ok('切回二阶：刚才摆好那个局面还在（每一阶的现场各存各的）',
+    eqState(readCube(demo.els.cube.innerHTML), drawn2),
+    JSON.stringify(readCube(demo.els.cube.innerHTML)).slice(0, 70));
 
   // 再打开一次：用存档里那一阶（不是每次都回到三阶）
   const reopened = boot('', { 'calc-cube-v1': '4' });
@@ -1356,6 +1365,42 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
   ok('@g:（绿面那版 F2L）也是三阶：切回三阶再摆局面',
     greenFrom2.els.mode3.classList.contains('on') &&
     posOf(greenFrom2.els.cube.innerHTML).length === 26);
+
+  /* 【用户报的 BUG】点 ↗ 从公式表跳到计算器后，点历史会「从复原态执行这条公式」。
+     根子在两处：历史只有一条链（三阶 / 二阶 / 四阶共用），而回溯总是从复原态重做 ——
+     跳转摆出来的那个局面根本没进这条链。现在每一阶一条链，链条起点就是跳转摆好的局面。 */
+  {
+    const timers = [];
+    const jp = boot('#@2:' + encodeURIComponent(ALG), undefined, timers);
+    const flushT = () => { let k = 0; while (timers.length && k++ < 800) timers.shift()(); };
+    ok('跳过来先摆出这条公式要解的局面（这一串历史还没开始记）',
+      eqState(readCube(jp.els.cube.innerHTML), cornerOnly(setup)) &&
+      String(jp.els.hcount.textContent) === '0', jp.els.hcount.textContent);
+    flushT();                       // HOLD_MS + 整条公式的动画
+    ok('播完：历史 1 条、魔方回到复原态',
+      String(jp.els.hcount.textContent) === '1' &&
+      eqState(readCube(jp.els.cube.innerHTML), cornerOnly(S.solved())),
+      jp.els.hcount.textContent);
+    jp.els.hist.fire('click', { target: { closest: sel => sel === '.e'
+      ? { dataset: { i: '0' } } : null } });
+    ok('点历史：步骤条上摆的是这条公式（10 步，头一步 R、第二步 U2）',
+      (jp.els.moves.innerHTML.match(/<span data-k=/g) || []).length === S.steps(ALG).length &&
+      /<b>R<\/b>/.test(jp.els.moves.innerHTML) && /<b>U2<\/b>/.test(jp.els.moves.innerHTML),
+      jp.els.moves.innerHTML.slice(0, 60));
+    jp.els.first.fire('click');     // 回到这条的开头
+    ok('点历史再回到开头：看到的是「公式要解的局面」（回溯从这儿重做），不是复原态',
+      eqState(readCube(jp.els.cube.innerHTML), cornerOnly(setup)),
+      JSON.stringify(readCube(jp.els.cube.innerHTML)).slice(0, 60));
+    // 每一阶独立：切到三阶看不见二阶这条历史，切回来还在
+    jp.els.mode3.fire('click');
+    ok('切到三阶：历史是空的那一份（各阶各记各的），魔方也是三阶自己那份（复原态）',
+      String(jp.els.hcount.textContent) === '0' &&
+      eqState(cornerOnly(readCube(jp.els.cube.innerHTML)), cornerOnly(S.solved())),
+      jp.els.hcount.textContent + ' / ' + JSON.stringify(cornerOnly(readCube(jp.els.cube.innerHTML))).slice(0, 50));
+    jp.els.mode2.fire('click');
+    ok('切回二阶：刚才那条历史还在（切阶数不会把别人的历史清掉）',
+      String(jp.els.hcount.textContent) === '1', jp.els.hcount.textContent);
+  }
 }
 
 console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走四阶模型、换阶数就重置');
@@ -1452,7 +1497,7 @@ console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走�
   ok('位置是 ±0.5 / ±1.5 那种（四层）',
     p4.every(p => p.split(',').every(v => Math.abs(Number(v)) === 0.5 || Math.abs(Number(v)) === 1.5)),
     p4.slice(0, 3).join(' '));
-  ok('换四阶就是换一套模型：局面重来（复原态、历史清空）',
+  ok('换四阶就是换一套模型：四阶第一次进来是干净的一份（复原态、历史空 —— 不拿三阶那份凑）',
     eqState(readCube4(), S4b.solved()) && String(els.hcount.textContent) === '0',
     String(els.hcount.textContent) + ' 条历史');
   ok('公式表说明四阶还没有公式表（别让人以为坏了）',
@@ -1525,10 +1570,15 @@ console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走�
 
   // 切回三阶：局面重置（四阶那份状态不能接着用）
   els.mode3.fire('click');
-  ok('切回三阶：26 个方块、m4 摘掉、局面和历史都重来',
+  // 三阶那一份中途被「切回三阶执行」那个提示键动过（点它会切到三阶并执行一条），
+  // 所以和存档里那一份比 —— 这正是「每一阶各存各的」要保证的
+  const saved3 = (JSON.parse(store['calc-state-v1'] || '{}').orders || {})['3'] || {};
+  ok('切回三阶：26 个方块、m4 摘掉，并把三阶自己那一份原样还回来（局面 + 历史条数）',
     posOf().length === 26 && !els.stage.classList.contains('m4') &&
-    eqState(readCube4(), S.solved()) && String(els.hcount.textContent) === '0',
-    posOf().length + ' 块 / ' + String(els.hcount.textContent) + ' 条历史');
+    eqState(readCube4(), saved3.cur) &&
+    String(els.hcount.textContent) === String((saved3.hist || []).length),
+    posOf().length + ' 块 / ' + String(els.hcount.textContent) + ' 条历史（存档里那份 ' +
+    String((saved3.hist || []).length) + ' 条）');
   ok('切回三阶：格子尺寸回到原来那个（四阶那 3/4 收回去）',
     Math.abs(cs() - cs3) < 1e-6, cs3 + ' -> ' + cs());
 

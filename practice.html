@@ -430,7 +430,25 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     var list = (typeof ALG_LIST !== 'undefined' && ALG_LIST[kind]) || [];
     var seen = {}, out = [];
     list.forEach(function (r) {
-      if (!seen[r[0]]) { seen[r[0]] = 1; out.push(r); }
+      if (seen[r[0]]) return;
+      seen[r[0]] = 1;
+      /* 【练习用的就是公式页里当前展示的那条】——用户在表上选了哪条（包括自定义公式），
+         这里就练哪条；没选过才用库里的第一行。公式页的选中存在 cube-pick:<页>:<情况>，
+         自定义公式在 cube-custom 里带着自己挑的画面（题面图要跟着画面走）。 */
+      var pick = '', view = (r.length > 2 && r[2]) || 0;
+      try { pick = localStorage.getItem('cube-pick:' + kind + ':' + r[0]) || ''; } catch (e) {}
+      if (pick) {
+        try {
+          var cs = JSON.parse(localStorage.getItem('cube-custom:' + kind + ':' + r[0]) || '[]');
+          for (var i = 0; i < cs.length; i++) {
+            if (String(cs[i].alg).replace(/[()\s]/g, '') === String(pick).replace(/[()\s]/g, '')) {
+              view = cs[i].view;
+              break;
+            }
+          }
+        } catch (e) {}
+        out.push([r[0], pick, view]);
+      } else out.push(r);
     });
     return out;
   }
@@ -466,14 +484,15 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     return lastIdx;
   }
   // 公式表里那张图的文件名
-  function thumbOf(kind, id) {
+  function thumbOf(kind, id, view) {
     var f = kind === 'f2l' ? id : (/^\d+$/.test(id) && id.length < 2 ? '0' + id : id);
-    // PLL 的图在 img/pll 下按角度分（题面用基准角度 v0）
-    if (kind === 'pll') return 'img/pll/pll-' + f + '-v0-256x256.png';
+    var v = view || 0;
+    // 图按行里那条公式**所在的画面**取（写在 v2 上的公式就得配 v2 的图，否则图和公式对不上）
+    if (kind === 'pll') return 'img/pll/pll-' + f + '-v' + v + '-256x256.png';
     var size = kind === 'f2l' ? '256x258' : '256x256';
     // OLL 有昼夜两版（白天紫顶 / 夜晚黄顶），别的只有一版
     var tone = kind === 'oll' ? (document.documentElement.dataset.theme === 'dark' ? '-night' : '-day') : '';
-    return 'img/' + kind + '/' + kind + '-' + f + (kind === 'oll' ? '-v0' : '') + tone + '-' + size + '.png';
+    return 'img/' + kind + '/' + kind + '-' + f + (kind === 'f2l' ? '' : '-v' + v) + tone + '-' + size + '.png';
   }
 
   // 本轮进度也要留住 —— 否则切回来重开一轮，"不重复出题"就断了
@@ -506,7 +525,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     view.y = VIEW.y;
     document.getElementById('qid').textContent = scope.toUpperCase() + ' ' + r[0];
     var img = document.getElementById('qimg');
-    img.src = thumbOf(scope, r[0]);
+    img.src = thumbOf(scope, r[0], r[2]);
     img.alt = scope.toUpperCase() + ' ' + r[0];
     document.getElementById('ans').classList.remove('on');
     document.getElementById('ansalg').textContent = '';
@@ -573,7 +592,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   var root = document.documentElement, btn = document.getElementById('themebtn');
   // 切主题时把当前这道题的图换成另一套（OLL 才有两版）
   function syncThumb() {
-    if (cur && cur.id) document.getElementById('qimg').src = thumbOf(scope, cur.id);
+    if (cur && cur.id) document.getElementById('qimg').src = thumbOf(scope, cur.id, cur[2]);
   }
   function applyTheme(t) {
     root.dataset.theme = t;

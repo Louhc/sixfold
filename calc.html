@@ -837,8 +837,33 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   var pillInstant = true;                // 下一块高亮直接落位（不做滑动过渡）
   // 当前局面（累积的）。三阶 / 二阶共用这份模型；切到四阶时 setMode 会重置局面
   var cur = CubeSim.solved();
-  var hist = [];                         // 历史：{kind:'alg'|'scramble'|'rotate'|'move', alg}
+  var hist = [];                         // 历史：{kind:'alg'|'scramble'|'rotate'|'move', alg, d:阶数}
   var histAt = -1;                       // 当前停在历史里的哪一条（-1 = 空）
+  /* 这一串历史是从哪个局面开始的。一般是复原态；从公式表点 ↗ 跳过来时是
+     「公式要解的局面」（跳转先做一遍公式的逆摆出来）—— 这样点历史回溯出来的是那个局面
+     + 这条公式，而不是「从复原态执行这条公式」（用户报过）。 */
+  var histBase = simFor('3').solved();
+  /* 二阶 / 三阶 / 四阶是三种不同的魔方，**各自有独立的现场**（局面 / 历史 / 步骤条 / 输入框）。
+     混在一起会出问题：回溯是从「复原态」把历史重做一遍（见 stateAfter），
+     拿三阶的历史在二阶里回溯，等于把那条公式从复原态重放一遍 —— 用户报过：
+     从公式表点 ↗ 跳到计算器（阶数被链接改掉）后，点历史就变成从复原态执行那条公式。 */
+  var ORDERS = { '2': null, '3': null, '4': null };
+  function saveOrder() {                 // 把当前这一阶的现场收进 ORDERS
+    ORDERS[mode] = { cur: cur, hist: hist, histAt: histAt, histBase: histBase,
+                     steps: steps, frames: frames, at: at, alg: algEl.value };
+  }
+  function freshOrder(m) {               // 某一阶第一次进来：干净的一份
+    var st = simFor(m).solved();
+    return { cur: st, hist: [], histAt: -1, histBase: st, steps: [], frames: [st], at: 0, alg: '' };
+  }
+  function loadOrder(m) {                // 把某一阶的现场摆出来
+    var s = ORDERS[m] || (ORDERS[m] = freshOrder(m));
+    cur = s.cur; hist = s.hist; histAt = s.histAt; histBase = s.histBase || simFor(m).solved();
+    steps = s.steps; frames = s.frames; at = s.at;
+    algEl.value = s.alg || '';
+    algEl.classList.remove('bad');
+    errEl.textContent = '';
+  }
   var queue = [];                        // 单步排队：动画没转完就接着点的那些步子
   // 观察角度（可拖动）。F2L 的 b 版是「绿色为 F 面」，
   // 选到它时要把绿面转到左可见位，否则公式的 L/U 等动作会与看到的面对不上。
@@ -904,7 +929,8 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     mode = (v === '2' || v === '4') ? v : '3';
   })();
   // 三阶和二阶共用同一份模型（角块是一回事），四阶是另一份
-  function sim() { return mode === '4' ? CubeSim4 : CubeSim; }
+  function simFor(m) { return m === '4' ? CubeSim4 : CubeSim; }   // 按阶数取模型
+  function sim() { return simFor(mode); }
   /* 一个公式里用了哪些「这一阶没有的」动作：
        二阶 —— 没有中层（M/E/S）、没有宽转（Rw 或小写 r/l/u/d/f/b）、没有里面的层（2R/3L）
        四阶 —— 有宽转和 2R/3L，但没有「正中间那一层」（M/E/S）
@@ -1023,11 +1049,14 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
       playing = false;
       busy = false;
       queue.length = 0;
-      // 三阶 / 二阶是同一份模型（角块完全一样），换过去局面留着；
-      // 四阶是另一份模型，局面 / 历史 / 存档都不是一回事 —— 从头来
-      var switchModel = (mode === '4') !== (nm === '4');
+      // 每一阶有自己的一份现场：切过去先把这一阶的收好，再把目标那一阶的摆出来
+      // （四阶是另一份模型，三阶 / 二阶也不是同一种魔方 —— 历史各记各的，不许混着回溯）
+      saveOrder();
       mode = nm;
-      if (switchModel) reset();
+      loadOrder(nm);
+      renderHist();
+      chrome();
+      saveState();
     }
     syncMode(true);             // 切模式时药丸滑过去
     try { localStorage.setItem(MODE_KEY, mode); } catch (e) {}   // 记住这一阶，下次打开还是它
@@ -1050,18 +1079,39 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   }
 
   /* 离开页面再回来（导航点是普通链接，会重新加载）时保住现场：
-     存当前局面、历史、输入框，以及最近一次提交的步骤和它的起始局面 ——
-     这样连「步骤条」的位置都能恢复（frames 由 base + steps 重算）。 */
+     三种阶数**各存一份**（局面 / 历史 / 输入框 / 步骤条），切阶数时各用各的。
+     存的是每一步的起始局面 base（frames 由 base + steps 重算），省得把整串局面都写进去。 */
   var STORE = 'calc-state-v1';
   function saveState() {
+    saveOrder();                       // 当前这一阶的现场先收好
     try {
+      var orders = {};
+      Object.keys(ORDERS).forEach(function (m) {
+        var o = ORDERS[m];
+        if (!o) return;
+        orders[m] = { cur: o.cur, hist: o.hist, histAt: o.histAt, histBase: o.histBase,
+                      steps: o.steps, alg: o.alg,
+                      base: (o.frames && o.frames[0]) || o.cur, at: o.at };
+      });
       localStorage.setItem(STORE, JSON.stringify({
-        cur: cur, hist: hist, histAt: histAt, alg: algEl.value,
-        steps: steps, base: frames[0] || cur,
-        mode: mode,                    // 四阶是另一份模型，恢复前先看是不是同一阶
-        dur: DUR, skip: skipAnim
+        v: 2, mode: mode, dur: DUR, skip: skipAnim, orders: orders
       }));
     } catch (e) {}
+  }
+  // 把存档里某一阶那一份装回 ORDERS（frames 由 base + steps 重算）
+  function orderFromStore(m, o) {
+    var sim0 = simFor(m), st = o.cur, frames = [o.base || st];
+    try {
+      (o.steps || []).forEach(function (x) {
+        frames.push(sim0.turn(sim0.clone(frames[frames.length - 1]), x.mv, x.times));
+      });
+    } catch (e) { frames = [st]; }
+    var at = (typeof o.at === 'number' && o.at >= 0 && o.at < frames.length) ? o.at : frames.length - 1;
+    return { cur: st, hist: Array.isArray(o.hist) ? o.hist : [],
+             histAt: (typeof o.histAt === 'number' ? o.histAt : -1),
+             histBase: (o.histBase && typeof o.histBase === 'object') ? o.histBase : sim0.solved(),
+             steps: Array.isArray(o.steps) ? o.steps : [], frames: frames, at: at,
+             alg: typeof o.alg === 'string' ? o.alg : '' };
   }
   function loadSaved() {
     var raw = null;
@@ -1069,9 +1119,17 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     if (!raw) return null;
     try {
       var d = JSON.parse(raw);
-      if (!d || !d.cur || typeof d.cur !== 'object') return null;
-      // 三阶 / 二阶的局面是同一份，四阶那份不能混着用
-      if (d.mode && (d.mode === '4') !== (mode === '4')) return null;
+      if (!d || d.v !== 2 || !d.orders || typeof d.orders !== 'object') {
+        // 旧格式（单份现场，没分阶数）：并到当前这一阶里，别让用户白丢一次现场
+        if (d && d.cur && typeof d.cur === 'object' &&
+            ((d.mode === '4') === (mode === '4'))) {
+          var one = {};
+          one[mode] = { cur: d.cur, hist: d.hist, histAt: d.histAt, histBase: d.cur,
+                        steps: d.steps, alg: d.alg, base: d.base || d.cur, at: -1 };
+          return { v: 2, mode: mode, dur: d.dur, skip: d.skip, orders: one };
+        }
+        return null;
+      }
       return d;
     } catch (e) { return null; }
   }
@@ -1454,16 +1512,18 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   /* ---------- 历史回溯 ---------- */
   // 一条历史 = {alg, rev}；rev 表示当时是取逆执行的
   function histMoves(h) {
-    var mv = sim().steps(h.alg);
+    var mv = simFor(h.d || mode).steps(h.alg);      // 用这条记录自己那一阶的模型解析
     return h.rev ? invert(mv) : mv;
   }
   // 第 i 条执行完时的局面：从复原态把 0..i 条重做一遍
+  // （历史是一阶一条链，所以整条链用同一个模型 —— 拿别的阶的模型算就会重放出别的局面）
   function stateAfter(i) {
-    var st = sim().solved();
+    var m = (hist[0] && hist[0].d) || mode, sim0 = simFor(m);
+    var st = sim0.clone(histBase);       // 从这一串的起点开始（一般是复原态；跳转过来的是那个局面）
     try {
       for (var k = 0; k <= i; k++) {
         histMoves(hist[k]).forEach(function (x) {
-          st = sim().turn(sim().clone(st), x.mv, x.times);
+          st = sim0.turn(sim0.clone(st), x.mv, x.times);
         });
       }
     } catch (e) { return null; }
@@ -1614,7 +1674,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     at = 0;
     // 先记账（截断回溯点之后那几条 + push + 高亮），再把累积局面推到这个末尾
     if (histAt < hist.length - 1) hist.length = histAt + 1;
-    hist.push({ kind: kind || 'alg', alg: label, rev: !!rev });
+    hist.push({ kind: kind || 'alg', alg: label, rev: !!rev, d: mode });   // d = 这条是哪一阶的
     histAt = hist.length - 1;
     renderHist();
     cur = frames[frames.length - 1];
@@ -1898,19 +1958,14 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     // 复原后要重新回到「红面在左、绿面在右」
     view.x = VIEW.x;
     view.y = VIEW.y;
-    hist = [];
-    histAt = -1;
-    steps = [];
-    frames = [sim().solved()];
-    at = 0;
-    cur = sim().solved();
-    algEl.value = '';
-    algEl.classList.remove('bad');
-    errEl.textContent = '';
+    // 只清当前这一阶：其它阶的现场（历史 / 局面）不动 —— 「复原」是复原这一个人手里的魔方
+    ORDERS[mode] = null;
+    loadOrder(mode);
     movesEl.innerHTML = '';
     paint(cur);
     chrome();
     renderHist();
+    saveState();               // 存档里这一阶也清掉（其它阶的还在）
   }
 
   // 回放最近一次提交（不影响累积局面）。
@@ -2241,7 +2296,6 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
         if (typeof prev.skip === 'boolean') keepSkip = prev.skip;
       }
     } catch (e) {}
-    try { localStorage.removeItem(STORE); } catch (e) {}
     /* 点 ↗ 跳过来的那一次，阶数以**链接**为准（别用上次留下的那一阶）：
          @2: / @2s: 是二阶，@4: / @4s: 是四阶，其它（三阶公式页的 #公式、@g:、@s:）都是三阶。
        切阶数不动局面（换模型那一步会自己重置），所以放在 reset() 前后都一样。 */
@@ -2282,6 +2336,13 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
       invert(fwd).forEach(function (x) {
         cur = sim().turn(cur, x.mv, x.times);
       });
+      // 这一串历史的起点就是刚摆好的局面（不是复原态）—— 历史回溯要从这里开始重做，
+      // 这样点历史看到的是「公式要解的局面 + 这条公式」，和跳过来时看到的一致。
+      histBase = sim().clone(cur);
+      hist.length = 0;
+      histAt = -1;
+      saveOrder();
+      renderHist();
       // 先让用户看清「公式要解的局面」，停 1 秒再正向播公式（和播完再播同一个节奏）
       paint(cur);
       setTimeout(function () { run(fwd, hashAlg, 'alg', false); }, HOLD_MS);
@@ -2295,17 +2356,18 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     // 没有 hash：有存档就恢复现场，否则从头开始
     var d = loadSaved();
     if (!d) { reset(); syncSpd(); return; }
-    cur = d.cur;
-    hist = Array.isArray(d.hist) ? d.hist : [];
-    // 停在历史里的哪一条：存档里有就用它（回溯过之后刷新，位置也要留住）
-    histAt = (typeof d.histAt === 'number' && d.histAt >= 0 && d.histAt < hist.length)
-             ? d.histAt : hist.length - 1;
-    algEl.value = typeof d.alg === 'string' ? d.alg : '';
-    // 速度 / 跳过动画也是「设置」，跟着存档回来
+    // 三种阶数各恢复各的现场（切阶数时换着用）
+    Object.keys(ORDERS).forEach(function (m) {
+      if (d.orders[m]) ORDERS[m] = orderFromStore(m, d.orders[m]);
+    });
+    // 速度 / 跳过动画是「设置」，三种阶数共用
     if (isFinite(d.dur)) DUR = Math.max(DUR_MIN, Math.min(DUR_MAX, +d.dur));
     skipAnim = !!d.skip;
     syncSpd();
-    showSteps(Array.isArray(d.steps) ? d.steps : [], d.base || cur);
+    loadOrder(mode);
+    // 停在历史里的哪一条：存档里有就用它（回溯过之后刷新，位置也要留住）
+    if (!(histAt >= 0 && histAt < hist.length)) histAt = hist.length - 1;
+    saveOrder();
     paint(cur);
     renderHist();
     chrome();

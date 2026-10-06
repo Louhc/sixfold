@@ -22,6 +22,15 @@
             color:var(--muted);cursor:pointer;display:grid;place-items:center;
             transition:color .12s,border-color .12s}
   .printbtn:hover{color:var(--accent-text);border-color:var(--accent-text)}
+  /* 表头那三个图标键（恢复默认 / 导出 CSV / 导入 CSV）：和打印键同一套外观 ——
+     位置由 js 按 right 排（打印键在 80px，这三个往前 116 / 152 / 188） */
+  .toolbtn{position:absolute;top:16px;width:28px;height:28px;padding:0;
+           border-radius:8px;background:var(--field);border:1px solid var(--line);
+           color:var(--muted);cursor:pointer;display:grid;place-items:center;
+           transition:color .12s,border-color .12s}
+  .toolbtn:hover{color:var(--accent-text);border-color:var(--accent-text)}
+  .toolbtn svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+               stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .printbtn svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
                 stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
@@ -153,7 +162,7 @@
   }
   @media print{
     body{background:#fff;color:#000}
-    .themebtn,.printbtn,nav.side{display:none}
+    .themebtn,.printbtn,nav.side,.toolbtn{display:none}
     .pickbox,button.pick{display:none}
     /* ⚠ 展开键那一格**不能 display:none**：这张表一行有两组「图 / 公式 / 键」，
        抽掉格子会让这一行后面的格子整体左移串列 —— 右半边的公式会挤进 0 宽的列里，
@@ -212,6 +221,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 
 <div id="toast"></div>
 
+<script src="js/algpicks.js"></script>
 <script>
 /* 行数据来自数据库（data/f2l.json → js/f2ldata.js，tools/emit_pages.py 生成）：
    三节，每节若干行；每行左右两格（左 = 红色为 F 面，右 = 绿色为 F 面，没有右格就是 null）。
@@ -286,7 +296,7 @@ function pickCell(id) {
   if (!id) return '<td class="empty"></td>';
   return '<td class="pickCell"><button type="button" class="pick' + (one ? ' off' : '') +
          '"' + (one ? ' disabled' : '') + ' data-f2l="' + esc(id) + '" title="' +
-         (one ? '这个情况只有一条写法' : '换一条写法') + '" aria-label="换一条写法">' +
+         (one ? '换一条写法 / 自己加一条' : '换一条写法 / 自己加一条') + '" aria-label="换一条写法">' +
          PICK_ICON + '</button></td>';
 }
 /* 半边：有情况就是「图 + 公式 + 展开键」三格。
@@ -333,6 +343,25 @@ document.getElementById('app').innerHTML = html;
   'use strict';
   var KEY = 'cube-pick:f2l:';
   var byId = {};
+/* 三个图标键（恢复默认 / 导出 CSV / 导入 CSV）+ 自定义公式：都交给 js/algpicks.js */
+if (typeof AlgPicks !== 'undefined') AlgPicks.mountTools('f2l', {
+  ids: function (id) { return !!byId[id]; },
+  rows: function () { return AlgPicks.domRows('f2l', 'f2l'); },
+  // 库里有同一条 → 返回它所在的画面（导入 CSV 时当「选中它」）；没有 → null（当自定义）
+  find: function (id, alg) {
+    var c = byId[id];
+    if (!c) return null;
+    var views = c.views || [{ view: 0, algs: c.algs || [] }];
+    for (var i = 0; i < views.length; i++) {
+      var as = views[i].algs || [];
+      for (var j = 0; j < as.length; j++) {
+        if (AlgPicks.algKey(as[j].alg) === AlgPicks.algKey(alg)) return { view: views[i].view || 0, alg: as[j].alg };
+      }
+    }
+    return null;
+  },
+  onDone: function (t) { toast(t); }
+});
   ((typeof F2L_DB !== 'undefined' && F2L_DB.cases) || []).forEach(function (c) { byId[c.id] = c; });
   var open = null;
 
@@ -352,6 +381,7 @@ document.getElementById('app').innerHTML = html;
   function usable(id, alg) {
     var c = byId[id];
     if (!c) return false;
+    if (typeof AlgPicks !== 'undefined' && AlgPicks.customView('f2l', id, alg) !== null) return true;
     var k = algKey(alg);
     return (c.algs || []).some(function (a) { return algKey(a.alg) === k; });
   }
@@ -417,6 +447,16 @@ document.getElementById('app').innerHTML = html;
       });
       row.box.appendChild(b);
     });
+    /* 面板最后再摆一行「自定义」：选画面 + 填公式（不检查对错）+ 添加；
+       已有的自定义公式当普通候选摆在前面。逻辑都在 js/algpicks.js。 */
+    if (typeof AlgPicks !== 'undefined') AlgPicks.decoratePanel(row.box, {
+      page: 'f2l', id: row.id, esc: esc,
+      views: (byId[row.id] && byId[row.id].views ? byId[row.id].views.length : 1),
+      imgOf: function (view) { return IMG(row.id); },
+      pick: function (alg) { apply(row, alg); },
+      rebuild: function () { buildBox(row); },
+      close: close
+    });
     return list.length;
   }
   /* 展开键和公式格用 data-f2l 对上（一格里一个键；单图形行的另一半是空单元格） */
@@ -435,13 +475,11 @@ document.getElementById('app').innerHTML = html;
     var cur = load(id);
     if (cur && usable(id, cur) && algKey(cur) !== algKey(shown(cell))) apply(row, cur);
 
-    if (candidates(id, ownAlgs(cell), shown(cell)).length < 2) {
-      pick.title = '这个情况只有一条写法';
-      return;                                   // 保持模板里的淡态（.off + disabled）
-    }
+    /* 每个展开键都能点：只有一条写法也点得开 —— 面板最后一行是「自定义…」，
+       可以在那儿自己填一条（所以不再有「只有一条写法就淡掉」的键）。 */
     pick.classList.remove('off');
     pick.disabled = false;
-    pick.title = '换一条写法';
+    pick.title = '换一条写法 / 自己加一条';
 
     pick.addEventListener('click', function (e) {
       e.preventDefault(); e.stopPropagation();

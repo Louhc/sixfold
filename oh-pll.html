@@ -28,6 +28,15 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
             color:var(--muted);cursor:pointer;display:grid;place-items:center;
             transition:color .12s,border-color .12s}
   .printbtn:hover{color:var(--accent-text);border-color:var(--accent-text)}
+  /* 表头那三个图标键（恢复默认 / 导出 CSV / 导入 CSV）：和打印键同一套外观 ——
+     位置由 js 按 right 排（打印键在 80px，这三个往前 116 / 152 / 188） */
+  .toolbtn{position:absolute;top:16px;width:28px;height:28px;padding:0;
+           border-radius:8px;background:var(--field);border:1px solid var(--line);
+           color:var(--muted);cursor:pointer;display:grid;place-items:center;
+           transition:color .12s,border-color .12s}
+  .toolbtn:hover{color:var(--accent-text);border-color:var(--accent-text)}
+  .toolbtn svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+               stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .printbtn svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
                 stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
@@ -159,7 +168,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
     th,td{border:1px solid #333}
     th{border-bottom-width:2px}
     code{font-size:15px;font-weight:600}
-    .themebtn,.printbtn,nav.side{display:none}
+    .themebtn,.printbtn,.opts,nav.side,.toolbtn{display:none}
     a.tocalc{display:none}
     code:hover{background:none}
     #toast{display:none}
@@ -181,6 +190,9 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   .tg:hover,.tg.on{color:var(--text)}
   .tg.on::before{background:var(--accent);border-color:var(--accent)}
   .tg.on::after{transform:translateX(16px);background:var(--on-accent, #fff)}
+  /* 打印：这一排开关不印。**必须写在这一组之后** —— @media print 里那条写在前面的话，
+     同权重下会被上面的 .opts{display:flex} 盖掉，纸上就又多一个「显示颜色」（用户报过两次）。 */
+  @media print{.opts{display:none}}
 </style>
 </head>
 <body>
@@ -206,6 +218,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 </header>
 <main id="app"></main>
 <div id="toast"></div>
+<script src="js/algpicks.js"></script>
 <script>
 /* 数据：每节若干情况，每条 = [编号, 公式]。公式为空串表示留空。
    图片来自数据库（img/pll/ 下按角度存）。公式由站主提供，
@@ -241,11 +254,34 @@ var showColors = true;
 try { showColors = localStorage.getItem(COLOR_KEY) !== '0'; } catch (e) {}
 
 var DB_CASE = {};
+/* 三个图标键（恢复默认 / 导出 CSV / 导入 CSV）+ 自定义公式：都交给 js/algpicks.js */
+if (typeof AlgPicks !== 'undefined') AlgPicks.mountTools('oh-pll', {
+  ids: function (id) { return !!DB_CASE[id]; },
+  rows: function () { return AlgPicks.domRows('ohpll', 'oh-pll'); },
+  // 库里有同一条 → 返回它所在的画面（导入 CSV 时当「选中它」）；没有 → null（当自定义）
+  find: function (id, alg) {
+    var c = DB_CASE[id];
+    if (!c) return null;
+    var views = c.views || [{ view: 0, algs: c.algs || [] }];
+    for (var i = 0; i < views.length; i++) {
+      var as = views[i].algs || [];
+      for (var j = 0; j < as.length; j++) {
+        if (AlgPicks.algKey(as[j].alg) === AlgPicks.algKey(alg)) return { view: views[i].view || 0, alg: as[j].alg };
+      }
+    }
+    return null;
+  },
+  onDone: function (t) { toast(t); }
+});
 ((typeof PLL_DB !== 'undefined' && PLL_DB.cases) || []).forEach(function (c) { DB_CASE[c.id] = c; });
 
 /* 图从数据库来（img/pll/ 下按角度存）。单手公式常常不在基准角度
    （F 在角度3、Ja 在角度2、Na/Z 在角度1），所以按「公式」反查它属于哪个角度。 */
 function viewOf(id, alg) {
+  if (typeof AlgPicks !== 'undefined') {
+    var apv = AlgPicks.customView('oh-pll', id, alg), apc = DB_CASE[id];
+    if (apv !== null && apc && apc.views && apc.views[apv]) return apc.views[apv];
+  }
   var c = DB_CASE[id];
   if (!c) return null;
   var hit = null;
@@ -402,6 +438,7 @@ document.getElementById('app').addEventListener('click', function (e) {
 })();
 </script>
 
+
 <script>
 /* 每行的「展开选公式」，和 PLL 页同一套（最右列的按钮）。
    候选 = 这个情况的其它单手写法：有单手专属就用它，没有就回退到双手那条（Ga–Gd / Ra 这类）；
@@ -503,6 +540,7 @@ document.getElementById('app').addEventListener('click', function (e) {
   function usable(id, alg) {
     var c = DB_CASE[id];
     if (!c) return false;
+    if (typeof AlgPicks !== 'undefined' && AlgPicks.customView('oh-pll', id, alg) !== null) return true;
     var k = algKey(alg), oh = [], two = [];
     (c.views || []).forEach(function (v) {
       (v.algs || []).forEach(function (a) {
@@ -528,6 +566,15 @@ document.getElementById('app').addEventListener('click', function (e) {
       });
       row.box.appendChild(b);
     });
+    /* 面板最后再摆一行「自定义」：选画面 + 填公式（不检查对错）+ 添加 —— 逻辑在 js/algpicks.js */
+    if (typeof AlgPicks !== 'undefined') AlgPicks.decoratePanel(row.box, {
+      page: 'oh-pll', id: row.id, esc: esc,
+      views: (DB_CASE[row.id] && DB_CASE[row.id].views ? DB_CASE[row.id].views.length : 1),
+      imgOf: function (view, alg) { return IMG(row.id, alg); },
+      pick: function (alg) { apply(row, alg); },
+      rebuild: function () { buildBox(row); },
+      close: close
+    });
     return list.length;
   }
   Array.prototype.forEach.call(document.querySelectorAll('#app tr'), function (tr) {
@@ -542,10 +589,8 @@ document.getElementById('app').addEventListener('click', function (e) {
     var cur = load(row.id);                      // 恢复上次的选择
     if (cur && usable(row.id, cur) && algKey(cur) !== algKey(shown(row))) apply(row, cur);
 
-    if (candidates(row.id, ownAlgs(row), shown(row)).length < 2) {
-      pick.title = '这个情况只有一条写法';
-      return;
-    }
+    /* 每个展开键都能点：只有一条写法也点得开 —— 面板最后一行是「自定义…」，
+       可以在那儿自己填一条（所以不再有「只有一条写法就淡掉」的键）。 */
     pick.classList.remove('off');
     pick.disabled = false;
     pick.addEventListener('click', function (e) {
