@@ -1101,12 +1101,12 @@ console.log('\n[11e] 「跳计算器」链接的朝向标记：只有 F2L 的 b 
       ls.length >= 20 && ls.every(h => h.indexOf('@g:') < 0),
       ls.filter(h => h.indexOf('@g:') >= 0).slice(0, 3).join(' '));
   });
-  // F2L 页现在从库（js/f2ldata.js）渲染：39 张图、40 条写法（07 那一格两条）
-  // 展开键：一格里一个（公式格右边那一列），只有 07 有两条写法 → 只有它那个键不是 .off
+  // F2L 页现在从库（js/f2ldata.js）渲染：39 张图、42 条写法（07 那一格两条、02a 三条）
+  // 展开键：一格里一个（公式格右边那一列），有两条以上写法的格子键才不是 .off → 02a 和 07
   const picks = [...f2l.matchAll(/<button type="button" class="pick( off)?"[^>]*data-f2l="([\w]+)"/g)];
-  ok('F2L 展开键：39 个键，只有 07 那个不是淡态（库里只有它有两写法）',
-    picks.length === 39 && picks.filter(m => !m[1]).length === 1 &&
-    picks.filter(m => !m[1])[0][2] === '07' &&
+  ok('F2L 展开键：39 个键，02a / 07 那两个不是淡态（就这两格有多条写法）',
+    picks.length === 39 && picks.filter(m => !m[1]).length === 2 &&
+    picks.filter(m => !m[1]).map(m => m[2]).sort().join(',') === '02a,07' &&
     picks.filter(m => m[1]).every(m => m[1] === ' off'),
     picks.length + ' 键 / 可用 ' + picks.filter(m => !m[1]).map(m => m[2]).join(','));
   const row07 = f2l.split('<tr>').filter(r => r.indexOf('f2l-07-256x258.png') >= 0)[0] || '';
@@ -3161,13 +3161,13 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
       vm3.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), c3);
       const A = c3.ALG_LIST;
       ok('alglist 覆盖 f2l/oll/pll', ['f2l', 'oll', 'pll'].every(k => A[k] && A[k].length));
-      // f2l 也搬进库了（data/f2l.json）：39 个情况、40 条写法（07 有两条）
+      // f2l 也搬进库了（data/f2l.json）：39 个情况、42 条写法（07 两条、02a 三条）
       {
         const db = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data/f2l.json'), 'utf8'));
         const want = db.cases.flatMap(c => c.algs.map(a => c.id + '\u0000' + a.alg)).sort();
         const got = A.f2l.map(r => r[0] + '\u0000' + r[1]).sort();
-        ok('alglist 的 F2L 与库一致（' + got.length + ' 条：39 个情况，07 两条）',
-          want.length === 40 && JSON.stringify(want) === JSON.stringify(got),
+        ok('alglist 的 F2L 与库一致（' + got.length + ' 条：39 个情况，02a 三条 / 07 两条）',
+          want.length === 42 && JSON.stringify(want) === JSON.stringify(got),
           '条数 ' + want.length + ' vs ' + got.length);
       }
       // 逐条和「公式来源」比对：pll / oll / f2l 的行数据都由库生成（页面里没有字面量了），

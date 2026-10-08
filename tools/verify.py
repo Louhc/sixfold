@@ -391,11 +391,13 @@ def check_f2l(page=None):
     seen = {}
     for ident, alg, side in rows:
         c = _key(f2l_case(alg))
-        if c in seen:
+        if c in seen and seen[c] != ident:
+            # 同一个情况可以有好几条写法（都解同一个局面），那不算重复；
+            # 只有**不同情况**落到同一个局面才是问题。
             print('  %s 与 %s 是同一个局面（重复）' % (ident, seen[c]))
             bad += 1
         else:
-            seen[c] = ident
+            seen.setdefault(c, ident)
     # 分节标题说的朝向，算出来必须真的成立（"白色朝上"节：角块白贴纸必须朝 U）
     byid = {}
     for ident, alg, side in rows:

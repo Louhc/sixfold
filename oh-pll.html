@@ -290,8 +290,12 @@ function viewOf(id, alg) {
   });
   return hit || c.views[0];
 }
-var IMG = function (id, alg) {
-  var v = viewOf(id, alg);
+var IMG = function (id, alg, view) {
+  /* 第三个参数是**画面在 views 数组里的下标**（面板/自定义弹窗按它取图）。
+     以前这里只按 alg 反查 —— 自定义弹窗里没有 alg（传的是空串），
+     于是所有 view 都退回 views[0]，图全长得一样（用户报过）。 */
+  var c = DB_CASE[id];
+  var v = (typeof view === 'number' && c && c.views && c.views[view]) ? c.views[view] : viewOf(id, alg);
   if (!v) return '';
   if (showColors) return v.img;
   return (document.documentElement.dataset.theme === 'dark' ? v['img-nc-night'] : v['img-nc-day']) || v.img;
@@ -570,7 +574,7 @@ document.getElementById('app').addEventListener('click', function (e) {
     if (typeof AlgPicks !== 'undefined') AlgPicks.decoratePanel(row.box, {
       page: 'oh-pll', id: row.id, esc: esc,
       views: (DB_CASE[row.id] && DB_CASE[row.id].views ? DB_CASE[row.id].views.length : 1),
-      imgOf: function (view, alg) { return IMG(row.id, alg); },
+      imgOf: function (view, alg) { return IMG(row.id, alg, view); },
       pick: function (alg) { apply(row, alg); },
       rebuild: function () { buildBox(row); },
       close: close

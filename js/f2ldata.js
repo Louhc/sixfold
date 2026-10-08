@@ -47,6 +47,26 @@ var F2L_DB = {
           "n": 7,
           "uses": [],
           "tags": []
+        },
+        {
+          "no": 2,
+          "alg": "y z U' R U R2 z' y' R U R'",
+          "n": 11,
+          "uses": [
+            "2H",
+            "OH"
+          ],
+          "tags": []
+        },
+        {
+          "no": 3,
+          "alg": "F' U F U2 R U R'",
+          "n": 7,
+          "uses": [
+            "2H",
+            "OH"
+          ],
+          "tags": []
         }
       ]
     },

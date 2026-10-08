@@ -219,9 +219,7 @@ var PLL_DB = {
               "uses": [
                 "OH"
               ],
-              "tags": [
-                "ohpll-preferred"
-              ]
+              "tags": []
             },
             {
               "no": 3,
@@ -241,7 +239,20 @@ var PLL_DB = {
           "img": "img/pll/pll-E-v1-256x256.png",
           "img-nc-day": "img/pll/pll-E-v1-nc-256x256.png",
           "img-nc-night": "img/pll/pll-E-v1-nc-night-256x256.png",
-          "algs": []
+          "algs": [
+            {
+              "no": 4,
+              "alg": "x' (U L' U' R) (U L U' R') (U L U' R) (U L' U' R')",
+              "n": 17,
+              "uses": [
+                "2H",
+                "OH"
+              ],
+              "tags": [
+                "ohpll-preferred"
+              ]
+            }
+          ]
         }
       ]
     },

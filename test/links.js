@@ -170,10 +170,20 @@ console.log('\n[8b] F2L 库（data/f2l.json）：分节 + 一情况一图，**�
     db.cases.every(c => c.algs.map(a => a.no).join(',') === c.algs.map((_, i) => i + 1).join(',')),
     db.cases.length + ' 情况 / ' +
       db.cases.reduce((n, c) => n + c.algs.length, 0) + ' 条写法');
-  ok('40 条写法；07 有两条（页面里那一格是换行分开的两条）',
-    db.cases.reduce((n, c) => n + c.algs.length, 0) === 40 &&
-    db.cases.filter(c => c.id === '07')[0].algs.length === 2,
+  ok('42 条写法；07 有两条、02a 有三条（页面里那一格是换行分开的）',
+    db.cases.reduce((n, c) => n + c.algs.length, 0) === 42 &&
+    db.cases.filter(c => c.id === '07')[0].algs.length === 2 &&
+    db.cases.filter(c => c.id === '02a')[0].algs.length === 3,
     JSON.stringify(db.cases.filter(c => c.id === '07')[0].algs.map(a => a.alg)));
+  ok('02a 新加的两条写法：带 2H + OH 标签，编号接着 1 号往下排',
+    (() => {
+      const c = db.cases.filter(x => x.id === '02a')[0];
+      const two = c.algs.filter(a => (a.uses || []).join('/') === '2H/OH');
+      return two.length === 2 &&
+        two.map(a => a.alg).join('|') === "y z U' R U R2 z' y' R U R'|F' U F U2 R U R'" &&
+        c.algs.map(a => a.no).join(',') === '1,2,3';
+    })(),
+    JSON.stringify(db.cases.filter(x => x.id === '02a')[0].algs.map(a => [a.no, a.alg, a.uses])));
   const covered = db.sections.flatMap(s => s.rows.flat()).filter(Boolean);
   const singles = db.sections.flatMap(s => s.rows).filter(r => r[1] === null).map(r => r[0]);
   ok('分节的行正好覆盖全部 39 个情况（每行左右两格；07/08/09 是单图形行）',
@@ -190,7 +200,7 @@ console.log('\n[8b] F2L 库（data/f2l.json）：分节 + 一情况一图，**�
     /typeof F2L_DB !== 'undefined' && F2L_DB\.cases/.test(h) &&
     !/var SECTIONS = \[\s*\n\s*\{/.test(h) &&
     /var SECTIONS = \(F2L\.sections \|\| \[\]\)/.test(h));
-  ok('生成物 js/f2ldata.js 里也是 39 情况 / 40 条（固定视角）',
+  ok('生成物 js/f2ldata.js 里也是 39 情况 / 42 条（固定视角）',
     /var F2L_DB = \{/.test(fs.readFileSync(path.join(ROOT, 'js', 'f2ldata.js'), 'utf8')) &&
     !/"views"/.test(fs.readFileSync(path.join(ROOT, 'js', 'f2ldata.js'), 'utf8')));
 }
@@ -2635,7 +2645,9 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
                        .push({ alg: extra, no: 99, n: 12, uses: ['2H'], tags: [] }));
     ok('面板上的号取自库里（注入的 99 号写法显示 99，而不是面板下标）',
       !pe.err && pe.idx[pe.labels.indexOf(extra)] === '99' &&
-      pe.idx.every((n, i) => n === '99' || (pool2h(pdb.cases.filter(c => c.id === 'E')[0])[i] || {}).no === +n),
+      // 面板里的号 = 库里那些 2H 写法的号（顺序不论；注入的那条显示 99）
+      pe.idx.filter(n => n !== '99').sort().join() ===
+        pool2h(pdb.cases.filter(c => c.id === 'E')[0]).map(a => String(a.no)).sort().join(),
       pe.err ? String(pe.err) : JSON.stringify([pe.idx, pe.labels]));
     // 四个库：同一个 case 里编号必须唯一且连续 1..n
     const badNo = [];
@@ -3625,6 +3637,13 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
       A4.readPick('oll', '17') === 'R U',
       JSON.stringify({ r, left: Object.keys(st6) }));
   }
+
+  /* 自定义弹窗要能按 view 取到**不同的**画面图：页面给 decoratePanel 的 imgOf 必须把 view 传下去。
+     （oh-pll 以前只按 alg 反查，弹窗里没有 alg → 所有 view 都退回 views[0]，图全一样。） */
+  ok('七个页的 imgOf 都能按 view 取图（自定义弹窗里各 view 的图不一样）',
+    /imgOf: function \(view, alg\) \{ return IMG\(row\.id, alg, view\); \}/.test(
+      fs.readFileSync(path.join(ROOT, 'oh-pll.html'), 'utf8')) &&
+    /var IMG = function \(id, alg, view\)/.test(fs.readFileSync(path.join(ROOT, 'oh-pll.html'), 'utf8')));
 
   /* 表头按键收在一条 .apbar 里：桌面上贴右上角，窄屏（手机）整条掉到标题下面 ——
      以前六个键平铺在最右边，手机上会压住中间的标题（用户报过）。 */
