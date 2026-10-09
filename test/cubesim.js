@@ -690,6 +690,14 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
         fire(' ');                                   // 再换一题
         fire('Tab');                                 // Tab → 看答案
         const shown = elsC.cwhy.hidden === false && /。/.test(String(elsC.cwhy.innerHTML));
+        // 图形折叠键：点一下给右栏挂 .off（再点摘掉）
+        (elsC.cpanel._h.click || []).forEach(f => f({}));
+        const panelOff = elsC.spanel.classList.contains('off');
+        (elsC.cpanel._h.click || []).forEach(f => f({}));
+        const panelOn = !elsC.spanel.classList.contains('off');
+        ok('练习页·记颜色：图形键能收起 / 展开整条右栏',
+          panelOff && panelOn, JSON.stringify({ panelOff, panelOn }));
+
         const beforeQ = String(elsC.cspeedst.textContent);
         fire('q');                                   // Q → 切换速记
         const afterQ = String(elsC.cspeedst.textContent);
@@ -2969,7 +2977,7 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
           /ghostOn \? 7\.7 : 6\.15/.test(h));
         // 滚轮：必须 preventDefault + passive:false，否则轮子会连带把页面滚了
         ok(f + ' 舞台上滚轮能缩放，并且拦掉页面滚动',
-          /stageEl\.addEventListener\('wheel', function \(e\) \{\s*\n\s*e\.preventDefault\(\);/.test(h) &&
+          /stageEl\.addEventListener\('wheel', function \(e\) \{[\s\S]{0,220}?e\.preventDefault\(\);/.test(h) &&
           /\}, \{ passive: false \}\);/.test(h));
         ok(f + ' 缩放有上下限（0.5× ~ 2.5×），到顶到底按钮置灰',
           /ZMIN = 0\.5, ZMAX = 2\.5/.test(h) &&

@@ -3672,14 +3672,19 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
       /\.chist\{min-height:150px;max-height:240px;overflow:auto/.test(h) &&   // 可滚动文本框
       /<div class="chist" id="chist"><\/div>/.test(h) &&      // 历史在底面选择下面
       h.indexOf('id="cbottom"') < h.indexOf('<div class="chist"') &&
-      /justify-content:center;gap:14px;text-align:center;padding:24px 18px/.test(h) &&   // 整块居中
+      /justify-content:flex-start;gap:14px;text-align:center;padding:58px 18px 18px/.test(h) &&
+      /\.ccard\{position:relative;box-sizing:border-box;flex:0 0 auto;/.test(h) &&  // 不被压扁、也不裁内容
+      /\.qtext \.cact\{position:sticky;bottom:0/.test(h) &&                     // 翻页行吸底
+      /\.ckeys\{display:none\}/.test(h) &&             // 小屏隐藏「1–9 作答」提示
       /\.qtext \.cact button\.main\{display:inline-flex;align-items:center;gap:9px/.test(h) &&  // 主按钮填色 + 箭头
       /button\.main:hover\{filter:brightness\(1\.1\)/.test(h) &&
       // 轻卡片（600-720 宽、细边）、倒计时圆环（中间数字）、选项序号、键盘提示与处理
-      /\.ccard\{position:relative;overflow:hidden;box-sizing:border-box;/.test(h) &&
-      /width:680px;max-width:100%;height:min\(78vh, 560px\)/.test(h) &&     // 固定大小
+      /\.ccard\{position:relative;box-sizing:border-box;/.test(h) &&
+      /width:680px;max-width:100%;min-height:min\(78vh, 560px\);height:auto/.test(h) &&  // 最小高度固定
+      /@media \(max-width:640px\)/.test(h) && /\.ccard\{width:100%;min-height:0/.test(h) && // 手机不裁
       /justify-content:flex-start;gap:14px\}/.test(h) &&                    // 题目贴最上面
-      /margin-top:auto;padding-top:6px/.test(h) &&                         // 翻页键钉在底部
+      /margin-top:auto;padding:8px 0 4px/.test(h) &&                       // 翻页键钉在底部
+      h.indexOf("e.target.closest('.qtext')") > 0 &&                       // 卡片里的滚轮留给滚动
       // 卡片顶部的进度条（速记时就是倒计时）+ 整行选项 + 右下主按钮带箭头
       /<div class="ctime" id="ctime" hidden><i class="cfill"><\/i><\/div>/.test(h) &&
       /\.qtext \.ctime\{position:absolute;left:0;right:0;top:0;height:5px/.test(h) &&
@@ -3698,6 +3703,25 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
       /\.cstat\{display:grid;grid-template-columns:1fr 1fr 1fr/.test(h) &&  // 三格统计卡
       /cOpt\.secs \|\| 3\) \* 1000/.test(h) && /secs: cOpt\.secs/.test(h) &&
       /<script src="js\/memcolor\.js"><\/script>/.test(h));
+    ok('练习页：整条右栏能用图形键收起 / 展开（状态记进存档）',
+      /id="cpanel"/.test(h) && /class="iconbtn"/.test(h) &&
+      /<aside class="panel" id="spanel">/.test(h) &&
+      /\.panel\.off\{width:\d+px;padding:[^}]*overflow:hidden\}/.test(h) &&   // 收起 = 窄条 + 不滚动
+      /overflow-x:hidden;overflow-y:auto;transition:width \.22s/.test(h) &&  // 展开时仍能滚
+      /\.panelbar\{display:flex;justify-content:flex-start/.test(h) &&        // 折叠键在右栏左侧
+      /\.panel #cpanel\{transform:rotate\(180deg\)\}/.test(h) &&            // 展开朝左
+      /\.panel\.off #cpanel\{transform:none\}/.test(h) &&                  // 收起朝右
+      /\.panel\.off\{width:auto;max-height:52px/.test(h) &&                 // 窄屏向下收（max-height 才能动画）
+      /transition:max-height \.22s ease/.test(h) &&
+      /\.panel #cpanel\{transform:rotate\(90deg\)\}/.test(h) &&            // 小屏箭头朝下
+      /\.panel\.off #cpanel\{transform:rotate\(-90deg\)\}/.test(h) &&      // 收起后朝上
+      /transition:width \.22s ease/.test(h) &&       // 是滑动，不是瞬切
+      /\.panel>\*:not\(\.panelbar\)\{min-width:300px/.test(h) &&      // 动画时内容不换行
+      /\.panel\.off>\*:not\(\.panelbar\)\{opacity:0;visibility:hidden/.test(h) &&
+      /document\.getElementById\('spanel'\)/.test(h) &&
+      /panelOff: cPanelOff/.test(h) && /cPanelOff = !!d\.panelOff/.test(h) &&
+      /cPanelOff \? 'false' : 'true'/.test(h));
+
     ok('记颜色这一档能记住：color 写进 practice-scope-v1，存档里有底面 / 只看错题 / 历史',
       /SCOPES = \['f2l', 'oll', 'pll', 'color'\]/.test(h) &&
       /bottom: cBottom, onlyWrong: cOnlyWrong,[\s\S]{0,40}?hist: cHist\.slice\(-40\)/.test(h) &&

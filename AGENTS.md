@@ -322,6 +322,10 @@
     以前「候选里出现过就不摆」那道挡会把用户自己的东西挡掉：已有的自定义看不见、
     新导入的那条也像是「没导进来」（用户报过）；只有「正显示 + 库里也有同一条」那一种才由候选行代表；
     页面的 `usable()` / `viewOfAlg()` 都要先问一句 `AlgPicks.customView()`，否则自定义公式刷新后不被恢复、配图也回 v0。
+- **练习页的缩放滚轮别把「记颜色」档的滚动吃掉**：`stageEl` 的 `wheel` 处理里第一句是
+  `if (e.target.closest && e.target.closest('.qtext')) return;` —— 不然舞台里的文字卡片永远滚不动
+  （用户报过「鼠标滚轮没作用」）；拖拽的 `pointerdown` 名单同理要放行 `.qtext`，
+  否则卡片上的按钮点不动（`test/cubesim.js` 里那条「舞台上的按钮全在名单里」盯着）。
 - **练习页（`practice.html`）练的就是公式页里当前展示的那条**：`casesOf()` 先读 `cube-pick:<页>:<情况>`，
   自定义公式再从 `cube-custom` 里取它自己挑的画面 —— 题图也跟着这个画面走（写死 v0 会和公式对不上）。
 - **练习页第 4 档「记颜色」**（`data-scope="color"`）：练**六个面颜色的相对位置**，**不画魔方**——
@@ -341,8 +345,15 @@
     四个侧面之间的左右关系是**固定**的，和谁在前面无关（换个朝向问同一对颜色，答案不变，
     `test/memcolor.js` 里有断言盯着）；
     `which` / `tf` **不拿「前面」出题**（问它必然答「前」/ 说「前面是 X」都是废话）。
-    **题干 + 选项 + 翻页装在一张固定大小的卡片里**（`.ccard`：`width:680px;max-width:100%`、
-    `height:min(78vh,560px)`、1px 细边 + **18px 圆角** + `overflow:hidden`，不做厚重面板），
+    **题干 + 选项 + 翻页装在一张卡片里**（`.ccard`：`width:680px;max-width:100%`、
+    `min-height:min(78vh,560px)` + `height:auto`、1px 细边 + **18px 圆角** + `overflow:hidden`，不做厚重面板）
+    —— ⚠ **高度只能定「最小」，而且卡片要 `flex:0 0 auto`**：写死 `height`、或者让它当弹性项目被压缩
+    （默认 `flex-shrink:1`），选项一多底部的「下一题」都会被裁掉（用户报过两次）；`.qtext` 用
+    `justify-content:flex-start` + `overflow:auto`，卡片放不下就让**容器**滚，别动卡片；
+    卡片**不要 `overflow:hidden`**（进度条自己带 `border-radius:18px 18px 0 0` + `overflow:hidden`），
+    `.cact` 再挂一条 `position:sticky;bottom:0` + `background:--panel` —— 双保险，
+    任何宽度下「下一题」都不会消失（用户连着报了三次）；
+    `@media (max-width:640px)` 里卡片 `width:100%;min-height:0`、字号内边距收紧、翻页键 `flex:1 1 44%` 排两行，
     卡片在左半边居中，`justify-content:flex-start` —— **题面贴卡片最上面**（左对齐、27px 加粗），
     `.cact` 用 `margin-top:auto` **钉在卡片底部**（换题时卡片不会跳）。
     **选项每行一个**：整行圆角块（`.canswers` 列布局，按钮 `width:100%`、`min-height:54px`、`border-radius:12px`、
@@ -352,7 +363,8 @@
     悬停 `brightness(1.1)` + 投影、按下 `translateY(1px)`、`:focus-visible` 描边、
     悬停时箭头右移 —— 交互态齐了，别再做成灰扑扑的默认按钮）。
     **键盘**：`1`–`9` 选对应选项；`空格` / `回车` 下一题；`Tab` 看答案；**`Q` 切换速记**（都 `preventDefault`；
-    焦点在输入框里时全部让开）—— 卡片底部有一行提示（`.ckeys`）。
+    焦点在输入框里时全部让开）—— 卡片底部有一行提示（`.ckeys`；**小屏（`max-width:640px`）里
+    `.ckeys{display:none}`** —— 触屏没有键盘，用户要求隐藏）。
     **速记开启时卡片顶部是一条进度条**（`.ctime` = 卡片最上面 5px 的轨道；`.cfill` 用
     `transform:scaleX()` + `transform-origin:left` + `will-change:transform` 伸缩 —— **走合成层**，
     计时器 `setInterval(…, 16)` = **60FPS**；改宽度会触发重排，别退回去用 `width`），回答完/切档时整条隐藏。
@@ -363,8 +375,19 @@
     **两个开关**（`.switchrow`：文字 + 拨杆 + 开/关，速记与「只看错题」同一套；`.on` 时主色底 + 拨杆右移）、
     **清空成绩**（`.ghostbtn` + 内联垃圾桶 SVG）、**速记限时**（number 输入，`appearance:none`，
     主题色边框 + 聚焦光圈 —— 不加这些，暗色下会冒出一个浏览器原生白框，用户报过）、
-    **题目历史**（`.clabel` 带主色色条 + 「只看错题」开关；`.chist` 可滚动、`min-height:150px;max-height:240px`、
-    `--field` 底、每行一题、最新在上、错题整行标红；空状态是居中图标 + 「还没有做过题」）。
+    **整条右栏能收起**：`<aside class="panel" id="spanel">` 最上面是 `.panelbar`（`justify-content:flex-start`，
+    **键在右栏左侧**）+ 图形键 `#cpanel`（`.iconbtn` + 内联 SVG）。点一下给 `#spanel` 挂 `.off`：
+    - **宽屏**：`.panel{overflow:hidden;transition:width .22s ease,padding .22s ease}` → 宽度滑到 52px 窄条；
+      内容 `min-width:300px`（动画时不换行、只被裁掉），收起时 `opacity:0;visibility:hidden;pointer-events:none` 淡出；
+    - **窄屏（`@media (max-width:760px)`，面板堆到舞台下面）**：改收**高度**，且必须用 **`max-height`**（`52vh → 52px`）——
+      `height:auto` 不能做过渡，用小屏没动画（用户报过）；箭头同时换上下（`rotate(90deg)` / `-90deg`）；
+    - 展开态是 `overflow-x:hidden;overflow-y:auto`（**展开时面板照样能滚**，横向裁掉是为了让宽度动画不出滚动条）；
+      收起态 `.off{overflow:hidden}` —— **只有收起时才不许滚动**（用户要求）；
+    - 箭头方向：宽屏展开朝左 / 收起朝右，小屏展开朝下 / 收起朝上；
+    - **别用 `display:none`**（那就没有动画了，见踩坑第 9 条）；收起状态存进 `cube-memcolor-v1.panelOff`。
+    **题目历史**（`.clabel` 带主色色条 + 「只看错题」开关；`.chist` 可滚动、
+    `min-height:150px;max-height:240px`、`--field` 底、每行一题、最新在上、错题整行标红；
+    空状态是居中图标 + 「还没有做过题」）。
     分节标题（范围 / 记录色 / 题目历史）左侧都有 4px 主色色条。
     **「错题集」那一块已经撤掉**（用户要求：历史框的「只看错题」就是它，不用两处都摆）。
     面板里**不再写那句提示**（「绕竖轴 前→左→后→右 / 对面三对」）——用户要求删掉。

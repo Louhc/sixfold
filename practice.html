@@ -94,10 +94,26 @@
   .layer.fi-pz .cubie i.ghost.pz,.layer.fi-nz .cubie i.ghost.nz{opacity:.42}
 
   .panel{width:322px;flex:none;background:var(--panel);border-left:1px solid var(--line);
+         overflow-x:hidden;overflow-y:auto;transition:width .22s ease,padding .22s ease;
          overflow-y:auto;padding:16px 16px 40px}
   .panel::-webkit-scrollbar{width:10px}
   .panel::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:6px;border:2px solid var(--panel)}
   .sec{margin-bottom:20px}
+  /* 收起整条右栏：宽度滑到 44px 窄条，只留最上面那个图形键（再点一下展开） */
+  .panelbar{display:flex;justify-content:flex-start;margin:-2px 0 10px}
+  /* 内容保持原宽度：滑动过程中不会挤压换行，只是被面板裁掉 */
+  .panel>*:not(.panelbar){min-width:300px;opacity:1;transition:opacity .16s ease}
+  .panel.off{width:52px;padding:16px 16px 16px 6px;overflow:hidden}
+  .panel.off>*:not(.panelbar){opacity:0;visibility:hidden;pointer-events:none}
+  .iconbtn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;
+           margin-left:8px;padding:0;border:1px solid var(--line);border-radius:8px;
+           background:var(--field);color:var(--muted);cursor:pointer;vertical-align:middle;
+           transition:color .12s,border-color .12s,transform .15s}
+  .iconbtn:hover{color:var(--accent-text);border-color:var(--accent-text)}
+  .iconbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+               stroke-linecap:round;stroke-linejoin:round}
+  .panel #cpanel{transform:rotate(180deg)}          /* 展开时箭头朝左（指向舞台 = 收起） */
+  .panel.off #cpanel{transform:none}                /* 收起后朝右（点回来） */
   /* 小标题是这一列的骨架：正文色 + 加粗 + 底下一道细线（和计算器那一列同一套） */
   .sec > h2{margin:0 0 9px;padding-bottom:6px;font-size:12px;letter-spacing:.1em;
             text-transform:uppercase;color:var(--text);font-weight:700;
@@ -113,11 +129,11 @@
      主题键不藏（位置也就不会动）。 */
   .stage.memo > .cube,.stage.memo > .shadow,.stage.memo > .zoom{display:none}
   .qtext{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;
-         justify-content:center;gap:14px;text-align:center;padding:24px 18px;
+         justify-content:flex-start;gap:14px;text-align:center;padding:58px 18px 18px;
          overflow:auto;z-index:2}
   .stage.memo .qtext{display:flex}
-  .ccard{position:relative;overflow:hidden;box-sizing:border-box;
-         width:680px;max-width:100%;height:min(78vh, 560px);
+  .ccard{position:relative;box-sizing:border-box;flex:0 0 auto;
+         width:680px;max-width:100%;min-height:min(78vh, 560px);height:auto;
          padding:26px 26px 16px;border:1px solid var(--line);border-radius:18px;
          background:var(--panel);display:flex;flex-direction:column;align-items:stretch;
          justify-content:flex-start;gap:14px}
@@ -125,7 +141,8 @@
   .qtext .cwhy{font-size:14px;color:var(--muted);max-width:30em;line-height:1.7}
   .qtext .cwhy[hidden]{display:none}
   /* 卡片顶部的进度条：速记开着时就是倒计时（左→右走完） */
-  .qtext .ctime{position:absolute;left:0;right:0;top:0;height:5px;background:var(--chip)}
+  .qtext .ctime{position:absolute;left:0;right:0;top:0;height:5px;background:var(--chip);
+                border-radius:18px 18px 0 0;overflow:hidden}
   .qtext .ctime[hidden]{display:none}
   .qtext .ctime .cfill{display:block;height:100%;width:100%;background:var(--accent-text);
                        border-radius:0 3px 3px 0;transform-origin:left center;
@@ -159,8 +176,9 @@
                        padding:3px 6px;flex:none}
   .canswers button.right{border-color:var(--accent-text);color:var(--accent-text)}
   .canswers button.wrong{border-color:#c0392b;color:#c0392b}
-  .qtext .cact{display:flex;gap:10px;justify-content:flex-end;align-items:center;
-               margin-top:auto;padding-top:6px;width:100%}
+  .qtext .cact{position:sticky;bottom:0;z-index:1;
+               display:flex;gap:10px;justify-content:flex-end;align-items:center;
+               margin-top:auto;padding:8px 0 4px;width:100%;background:var(--panel)}
   .cstat{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--line);
          border-radius:12px;overflow:hidden;margin:0 0 14px;background:var(--field)}
   .cstat .cell{padding:12px 14px;border-left:1px solid var(--line);display:flex;
@@ -252,7 +270,15 @@
 
   @media (max-width:760px){
     .app{flex-direction:column}
-    .panel{width:auto;border-left:none;border-top:1px solid var(--line);max-height:52vh}
+    .panel{width:auto;border-left:none;border-top:1px solid var(--line);max-height:52vh;
+           overflow-x:hidden;overflow-y:auto;transition:max-height .22s ease,padding .22s ease}
+    /* 这种堆叠布局里「收起」要**向下**收：只留顶上一行（折叠键位置不变） */
+    .panel>*:not(.panelbar){min-width:0}
+    .panel.off{width:auto;max-height:52px;padding:16px;overflow:hidden}
+    /* 这种布局是上下收，箭头也跟着转成上下：展开时朝下、收起后朝上 */
+    .panel #cpanel{transform:rotate(90deg)}
+    .panel.off #cpanel{transform:rotate(-90deg)}
+    .panel.off>*:not(.panelbar){opacity:0;visibility:hidden;pointer-events:none}
     .stage{min-height:38vh}
   }
   @media print{ .themebtn,.panel,.zoom{display:none} }
@@ -260,6 +286,17 @@
   .sec h2,#csec h2{position:relative;font-size:19px;margin:0 0 14px;padding-left:12px;color:var(--text)}
   .sec h2::before,#csec h2::before{content:'';position:absolute;left:0;top:2px;bottom:2px;
     width:4px;border-radius:2px;background:var(--accent-text)}
+  /* 窄屏（手机）：卡片占满宽度、内边距与字号收紧，内容再多也不会被裁掉 */
+  @media (max-width:640px) {
+    .qtext{padding:54px 10px 12px;justify-content:flex-start}
+    .ccard{width:100%;min-height:0;padding:18px 14px 12px;border-radius:14px;gap:11px}
+    .qtext .cask{font-size:21px;line-height:1.45}
+    .canswers button{min-height:46px;font-size:15.5px;padding:0 13px;gap:9px}
+    .canswers button .no{padding:2px 5px}
+    .qtext .cact{flex-wrap:wrap;justify-content:stretch;gap:8px}
+    .qtext .cact button{flex:1 1 44%;min-height:42px;font-size:14.5px;padding:0 12px}
+    .ckeys{display:none}   /* 小屏是触屏，键盘提示没意义（用户要求隐藏） */
+  }
 </style>
 <script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
 try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dataset.theme='dark'}catch(e){}</script>
@@ -304,7 +341,15 @@ try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dat
     </div>
   </main>
 
-  <aside class="panel">
+  <aside class="panel" id="spanel">
+    <!-- 收起 / 展开整条右栏（图形键；收起后自己留在窄条上） -->
+    <div class="panelbar">
+      <button id="cpanel" class="iconbtn" type="button" aria-expanded="true"
+        title="收起右栏" aria-label="收起右栏">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5v14"/><path d="M9 12h11"/>
+          <path d="M15 7l5 5-5 5"/></svg>
+      </button>
+    </div>
     <section class="sec">
       <h2>范围</h2>
       <div class="scope" id="scope">
@@ -524,6 +569,8 @@ try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dat
   // 只有指针在舞台上才缩放（右栏里滚轮要正常滚动）。
   // passive:false + preventDefault —— 否则轮子会连带把页面也滚了。
   stageEl.addEventListener('wheel', function (e) {
+    /* 卡片里的滚轮要留给页面滚动：别把它当缩放滚轮吃掉（用户报过滚轮没反应） */
+    if (e.target && e.target.closest && e.target.closest('.qtext')) return;
     e.preventDefault();
     var d = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;   // Firefox 有时按「行」给
     setZoom(zoom * Math.exp(-d * 0.0016));
@@ -769,6 +816,7 @@ try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dat
         cStreak = +d.streak || 0; cBestEver = +d.best || 0;
         if (MemColor.ORDER.indexOf(d.bottom) >= 0) cBottom = d.bottom;
         cOnlyWrong = !!d.onlyWrong;
+        cPanelOff = !!d.panelOff;
         if (Array.isArray(d.hist)) cHist = d.hist.slice(-40);
       }
     } catch (e) {}
@@ -778,7 +826,7 @@ try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dat
       localStorage.setItem(C_KEY, JSON.stringify({
         speed: cOpt.speed, secs: cOpt.secs,
         right: cRight, all: cAll, streak: cStreak, best: cBestEver,
-        bottom: cBottom, onlyWrong: cOnlyWrong,
+        bottom: cBottom, onlyWrong: cOnlyWrong, panelOff: cPanelOff,
         hist: cHist.slice(-40)
       }));
     } catch (e) {}
@@ -984,6 +1032,21 @@ try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dat
       if (cOpt.speed && !cLock) cStartTimer();   // 正在答的这题按新秒数重新计时
     });
   }
+  var cPanelBtn = document.getElementById('cpanel');
+  var cPanelOff = false;
+  var cSyncPanel = function () {
+    var sec = document.getElementById('spanel');      // 整条右栏
+    if (sec) sec.classList.toggle('off', cPanelOff);
+    if (cPanelBtn) {
+      cPanelBtn.title = cPanelOff ? '展开右栏' : '收起右栏';
+      if (cPanelBtn.setAttribute) cPanelBtn.setAttribute('aria-expanded', cPanelOff ? 'false' : 'true');
+    }
+  };
+  if (cPanelBtn) cPanelBtn.addEventListener('click', function () {
+    cPanelOff = !cPanelOff;
+    cSyncPanel();
+    cSave();
+  });
   var cOnlyBtn = document.getElementById('conlywrong');
   if (cOnlyBtn) cOnlyBtn.addEventListener('click', function () {
     cOnlyWrong = !cOnlyWrong;
@@ -1013,6 +1076,7 @@ try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dat
     cSave(); cStat();
   });
   cLoad();
+  cSyncPanel();
   cSyncSwitch(cSpeedBtn, cOpt.speed, 'cspeedst');
   if (cSecsInput) cSecsInput.value = String(cOpt.secs);
   cSyncSwitch(cOnlyBtn, cOnlyWrong, 'conlywrongst');
