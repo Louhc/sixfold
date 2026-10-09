@@ -14,6 +14,10 @@
 2. 页面是 `file://` 打开的：**不能 `fetch` JSON**、不能用 `import`/`type=module`。
    共享代码一律普通 `<script>`（UMD 风格全局变量）。
 3. **主题色只写在 `theme.css` 的 CSS 变量里**，页面里不写死颜色（`--accent` / `--line` / `--panel` / `--chip` / `--muted` / `--accent-text`）。
+   **全站默认夜晚**：每个页面 `<head>` 里那段预设脚本写的是
+   `if (localStorage.getItem('cube-theme') !== 'light') document.documentElement.dataset.theme = 'dark'`
+   （首次绘制前就定好，不会闪），主脚本里 `applyTheme(saved === 'light' ? 'light' : 'dark')` 保持一致 ——
+   **只有用户明确切过白天才是白天**。加新页面时这两处都要照抄。
 4. 命名/文件移动后 **全仓 grep 引用**（`README.md`、`index.html`、`tutorial-*.html`、`calc.html`、`test/*`、`tools/*` 都可能有）。
 
 ## 2. 目录
@@ -320,6 +324,57 @@
     页面的 `usable()` / `viewOfAlg()` 都要先问一句 `AlgPicks.customView()`，否则自定义公式刷新后不被恢复、配图也回 v0。
 - **练习页（`practice.html`）练的就是公式页里当前展示的那条**：`casesOf()` 先读 `cube-pick:<页>:<情况>`，
   自定义公式再从 `cube-custom` 里取它自己挑的画面 —— 题图也跟着这个画面走（写死 v0 会和公式对不上）。
+- **练习页第 4 档「记颜色」**（`data-scope="color"`）：练**六个面颜色的相对位置**，**不画魔方**——
+  左边那一片改成大字文字题，逻辑全在 **`js/memcolor.js`**（普通 `<script>`、全局 `MemColor`，没有 DOM 依赖）：
+  - 六个面的颜色由「**哪个颜色在底 + 哪个颜色在前**」定死（`MemColor.scheme()`）；本站手性沿用
+    `js/cube.js` 的默认配色 —— **白底、绿在前时红在左**（底 × 前 = 左）；对面三对固定：白-黄、红-橙、蓝-绿。
+  - 三类题：在哪一面 / 左邻右邻（绕着竖轴 **前 → 左 → 后 → 右**）/ 判真伪；`question(rng, opt)` 出题、
+    `check(q, pick)` 判分，题面里带「为什么」。
+    **「X 的对面是什么颜色」这一类已经去掉**（用户要求：太简单，`TYPES` 里没有它）。
+  - **底面由用户选**（`opt.bottom`，默认白）；既然底面已知，**顶面就是它的对面对**，所以
+    **两个颜色的题不问底/顶那两个颜色，选项里也不放它们**（`choicesOf()`）——
+    `which` 只在四个侧面里选、选项只有 前/后/左/右（用户要求：别拿送分的颜色当选项）。
+  - 页面这一档：**给舞台加 `.memo`**（CSS 藏掉 `.cube` / `.shadow` / `.zoom`），文字题面 `.qtext`
+    就摆在舞台里 —— 这样**主题键一直留在原地**（以前把整个舞台 `hidden`，主题键会跟着消失/跳位）。
+    题面是**一句话**：「X 在前时，…？」（`lines` 只有一行；**不再另起一行写「白底」** ——
+    底面是用户在面板里选的，重复它没意义）；**`side`（左邻右邻）连「X 在前时」都不写** ——
+    四个侧面之间的左右关系是**固定**的，和谁在前面无关（换个朝向问同一对颜色，答案不变，
+    `test/memcolor.js` 里有断言盯着）；
+    `which` / `tf` **不拿「前面」出题**（问它必然答「前」/ 说「前面是 X」都是废话）。
+    **题干 + 选项 + 翻页装在一张固定大小的卡片里**（`.ccard`：`width:680px;max-width:100%`、
+    `height:min(78vh,560px)`、1px 细边 + **18px 圆角** + `overflow:hidden`，不做厚重面板），
+    卡片在左半边居中，`justify-content:flex-start` —— **题面贴卡片最上面**（左对齐、27px 加粗），
+    `.cact` 用 `margin-top:auto` **钉在卡片底部**（换题时卡片不会跳）。
+    **选项每行一个**：整行圆角块（`.canswers` 列布局，按钮 `width:100%`、`min-height:54px`、`border-radius:12px`、
+    底色 `--chip`、无边框、`padding:0 18px`），**文字左对齐**，左边带**序号徽章**（`.no`）。
+    底部一行：左边是「看答案」次要键（透明底 + 细边，悬停变主色），**右边是主按钮「下一题 →」**
+    （`.cact` 右对齐；主按钮胶囊形 `border-radius:999px`、`--accent-text` 填色 + `--panel` 文字、
+    悬停 `brightness(1.1)` + 投影、按下 `translateY(1px)`、`:focus-visible` 描边、
+    悬停时箭头右移 —— 交互态齐了，别再做成灰扑扑的默认按钮）。
+    **键盘**：`1`–`9` 选对应选项；`空格` / `回车` 下一题；`Tab` 看答案；**`Q` 切换速记**（都 `preventDefault`；
+    焦点在输入框里时全部让开）—— 卡片底部有一行提示（`.ckeys`）。
+    **速记开启时卡片顶部是一条进度条**（`.ctime` = 卡片最上面 5px 的轨道；`.cfill` 用
+    `transform:scaleX()` + `transform-origin:left` + `will-change:transform` 伸缩 —— **走合成层**，
+    计时器 `setInterval(…, 16)` = **60FPS**；改宽度会触发重排，别退回去用 `width`），回答完/切档时整条隐藏。
+    **左半边**（舞台）从上到下是 题面 → **答案键** → 「为什么」 → 「下一题 / 看答案」；
+    **右半边**（面板 `#csec`）照着一张参考图重做过样式：
+    **三格统计卡**（`.cstat` = grid 三等分 + 细边框 + `--field` 底：正确率（`—（0/0）`）/ 连对 / 最好，
+    速记时再显示一行「本轮 N 秒」）、**底面**是一排 46px 圆角色块（选中的加主色 outline）、
+    **两个开关**（`.switchrow`：文字 + 拨杆 + 开/关，速记与「只看错题」同一套；`.on` 时主色底 + 拨杆右移）、
+    **清空成绩**（`.ghostbtn` + 内联垃圾桶 SVG）、**速记限时**（number 输入，`appearance:none`，
+    主题色边框 + 聚焦光圈 —— 不加这些，暗色下会冒出一个浏览器原生白框，用户报过）、
+    **题目历史**（`.clabel` 带主色色条 + 「只看错题」开关；`.chist` 可滚动、`min-height:150px;max-height:240px`、
+    `--field` 底、每行一题、最新在上、错题整行标红；空状态是居中图标 + 「还没有做过题」）。
+    分节标题（范围 / 记录色 / 题目历史）左侧都有 4px 主色色条。
+    **「错题集」那一块已经撤掉**（用户要求：历史框的「只看错题」就是它，不用两处都摆）。
+    面板里**不再写那句提示**（「绕竖轴 前→左→后→右 / 对面三对」）——用户要求删掉。
+  - 颜色名**直接用颜色上色**（`.cw`；白/黄另加 `.cw-light` 描边，浅色主题下也看得清），**不放色块**；
+    **速记限时可调**（面板里 `#csecs` 一个 number 输入，1..30 秒、默认 3）：
+    存进 `cube-memcolor-v1` 的 `secs`，计时就按它走（`(cOpt.secs || 3) * 1000`）；
+    改了秒数**立刻生效**（正在答的那题按新秒数重新计时）。速记答完 0.8 秒自动翻页（翻页前先解锁 `cLock`）。
+  - 存档 `cube-memcolor-v1` = `{speed, right, all, streak, best, bottom, onlyWrong, hist}`
+    （不碰 `cube-pick:*`）；**`color` 也写进 `practice-scope-v1`** —— 刷新后还停在「记颜色」这一档
+    （`SCOPES` 里必须有 `'color'`，否则会被当成非法值退回 OLL）。
 - 页面里读库要写 **`typeof PLL_DB !== 'undefined' && PLL_DB.cases`**，不要写 `window.PLL_DB`（测试桩里 `window ≠ global`）。
 - 页面里调用 `window.addEventListener` 要加保护（测试桩的 `window` 是简化对象）。
 
@@ -336,7 +391,8 @@
 | `cube-pick:f2l:<编号>` | F2L 页这一格选中的写法（存公式文本；库里的写法被删掉后不再恢复） |
 | `pll-color-v1` / `ohpll-color-v1` | 显示颜色开关（`'0'` = 关） |
 | `cube-custom:<页>:<情况>` | 这一页这个情况的自定义公式 `[{alg, view}]`（`js/algpicks.js`；**「恢复默认」不会清它**，要删就在面板里点 `✕`） |
-| `cube-theme` | `light` / `dark` |
+| `cube-memcolor-v1` | 练习页「记颜色」的速记开关与成绩（`{speed,right,all,streak,best}`） |
+| `cube-theme` | `light` / `dark` —— **本站默认夜晚**：没这个键或不是 `light` 时全站按夜晚渲染 |
 
 ## 8. 测试与校验
 
@@ -348,6 +404,7 @@ node test/timer.js        # 计时器（72）
 node test/interaction.js  # 交互（262）
 node test/pll.js          # PLL 页数据/图片（40）
 node test/lightbox.js     # 看图（33）
+node test/memcolor.js     # 练习页「记颜色」的纯逻辑：24 朝向 × 四类题（9）
 python3 tools/pll_db.py --check   # PLL 库全量校验（21 情况 / 87 条公式）
 python3 tools/oll_db.py --check   # OLL 库全量校验（57 情况 / 215 画面 / 169 条公式：双手 + 单手）
 python3 tools/oll2_db.py --check  # 二阶 OLL 库（7 情况 / 26 画面 / 9 条公式）

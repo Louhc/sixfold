@@ -124,7 +124,8 @@ console.log('\n[5] 真跑一遍 calc.html 的脚本（DOM 桩）');
       setPointerCapture() {}, closest() { return null; }, offsetWidth: 1,
       value: init || '',
       set innerHTML(v) { this._h = v; }, get innerHTML() { return this._h || ''; },
-      set textContent(v) { this._t = v; }, get textContent() { return this._t === undefined ? '' : this._t; },
+      set textContent(v) { this._t = v; }, get textContent() { return this._t !== undefined ? this._t
+      : String(this._hh || '').replace(/<[^>]*>/g, ''); },
       set disabled(v) {} };
     return e;
   };
@@ -133,7 +134,7 @@ console.log('\n[5] 真跑一遍 calc.html 的脚本（DOM 桩）');
   const ctx = { console, navigator: {},
     // 页面里会挂 resize 监听，桩也得有
     window: { addEventListener() {} }, setTimeout, clearTimeout,
-    localStorage: { getItem: k => (k in store5 ? store5[k] : null),
+    localStorage: { getItem: k => (k in store5 ? store5[k] : (k === 'cube-theme' ? 'light' : null)),
                     setItem: (k, v) => { store5[k] = String(v); }, removeItem: k => { delete store5[k]; } },
     CubeSim: S,
     location: { hash: '' },
@@ -546,7 +547,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
   const st5 = {};
   const ctx5 = { console, navigator: {}, window: { addEventListener() {} },
     setTimeout, clearTimeout,
-    localStorage: { getItem: k => (k in st5 ? st5[k] : null),
+    localStorage: { getItem: k => (k in st5 ? st5[k] : (k === 'cube-theme' ? 'light' : null)),
                     setItem: (k, v) => { st5[k] = String(v); }, removeItem: k => { delete st5[k]; } },
     CubeSim: S, location: { hash: '' },
     document: { getElementById: id => els5[id] || (els5[id] = mk('div')),
@@ -631,6 +632,90 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       ok('展示一律默认视角（b 版 rotateY -32）', /rotateY\(-32deg\)/.test(sawB || ''), String(sawB));
     }
 
+    // 练习页的「记颜色」：点第 4 个范围键 → 左边换成文字题、右边出答案键（这一档不画魔方）
+    {
+      const vmC = require('vm');
+      const elsC = { cube: mk('div'), stage: mk('div'), next: mk('button') };
+      const btnsC = ['f2l', 'oll', 'pll', 'color'].map(k => {
+        const b = mk('button'); b.dataset.scope = k; return b;
+      });
+      const ctxC = { console, navigator: {}, window: { addEventListener() {} },
+        setTimeout, clearTimeout,
+        localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
+        CubeSim: S, location: { hash: '' },
+        document: { getElementById: id => elsC[id] || (elsC[id] = mk('div')),
+                    querySelectorAll: sel => sel === '#scope button' ? btnsC : [],
+                    documentElement: mk('html'), createElement: mk,
+                    body: { appendChild() {} },
+                    _on: {}, addEventListener(ev, fn) { (this._on[ev] = this._on[ev] || []).push(fn); } } };
+      ctxC.globalThis = ctxC;
+      vmC.createContext(ctxC);
+      vmC.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'memcolor.js'), 'utf8'), ctxC);
+      vmC.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'alglist.js'), 'utf8'), ctxC);
+      vmC.runInContext(page, ctxC);
+      (btnsC[3]._h.click || []).forEach(f => f({}));           // 切到「记颜色」
+      ok('练习页·记颜色：题面是文字（有问号），答案键出 2~6 个，魔方收起来（舞台加 .memo，主题键不动）',
+        elsC.qtext && elsC.stage.classList.contains('memo') &&
+        /？/.test(elsC.cask.innerHTML || '') &&
+        elsC.canswers.children.length >= 2 && elsC.canswers.children.length <= 6,
+        JSON.stringify({ memo: elsC.stage.classList.contains('memo'), ask: String(elsC.cask.innerHTML).slice(0, 30),
+                         n: elsC.canswers.children.length, ask: String(elsC.cask.innerHTML).slice(0, 40) }));
+      // 点一个答案：（对或错都行）面板要给出反馈，并且分数记到 cube-memcolor-v1
+      const first = elsC.canswers.children[0];
+      if (first && (first._h.click || []).length) {
+        first._h.click.forEach(f => f({}));
+        ok('练习页·记颜色：答完立刻给「为什么」的反馈（并且记了分数）',
+          elsC.cwhy && elsC.cwhy.hidden === false && /。/.test(elsC.cwhy.innerHTML || '') &&
+          /正确率/.test(String(elsC.cstat.innerHTML || '')) &&
+          /（[01]\/1）/.test(String(elsC.cstat.innerHTML || '')) &&
+          /✅|❌/.test(elsC.chist.innerHTML || ''),
+          String(elsC.cwhy && elsC.cwhy.innerHTML).slice(0, 40) + ' | ' + elsC.cstat.textContent);
+      }
+      // 回公式档：舞台回来、文字题收起来
+      (btnsC[1]._h.click || []).forEach(f => f({}));
+      ok('练习页·记颜色：切回 OLL 档时魔方回来（.memo 摘掉）',
+        elsC.stage.classList.contains('memo') === false,
+        JSON.stringify({ memo: elsC.stage.classList.contains('memo') }));
+      // 键盘：1-9 作答 / 空格·回车 下一题 / Tab 看答案（注册在 document 上）
+      {
+        const fire = key => {
+          const e = { key, target: {}, preventDefault() { this._p = 1; } };
+          (ctxC.document._on.keydown || []).forEach(f => f(e));
+          return e;
+        };
+        const nKeys = (ctxC.document._on.keydown || []).length;
+        fire(' ');                                   // 空格 → 换一题（并把锁解开）
+        fire('1');                                   // 数字 → 作答
+        const judged = /（[0-9]+\/[0-9]+）/.test(String(elsC.cstat.innerHTML));
+        fire(' ');                                   // 再换一题
+        fire('Tab');                                 // Tab → 看答案
+        const shown = elsC.cwhy.hidden === false && /。/.test(String(elsC.cwhy.innerHTML));
+        const beforeQ = String(elsC.cspeedst.textContent);
+        fire('q');                                   // Q → 切换速记
+        const afterQ = String(elsC.cspeedst.textContent);
+        ok('练习页·记颜色：Q 键切换速记（开关文字与 .on 状态一致）',
+          /^(开|关)$/.test(afterQ) &&
+          elsC.cspeed.classList.contains('on') === (afterQ === '开'),
+          JSON.stringify({ beforeQ, afterQ, on: elsC.cspeed.classList.contains('on') }));
+        ok('练习页·记颜色：键盘能用（数字作答 / Tab 看答案 / 空格换题）',
+          nKeys === 1 && judged && shown,
+          JSON.stringify({ nKeys, judged, shown, stat: elsC.cstat.textContent }));
+      }
+      // 速记限时可调：默认 3；改 5 生效；99 / 0 被夹回 30 / 3（空值也回 3）
+      {
+        const fire = v => {
+          elsC.csecs.value = v;
+          (elsC.csecs._h.change || []).forEach(f => f({}));
+          return String(elsC.csecs.value);
+        };
+        const d0 = String(elsC.csecs.value);
+        const v5 = fire('5'), v99 = fire('99'), v0 = fire('0');
+        ok('练习页·记颜色：速记限时可调（默认 3 秒；改 5 生效；99 → 30、0 → 3）',
+          d0 === '3' && v5 === '5' && v99 === '30' && v0 === '3',
+          JSON.stringify({ d0, v5, v99, v0 }));
+      }
+    }
+
     // 切走再回来，题目不能变
     ok('会存本轮进度', /practice-round-v1/.test(html) && /function saveRound\(\)/.test(html));
     ok('载入时优先恢复上次那一题', /localStorage\.getItem\(ROUND_KEY\)/.test(html) &&
@@ -645,7 +730,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       const btns9 = ['f2l', 'oll', 'pll'].map(k => { const b = mk('button'); b.dataset.scope = k; return b; });
       const ctx9 = { console, navigator: {}, window: { addEventListener() {} },
         setTimeout, clearTimeout,
-        localStorage: { getItem: k => (k in st9 ? st9[k] : null),
+        localStorage: { getItem: k => (k in st9 ? st9[k] : (k === 'cube-theme' ? 'light' : null)),
                        setItem: (k, v) => { st9[k] = String(v); }, removeItem: k => { delete st9[k]; } },
         CubeSim: S, location: { hash: '' },
         document: { getElementById: id => els9[id] || (els9[id] = mk('div')),
@@ -717,7 +802,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       const btns6 = ['f2l', 'oll', 'pll'].map(k => { const b = mk6('button'); b.dataset.scope = k; return b; });
       const ctx6 = { console, navigator: {}, window: { addEventListener() {} },
         setTimeout, clearTimeout,
-        localStorage: { getItem: k => (k in st6 ? st6[k] : null),
+        localStorage: { getItem: k => (k in st6 ? st6[k] : (k === 'cube-theme' ? 'light' : null)),
                        setItem: (k, v) => { st6[k] = String(v); }, removeItem: k => { delete st6[k]; } },
         CubeSim: S, location: { hash: '' },
         document: { getElementById: id => els6[id] || (els6[id] = mk6('div')),
@@ -803,7 +888,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
         const btns7 = ['f2l', 'oll', 'pll'].map(k => { const b = mk('button'); b.dataset.scope = k; return b; });
         const ctx7 = { console, navigator: {}, window: { addEventListener() {} },
           setTimeout, clearTimeout,
-          localStorage: { getItem: k => (k in st7 ? st7[k] : null),
+          localStorage: { getItem: k => (k in st7 ? st7[k] : (k === 'cube-theme' ? 'light' : null)),
                           setItem: (k, v) => { st7[k] = String(v); }, removeItem: k => { delete st7[k]; } },
           CubeSim: S, location: { hash: '' },
           document: { getElementById: id => els7[id] || (els7[id] = mk('div')),
@@ -835,7 +920,7 @@ console.log('\n[13] 练习页：显示的图形必须是「从复原态执行该
       const btns10 = ['f2l', 'oll', 'pll'].map(k => { const b = mk('button'); b.dataset.scope = k; return b; });
       const ctx10 = { console, navigator: {}, window: { addEventListener() {} },
         setTimeout(fn) { return 0; }, clearTimeout() {},
-        localStorage: { getItem: k => (k in st10 ? st10[k] : null),
+        localStorage: { getItem: k => (k in st10 ? st10[k] : (k === 'cube-theme' ? 'light' : null)),
                         setItem: (k, v) => { st10[k] = String(v); }, removeItem: k => { delete st10[k]; } },
         CubeSim: S, location: { hash: '' },
         document: { getElementById: id => els10[id] || (els10[id] = mk('div')),
@@ -888,7 +973,7 @@ console.log('\n[11c] PLL 页的「显示颜色」开关（真跑一遍页面脚�
     [...new Set(ids)].forEach(id => { const im = mkEl('img'); im.dataset.pll = id; im.src = 'x'; imgs.push(im); });
     const ctx = { console, navigator: {}, window: { addEventListener() {} },
       setTimeout, clearTimeout,
-      localStorage: { getItem: k => (k in store ? store[k] : null),
+      localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                      setItem: (k, v) => { store[k] = String(v); }, removeItem() {} },
       location: { hash: '' },
       document: { documentElement: { dataset: {} },
@@ -1226,7 +1311,7 @@ console.log('\n[11g] 二阶模式：@2: 链接切到二阶、只画八个角、�
       // 定时器默认不排（只看「一进来摆成什么样」）；给了 timers 就攒起来，测试里手动放
       setTimeout: timers ? (fn => { timers.push(fn); return 0; }) : (() => 0), clearTimeout() {},
       CubeSim: S, CubeSim4: S4T, performance: { getEntriesByType: () => [] },
-      localStorage: { getItem: k => (k in store ? store[k] : null),
+      localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                       setItem: (k, v) => { store[k] = String(v); }, removeItem: k => { delete store[k]; } },
       location: { hash },
       document: { getElementById: id => els[id] || (els[id] = mkEl('div')),
@@ -1443,7 +1528,7 @@ console.log('\n[11h] 四阶模式：64 块只画 56 个有贴纸的、公式走�
   const ctx = { console, navigator: {}, window: { addEventListener() {} },
     setTimeout: fn => { pending.push(fn); return 0; }, clearTimeout() {},
     CubeSim: S, CubeSim4: S4b, performance: { getEntriesByType: () => [] },
-    localStorage: { getItem: k => (k in store ? store[k] : null),
+    localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                     setItem: (k, v) => { store[k] = String(v); }, removeItem: k => { delete store[k]; } },
     location: { hash: '' },
     document: { getElementById: id => els[id] || (els[id] = mkEl('div')),
@@ -1635,7 +1720,7 @@ console.log('\n[11i] 计时器过来的打乱：@2s: / @4s:（先切阶数，再
     const ctx = { console, navigator: {}, window: { addEventListener() {} },
       setTimeout: fn => { pending.push(fn); return 0; }, clearTimeout() {},
       CubeSim: S, CubeSim4: S4c, performance: { getEntriesByType: () => [] },
-      localStorage: { getItem: k => (k in store ? store[k] : null),
+      localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                       setItem: (k, v) => { store[k] = String(v); }, removeItem: k => { delete store[k]; } },
       location: { hash },
       document: { getElementById: id => els[id] || (els[id] = mkEl('div')),
@@ -1730,7 +1815,7 @@ console.log('\n[11d] 教程页：主题开关能切、写进存档（真跑一�
     });
     const ctx = {
       console, setTimeout, clearTimeout, navigator: {}, window: { addEventListener() {} },
-      localStorage: { getItem: k => (k in store ? store[k] : null),
+      localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                       setItem: (k, v) => { store[k] = String(v); },
                       removeItem: k => { delete store[k]; } },
       document: { documentElement: { dataset: {} }, createElement: mkEl,
@@ -2563,9 +2648,12 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
         const cls = (tag.match(/class="([^"]*)"/) || [])[1] || '';
         const id = (tag.match(/id="([^"]*)"/) || [])[1] || '';
         const region = Object.keys(spans).find(k => at > spans[k][0] && at < spans[k][1]) || 'self';
+        // 记颜色那一块（题面 / 答案键 / 下一题）也在舞台里，统一算 .qtext button
+        const qAt = body.indexOf('class="qtext"');
         const need = region === 'orbit' ? '.orbit button'
                    : region === 'zoom' ? '.zoom button'
                    : region === 'modebar' ? '.modebar button'
+                   : (qAt >= 0 && at > qAt) ? '.qtext button'
                    : /\bsnap\b/.test(cls) ? '.snap'
                    : (/\bthemebtn\b/.test(cls) || id === 'themebtn') ? '.themebtn' : null;
         return { tag: tag.slice(0, 40), need };
@@ -3347,7 +3435,7 @@ console.log('\n[12] 提交 / 历史 / 累积（端到端，真的点提交）');
       els4.cube = mkEl('div');
       const ctx4 = { console, navigator: {}, window: { addEventListener() {} },
         setTimeout, clearTimeout,
-        localStorage: { getItem: k => (k in store ? store[k] : null),
+        localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                        setItem: (k, v) => { store[k] = String(v); },
                        removeItem: k => { delete store[k]; } },
         CubeSim: S, location: { hash: '' },

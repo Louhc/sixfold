@@ -10,7 +10,7 @@
 <!-- 公式库（tools/emit_pages.py 生成）：图与公式都从它来 -->
 <script src="js/plldata.js"></script>
 <script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
-try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 <style>
   /* 默认浅色（白底）；点右上角按钮切夜晚。不跟随系统 —— 这是打印/速查用的表。
      两套主题的所有颜色变量都在 theme.css 里，这里只管版式。 */
@@ -353,7 +353,7 @@ function row(n, alg) {
 /* 主题在建表之前定下来（页面底色用），图本身不随主题变 */
 var root = document.documentElement, savedTheme = null;
 try { savedTheme = localStorage.getItem('cube-theme'); } catch (e) {}
-root.dataset.theme = savedTheme === 'dark' ? 'dark' : 'light';
+root.dataset.theme = savedTheme === 'light' ? 'light' : 'dark';   // 默认夜晚
 
 var html = '';
 SECTIONS.forEach(function (sec) {

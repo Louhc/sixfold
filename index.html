@@ -87,7 +87,7 @@
   @media print{ .themebtn, .ghribbon{display:none} }
 </style>
 <script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
-try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 </head>
 <body>
 
@@ -201,7 +201,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   }
   var saved = null;
   try { saved = localStorage.getItem('cube-theme'); } catch (e) {}
-  applyTheme(saved === 'dark' ? 'dark' : 'light');
+  applyTheme(saved === 'light' ? 'light' : 'dark');
   btn.addEventListener('click', function () {
     applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
   });

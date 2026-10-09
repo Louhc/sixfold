@@ -825,9 +825,13 @@ console.log('\n[13] 切页不该闪：主题要预设、导航条要早注入');
   PAGES.forEach(p => {
     const h = fs.readFileSync(path.join(ROOT, p), 'utf8');
     const head = h.slice(0, h.indexOf('</head>'));
-    ok(p + ' 在 head 里预设主题（首次绘制前）',
-      /localStorage\.getItem\('cube-theme'\)/.test(head) &&
-      /dataset\.theme/.test(head), 'head 里没有预设主题的脚本');
+    ok(p + ' 在 head 里预设主题（首次绘制前；**默认夜晚**：只有存档明确是 light 才白天）',
+      /localStorage\.getItem\('cube-theme'\)!=='light'/.test(head) &&
+      /dataset\.theme='dark'/.test(head), 'head 里没有预设主题的脚本');
+    ok(p + ' 主脚本的主题初值也是「默认夜晚」',
+      /applyTheme\(saved === 'light' \? 'light' : 'dark'\)/.test(h) ||
+      /savedTheme === 'light' \? 'light' : 'dark'/.test(h) ||
+      /localStorage\.getItem\('cube-theme'\) === 'light'/.test(h));
     const body = h.slice(h.indexOf('<body>'));
     const navAt = body.indexOf('src="js/nav.js"');
     ok(p + ' 的 nav.js 在 body 开头注入（不产生位移）',
@@ -935,10 +939,10 @@ console.log('\n[14] 导航高亮框：会滑动的 .pill');
       // defer=true 时把回调攒起来，好检查「蓝框到位前 / 到位后」两个阶段
       setTimeout(fn) { pending.push(fn); if (!opts.defer) fn(); return 0; },
       // 导航里「教程」入口要读 localStorage 找上次看的那一篇
-      localStorage: { getItem: k => (k in store ? store[k] : null),
+      localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                       setItem: (k, v) => { store[k] = String(v); },
                       removeItem: k => { delete store[k]; } },
-      sessionStorage: { getItem: k => (k in store ? store[k] : null),
+      sessionStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                         setItem: (k, v) => { store[k] = String(v); },
                         removeItem: k => { delete store[k]; } },
       window: { _e: {}, pageYOffset: 0,
@@ -1350,7 +1354,7 @@ console.log('\n[15] 各页的明暗底色约定必须一致');
 
   PAGES.forEach(p => {
     const h = fs.readFileSync(path.join(ROOT, p), 'utf8');
-    [['没存档（站点的默认）', null, false],
+    [['没存档（站点默认 = 夜晚）', null, true],
      ['存档为 light', 'light', false],
      ['存档为 dark', 'dark', true]].forEach(([name, store, wantDark]) => {
       const e = effective(h, store);
@@ -1363,8 +1367,8 @@ console.log('\n[15] 各页的明暗底色约定必须一致');
   // 否则会先按存档画好、再被主脚本覆盖回去（editor.html 原来就只认深色）
   {
     const h = fs.readFileSync(path.join(ROOT, 'editor.html'), 'utf8');
-    ok('editor.html 主脚本的 theme 也读 cube-theme',
-      /var theme = 'light';[\s\S]{0,200}?localStorage\.getItem\('cube-theme'\)/.test(h));
+    ok('editor.html 主脚本的 theme 也读 cube-theme（默认夜晚）',
+      /var theme = 'dark';[\s\S]{0,260}?localStorage\.getItem\('cube-theme'\) === 'light'/.test(h));
     ok('editor.html 切换主题会写回 cube-theme（和别的页共用同一个键）',
       /function applyTheme[\s\S]{0,260}?localStorage\.setItem\('cube-theme', theme\)/.test(h));
   }
@@ -2243,7 +2247,7 @@ console.log('\n[19h] 单手 PLL 页（oh-pll.html）：公式和本页的图逐�
                   addEventListener() {}, body: el('body') };
     const ctx = { console, JSON, Math, Array, String, Object, setTimeout: () => 0,
                   clearTimeout() {}, document: doc, navigator: {},
-                  localStorage: { getItem: k => (k in store ? store[k] : null),
+                  localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                                   setItem: (k, v) => { store[k] = String(v); } },
                   window: { print() {}, isSecureContext: false }, location: {} };
     ctx.globalThis = ctx;
@@ -2427,7 +2431,7 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
       addEventListener() {}, body: mkEl('body') };
     const ctx = { console, JSON, Math, Array, String, Object, setTimeout: () => 0, clearTimeout() {},
       document: doc, navigator: {},
-      localStorage: { getItem: k => (k in store ? store[k] : null),
+      localStorage: { getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                       setItem: (k, v) => { store[k] = String(v); } },
       window: { print() {}, isSecureContext: false, addEventListener() {},
                 pageXOffset: 0, pageYOffset: 0, innerWidth: 1200, innerHeight: 800 },
@@ -2694,7 +2698,7 @@ console.log('\n[19j] 展开键：再点收起、展开态样式、开合过渡�
       addEventListener() {}, body: mkEl('body') };
     const ctx = { console, JSON, Math, Array, String, Object, setTimeout: () => 0, clearTimeout() {},
       document: doc, navigator: {},
-      localStorage: { getItem: k => (k in st ? st[k] : null), setItem: (k, v) => { st[k] = String(v); } },
+      localStorage: { getItem: k => (k in st ? st[k] : (k === 'cube-theme' ? 'light' : null)), setItem: (k, v) => { st[k] = String(v); } },
       window: { print() {}, isSecureContext: false, addEventListener() {},
                 pageXOffset: 0, pageYOffset: 0, innerWidth: 1200, innerHeight: 800 },
       location: {} };
@@ -3415,7 +3419,7 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
   const store = {};
   const fake = { get length() { return Object.keys(store).length; },
                  key: i => Object.keys(store)[i],
-                 getItem: k => (k in store ? store[k] : null),
+                 getItem: k => (k in store ? store[k] : (k === 'cube-theme' ? 'light' : null)),
                  setItem: (k, v) => { store[k] = String(v); },
                  removeItem: k => { delete store[k]; } };
   const ctx = { console, localStorage: fake, window: { localStorage: fake },
@@ -3500,7 +3504,7 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
     const st5 = {};
     const fake5 = { get length() { return Object.keys(st5).length; },
                     key: i => Object.keys(st5)[i],
-                    getItem: k => (k in st5 ? st5[k] : null),
+                    getItem: k => (k in st5 ? st5[k] : (k === 'cube-theme' ? 'light' : null)),
                     setItem: (k, v) => { st5[k] = String(v); },
                     removeItem: k => { delete st5[k]; } };
     const ctx5 = { console, localStorage: fake5, window: { localStorage: fake5 },
@@ -3618,7 +3622,7 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
     const st6 = {};
     const fake6 = { get length() { return Object.keys(st6).length; },
                     key: i => Object.keys(st6)[i],
-                    getItem: k => (k in st6 ? st6[k] : null),
+                    getItem: k => (k in st6 ? st6[k] : (k === 'cube-theme' ? 'light' : null)),
                     setItem: (k, v) => { st6[k] = String(v); },
                     removeItem: k => { delete st6[k]; } };
     const ctx6 = { console, localStorage: fake6, window: { localStorage: fake6 },
@@ -3644,6 +3648,66 @@ console.log('\n[25] js/algpicks.js：CSV / 导入匹配 / 恢复默认 / 弹窗�
     /imgOf: function \(view, alg\) \{ return IMG\(row\.id, alg, view\); \}/.test(
       fs.readFileSync(path.join(ROOT, 'oh-pll.html'), 'utf8')) &&
     /var IMG = function \(id, alg, view\)/.test(fs.readFileSync(path.join(ROOT, 'oh-pll.html'), 'utf8')));
+
+  /* 练习页「记颜色」：第 4 个范围键 + 纯文字题面（不画魔方）+ 3 秒速记 */
+  {
+    const h = fs.readFileSync(path.join(ROOT, 'practice.html'), 'utf8');
+    const iQ = h.indexOf('<div class="qtext" id="qtext">');
+    const iAns = h.indexOf('id="canswers"');
+    const iNext = h.indexOf('id="cnext2"');
+    const iSec = h.indexOf('<section class="sec" id="csec"');
+    const iStat = h.indexOf('id="cstat"');
+    const iBot = h.indexOf('id="cbottom"');
+    ok('练习页：范围里多了「记颜色」；题面/答案键/下一题在左边居中，正确率/历史/错题集/底面在右边',
+      /data-scope="color"[^>]*>记颜色</.test(h) &&
+      iQ >= 0 && h.indexOf('class="stage"') < iQ &&
+      /id="cask"/.test(h) && !/id="csetup"/.test(h) &&      // 题面一句话，不再另起小字
+      /id="csec" hidden/.test(h) &&
+      iAns > iQ && iNext > iQ && iAns < iNext &&            // 答案键 → 下一题 都在题面下面
+      iSec >= 0 && iStat > iSec && iBot > iSec &&           // 四块都在右边面板那节里
+      iStat < iBot &&
+      /id="chist"/.test(h) && !/id="cwrong"/.test(h) &&      // 错题集已撤（历史框 + 只看错题代替）
+      !/class="chint"/.test(h) &&                          // 那句提示已经删掉
+      /id="conlywrong"/.test(h) &&                          // 只看错题开关
+      /\.chist\{min-height:150px;max-height:240px;overflow:auto/.test(h) &&   // 可滚动文本框
+      /<div class="chist" id="chist"><\/div>/.test(h) &&      // 历史在底面选择下面
+      h.indexOf('id="cbottom"') < h.indexOf('<div class="chist"') &&
+      /justify-content:center;gap:14px;text-align:center;padding:24px 18px/.test(h) &&   // 整块居中
+      /\.qtext \.cact button\.main\{display:inline-flex;align-items:center;gap:9px/.test(h) &&  // 主按钮填色 + 箭头
+      /button\.main:hover\{filter:brightness\(1\.1\)/.test(h) &&
+      // 轻卡片（600-720 宽、细边）、倒计时圆环（中间数字）、选项序号、键盘提示与处理
+      /\.ccard\{position:relative;overflow:hidden;box-sizing:border-box;/.test(h) &&
+      /width:680px;max-width:100%;height:min\(78vh, 560px\)/.test(h) &&     // 固定大小
+      /justify-content:flex-start;gap:14px\}/.test(h) &&                    // 题目贴最上面
+      /margin-top:auto;padding-top:6px/.test(h) &&                         // 翻页键钉在底部
+      // 卡片顶部的进度条（速记时就是倒计时）+ 整行选项 + 右下主按钮带箭头
+      /<div class="ctime" id="ctime" hidden><i class="cfill"><\/i><\/div>/.test(h) &&
+      /\.qtext \.ctime\{position:absolute;left:0;right:0;top:0;height:5px/.test(h) &&
+      /transform:scaleX\(1\);will-change:transform/.test(h) &&                 // 走合成层
+      /\}, 16\);                                    \/\/ 60FPS/.test(h) &&     // 60FPS
+      /fill\.style\.transform = 'scaleX\('/.test(h) &&
+      /border-radius:18px;\n?\s*background:var\(--panel\)/.test(h) &&
+      /\.canswers\{display:flex;flex-direction:column;gap:10px;width:100%\}/.test(h) &&
+      /class="main" type="button">下一题<svg viewBox="0 0 24 24"/.test(h) &&
+      /k === 'q' \|\| k === 'Q'/.test(h) &&
+      /class="no">' \+ \(i \+ 1\)/.test(h) && /class="ckeys"/.test(h) &&
+      h.indexOf("k === 'Tab'") > 0 && h.indexOf('colorGiveUp()', h.indexOf("k === 'Tab'")) > 0 &&
+      h.indexOf("k === ' '") > 0 && h.indexOf('/^[1-9]$/.test(k)') > 0 &&
+      /id="cspeedst"/.test(h) && /id="csecs"/.test(h) &&              // 速记开关 + 限时可调
+      /class="switchrow"/.test(h) && /id="conlywrongst"/.test(h) &&   // 两个开关
+      /\.cstat\{display:grid;grid-template-columns:1fr 1fr 1fr/.test(h) &&  // 三格统计卡
+      /cOpt\.secs \|\| 3\) \* 1000/.test(h) && /secs: cOpt\.secs/.test(h) &&
+      /<script src="js\/memcolor\.js"><\/script>/.test(h));
+    ok('记颜色这一档能记住：color 写进 practice-scope-v1，存档里有底面 / 只看错题 / 历史',
+      /SCOPES = \['f2l', 'oll', 'pll', 'color'\]/.test(h) &&
+      /bottom: cBottom, onlyWrong: cOnlyWrong,[\s\S]{0,40}?hist: cHist\.slice\(-40\)/.test(h) &&
+      /SCOPES\.indexOf\(sv\)/.test(h));
+    ok('记颜色这一档不画魔方：舞台加 .memo 藏 cube/shadow/zoom（主题键不藏，位置不变）',
+      /id="stage"/.test(h) && /class="qtext"/.test(h) &&
+      /\.stage\.memo > \.cube,\.stage\.memo > \.shadow,\.stage\.memo > \.zoom\{display:none\}/.test(h) &&
+      /function colorEnter\(\)/.test(h) && /classList\.add\('memo'\)/.test(h) &&
+      !/stage\.memo > \.themebtn/.test(h));
+  }
 
   /* 表头按键收在一条 .apbar 里：桌面上贴右上角，窄屏（手机）整条掉到标题下面 ——
      以前六个键平铺在最右边，手机上会压住中间的标题（用户报过）。 */

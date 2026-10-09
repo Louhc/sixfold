@@ -196,7 +196,7 @@
 </style>
 <link rel="stylesheet" href="css/nav.css">
 <script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
-try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 </head>
 <body>
   <nav class="side" aria-label="三阶公式目录">
@@ -524,7 +524,7 @@ function applyTheme(t) {
 }
 var saved = null;
 try { saved = localStorage.getItem('cube-theme'); } catch (e) {}
-applyTheme(saved === 'dark' ? 'dark' : 'light');
+applyTheme(saved === 'light' ? 'light' : 'dark');
 themeBtn.addEventListener('click', function () {
   applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
 });

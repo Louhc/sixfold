@@ -109,6 +109,99 @@
   .scope button:hover{color:var(--text);border-color:var(--line-strong)}
   .scope button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent, #fff)}
 
+  /* 记颜色：文字题面就在舞台里、占满它；这一档把魔方 / 阴影 / 缩放藏起来，
+     主题键不藏（位置也就不会动）。 */
+  .stage.memo > .cube,.stage.memo > .shadow,.stage.memo > .zoom{display:none}
+  .qtext{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;
+         justify-content:center;gap:14px;text-align:center;padding:24px 18px;
+         overflow:auto;z-index:2}
+  .stage.memo .qtext{display:flex}
+  .ccard{position:relative;overflow:hidden;box-sizing:border-box;
+         width:680px;max-width:100%;height:min(78vh, 560px);
+         padding:26px 26px 16px;border:1px solid var(--line);border-radius:18px;
+         background:var(--panel);display:flex;flex-direction:column;align-items:stretch;
+         justify-content:flex-start;gap:14px}
+  .qtext .cask{font-size:27px;font-weight:700;line-height:1.4;text-align:left}
+  .qtext .cwhy{font-size:14px;color:var(--muted);max-width:30em;line-height:1.7}
+  .qtext .cwhy[hidden]{display:none}
+  /* 卡片顶部的进度条：速记开着时就是倒计时（左→右走完） */
+  .qtext .ctime{position:absolute;left:0;right:0;top:0;height:5px;background:var(--chip)}
+  .qtext .ctime[hidden]{display:none}
+  .qtext .ctime .cfill{display:block;height:100%;width:100%;background:var(--accent-text);
+                       border-radius:0 3px 3px 0;transform-origin:left center;
+                       transform:scaleX(1);will-change:transform}
+  .ckeys{font-size:11px;color:var(--muted);opacity:.85;letter-spacing:.02em;text-align:right}
+  /* 颜色名直接上色；白 / 黄太浅，加一层描边，浅色主题下也看得清 */
+  .qtext .cw,.canswers .cw{font-weight:700}
+  .qtext .cw-light,.canswers .cw-light{text-shadow:0 0 1px rgba(0,0,0,.8),0 1px 2px rgba(0,0,0,.5)}
+  /* 每行一个选项（整行圆角块，像图里那样） */
+  .canswers{display:flex;flex-direction:column;gap:10px;width:100%}
+  .canswers button{min-height:54px;font-size:17px;cursor:pointer;border:0;border-radius:12px;
+                   background:var(--chip);display:inline-flex;align-items:center;
+                   justify-content:flex-start;gap:12px;text-align:left;padding:0 18px;width:100%}
+  .canswers button:hover{background:var(--field-hover, var(--line))}
+  .qtext .cact button{min-height:44px;font-size:15px;cursor:pointer;border-radius:999px;
+                      padding:0 20px;transition:background .15s,color .15s,transform .06s,box-shadow .15s}
+  .qtext .cact button#cgiveup{background:transparent;border:1px solid var(--line);color:var(--muted)}
+  .qtext .cact button#cgiveup:hover{color:var(--accent-text);border-color:var(--accent-text)}
+  .qtext .cact button.main{display:inline-flex;align-items:center;gap:9px;padding:0 22px;
+                           border:0;background:var(--accent-text);color:var(--panel);font-weight:600;
+                           box-shadow:0 1px 2px rgba(0,0,0,.18)}
+  .qtext .cact button.main:hover{filter:brightness(1.1);box-shadow:0 3px 10px rgba(0,0,0,.22)}
+  .qtext .cact button.main:active{transform:translateY(1px) scale(.99);box-shadow:none}
+  .qtext .cact button:focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+  .qtext .cact button.main svg{width:17px;height:17px;fill:none;stroke:currentColor;
+                               stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+                               transition:transform .15s}
+  .qtext .cact button.main:hover svg{transform:translateX(3px)}
+  .canswers button .no{font:600 11px/1 ui-monospace,Menlo,Consolas,monospace;
+                       color:var(--muted);border:1px solid var(--line);border-radius:5px;
+                       padding:3px 6px;flex:none}
+  .canswers button.right{border-color:var(--accent-text);color:var(--accent-text)}
+  .canswers button.wrong{border-color:#c0392b;color:#c0392b}
+  .qtext .cact{display:flex;gap:10px;justify-content:flex-end;align-items:center;
+               margin-top:auto;padding-top:6px;width:100%}
+  .cstat{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--line);
+         border-radius:12px;overflow:hidden;margin:0 0 14px;background:var(--field)}
+  .cstat .cell{padding:12px 14px;border-left:1px solid var(--line);display:flex;
+               flex-direction:column;gap:4px;min-width:0}
+  .cstat .cell:first-child{border-left:0}
+  .cstat .k{font-size:13px;color:var(--muted)}
+  .cstat .vrow{display:flex;align-items:baseline;gap:6px}
+  .cstat .v{font-size:22px;font-weight:700;line-height:1.1}
+  .cstat .n{font-size:13px;color:var(--muted);font-style:normal}
+  .cstat .round{font-size:12px;color:var(--muted)}
+  .csecline{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin:0 0 12px}
+  .csecline input{width:78px;min-height:38px;padding:2px 6px;font-size:16px;font-weight:600;
+                  text-align:center;border-radius:10px;-webkit-appearance:none;appearance:none;
+                  background:var(--field);color:var(--text);border:1px solid var(--line);
+                  font-family:inherit}
+  .csecline input:hover{border-color:var(--accent-text)}
+  .csecline input:focus{outline:none;border-color:var(--accent-text);
+                        box-shadow:0 0 0 3px var(--accent-glow, rgba(255,214,102,.25))}
+  .clabel{display:flex;align-items:center;justify-content:space-between;gap:10px;
+          margin:16px 0 8px;font-size:17px;font-weight:700;color:var(--text)}
+  .clabel>span{position:relative;padding-left:12px}
+  .clabel>span::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:4px;
+                       border-radius:2px;background:var(--accent-text)}
+  .chist{min-height:150px;max-height:240px;overflow:auto;border:1px solid var(--line);
+         border-radius:12px;background:var(--field);padding:6px 12px;
+         font:13px/2 ui-monospace,Menlo,Consolas,monospace;color:var(--muted);
+         word-break:break-all;overscroll-behavior:contain}
+  .chist .row{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chist .row.bad{color:#c0392b}     /* 错题整行标红（原来的「错题集」块已撤，筛选用「只看错题」） */
+  .chist .none{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+               min-height:132px;color:var(--muted);opacity:.75;font-size:14px}
+  .chist .none svg{width:42px;height:42px;fill:none;stroke:currentColor;stroke-width:1.6;
+                   stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+  .cbottom{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px;font-size:15px}
+  .cbottom>span{color:var(--muted)}
+  .cbottom button{width:46px;height:46px;padding:0;border:1px solid var(--line);border-radius:10px;
+                  cursor:pointer;transition:transform .08s}
+  .cbottom button:hover{transform:translateY(-1px)}
+  .cbottom button.on{outline:2px solid var(--accent-text);outline-offset:2px;border-color:transparent}
+  .cbottom button{width:26px;height:26px;padding:0;border-radius:5px;border:1px solid var(--line);cursor:pointer}
+  .cbottom button.on{outline:2px solid var(--accent-text);outline-offset:1px}
   .qid{font:600 22px/1.2 ui-monospace,Menlo,Consolas,monospace;
        text-align:center;margin:4px 0 2px;letter-spacing:.02em}
   .qhint{text-align:center;color:var(--muted);font-size:12.5px;margin-bottom:12px}
@@ -117,7 +210,32 @@
   .qthumb img{width:192px;height:192px;border-radius:12px;background:var(--field)}
   .qthumb span{color:var(--muted);font-size:11.5px;letter-spacing:.06em}
 
-  .act{display:flex;gap:8px}
+  .act{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .act .switchrow,.act .ghostbtn{height:auto;flex:none;font-size:15px}
+  /* 开关（速记 / 只看错题）：文字 + 拨杆 + 开/关 */
+  .switchrow{display:flex;align-items:center;gap:12px;justify-content:flex-start;
+             min-height:52px;padding:0 16px;border:1px solid var(--line);border-radius:12px;
+             background:var(--field);color:var(--text);cursor:pointer;font:inherit}
+  .switchrow:hover{border-color:var(--accent-text);color:var(--text);background:var(--field)}
+  .switchrow .lb{flex:none}
+  .switchrow .st{color:var(--muted);font-size:14px;flex:none;min-width:1.2em}
+  .switchrow .sw{position:relative;flex:none;width:42px;height:24px;border-radius:999px;
+                 background:var(--chip);border:1px solid var(--line);transition:background .15s}
+  .switchrow .sw::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;
+                        border-radius:50%;background:var(--muted);transition:transform .15s,background .15s}
+  .switchrow.on .sw{background:var(--accent-text);border-color:transparent}
+  .switchrow.on .sw::after{transform:translateX(18px);background:var(--panel)}
+  .switchrow.on .st{color:var(--accent-text)}
+  .switchrow.sml{min-height:38px;padding:0 12px;gap:8px;font-size:13px}
+  .switchrow.sml .sw{width:36px;height:20px}
+  .switchrow.sml .sw::after{width:14px;height:14px}
+  .switchrow.sml.on .sw::after{transform:translateX(16px)}
+  .ghostbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;
+            padding:0 16px;border:1px solid var(--line);border-radius:12px;background:var(--field);
+            color:var(--text);cursor:pointer;font:inherit;transition:border-color .12s,color .12s}
+  .ghostbtn:hover{border-color:var(--accent-text);color:var(--accent-text);background:var(--field)}
+  .ghostbtn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;
+                stroke-linecap:round;stroke-linejoin:round}
   .act button{flex:1;height:34px;border-radius:8px;cursor:pointer;font:inherit;font-size:12.5px;
               background:var(--field);border:1px solid var(--line);color:var(--text);transition:.12s}
   .act button:hover{border-color:var(--accent-text);color:var(--accent-text);background:var(--field-hover)}
@@ -138,9 +256,13 @@
     .stage{min-height:38vh}
   }
   @media print{ .themebtn,.panel,.zoom{display:none} }
+  /* 分节标题左边的色条（范围 / 记录色 / 题目历史） */
+  .sec h2,#csec h2{position:relative;font-size:19px;margin:0 0 14px;padding-left:12px;color:var(--text)}
+  .sec h2::before,#csec h2::before{content:'';position:absolute;left:0;top:2px;bottom:2px;
+    width:4px;border-radius:2px;background:var(--accent-text)}
 </style>
 <script>/* 主题必须在首次绘制前定好，否则会先用浅色画一遍再翻深色（闪一下） */
-try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 </head>
 <body>
 
@@ -149,6 +271,22 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
 <div class="app">
   <main class="stage" id="stage">
     <button class="themebtn" id="themebtn" type="button" title="切到夜晚"></button>
+    <!-- 「记颜色」的文字题面：就在舞台里，切到这一档时藏起魔方、只留它（主题键位置不变） -->
+    <div class="qtext" id="qtext">
+      <!-- 一张轻卡片：题目 + 选项 + 翻页都装在里面 -->
+      <div class="ccard">
+        <div class="ctime" id="ctime" hidden><i class="cfill"></i></div>
+        <div class="cask" id="cask"></div>
+        <div class="canswers" id="canswers"></div>
+        <div class="cwhy" id="cwhy" hidden></div>
+        <div class="cact">
+          <button id="cgiveup" type="button">看答案</button>
+          <button id="cnext2" class="main" type="button">下一题<svg viewBox="0 0 24 24"
+            aria-hidden="true"><path d="M5 12h13"/><path d="M13 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="ckeys">1–9 作答 · 空格 / 回车 下一题 · Tab 看答案 · Q 切速记</div>
+      </div>
+    </div>
     <!-- 魔方的落地阴影：不参与 3D，尺寸跟着 --cs 走 -->
     <div class="shadow" aria-hidden="true"></div>
     <div class="cube" id="cube"></div>
@@ -173,10 +311,11 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
         <button data-scope="f2l" type="button">F2L</button>
         <button data-scope="oll" type="button">OLL</button>
         <button data-scope="pll" type="button">PLL</button>
+        <button data-scope="color" type="button">记颜色</button>
       </div>
     </section>
 
-    <section class="sec">
+    <section class="sec" id="qsec">
       <h2>题目</h2>
       <div class="qid" id="qid">—</div>
       <div class="qthumb"><img id="qimg" alt="要解决的图形" data-zoom><span>要解决的图形</span></div>
@@ -191,11 +330,41 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
         <div class="playtip">已从复原态播了一遍 —— 对着它核对你的结果</div>
       </div>
     </section>
+
+    <!-- 记颜色：只答颜色/方位，不涉及公式和魔方 -->
+    <section class="sec" id="csec" hidden>
+      <h2>记颜色</h2>
+      <!-- 正确率 / 底面选择 / 题目历史（含「只看错题」）—— 都在右边面板 -->
+      <!-- 三格统计卡：正确率 / 连对 / 最好 -->
+      <div class="cstat" id="cstat"></div>
+      <div class="cbottom" id="cbottom"></div>
+      <div class="act">
+        <button id="cspeed" class="switchrow" type="button" role="switch" aria-checked="false">
+          <span class="lb">速记</span><i class="sw"></i><span class="st" id="cspeedst">关</span>
+        </button>
+        <button id="cclear" class="ghostbtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V5h6v2"/>
+            <path d="M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/></svg>清空成绩
+        </button>
+      </div>
+      <div class="csecline">速记限时
+        <input id="csecs" type="number" min="1" max="30" step="1" value="3" inputmode="numeric">
+        秒 / 题
+      </div>
+      <!-- 题目历史：一个可滚动的文本框，每行一题；错题标红 -->
+      <div class="clabel"><span>题目历史</span>
+        <button id="conlywrong" class="switchrow sml" type="button" role="switch" aria-checked="false">
+          <span class="lb">只看错题</span><i class="sw"></i><span class="st" id="conlywrongst">关</span>
+        </button>
+      </div>
+      <div class="chist" id="chist"></div>
+    </section>
   </aside>
 </div>
 
 <script src="js/cubesim.js"></script>
 <script src="js/alglist.js"></script>
+<script src="js/memcolor.js"></script>
 <script>
 (function () {
   'use strict';
@@ -407,7 +576,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   /* ---------- 题目 ---------- */
   // 范围选择也持久化，离开再回来还是上次练的那个
   var SCOPE_KEY = 'practice-scope-v1';
-  var SCOPES = ['f2l', 'oll', 'pll'];
+  var SCOPES = ['f2l', 'oll', 'pll', 'color'];   // color = 「记颜色」这一档，也要能记住
   var scope = 'oll', cur = null;
   var bag = [], lastIdx = -1;
   try {
@@ -505,6 +674,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   }
 
   function pick() {
+    if (scope === 'color') { colorEnter(); return; }   // 记颜色：不出公式题，进文字题
     var list = casesOf(scope);
     if (!list.length) return;
     show(list[drawIndex(list)]);
@@ -563,16 +733,294 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
       Array.prototype.forEach.call(document.querySelectorAll('#scope button'), function (o) {
         o.classList.toggle('on', o === b);
       });
+      colorLeave();                    // 先退出「记颜色」的文字题（不是这一档就什么都不做）
       pick();
     });
   });
-  document.getElementById('next').addEventListener('click', function () { if (!busy) pick(); });
-  document.getElementById('reveal').addEventListener('click', reveal);
+  document.getElementById('next').addEventListener('click', function () {
+    if (scope === 'color') return colorNext();
+    if (!busy) pick();
+  });
+  document.getElementById('reveal').addEventListener('click', function () {
+    if (scope === 'color') return colorGiveUp();
+    reveal();
+  });
+
+  /* ---------------- 记颜色（纯文字题：不画魔方、不出公式） ----------------
+     六个面的颜色由「底 + 前」定死，规则和题目都在 js/memcolor.js；这里只管出题、判分、统计。
+     存 cube-memcolor-v1：{ speed, right, wrong, streak, best }（best = 本轮最好连对）。 */
+  var C_KEY = 'cube-memcolor-v1';
+  var cText = document.getElementById('qtext');
+  var cSec = document.getElementById('csec');
+  var cQ = null, cLock = false, cTimer = 0, cLeft = 3000, cRound = 0, cRight = 0;
+  var cBest = 0, cAll = 0, cStreak = 0, cBestEver = 0;
+  var cOpt = { speed: false, secs: 3 };   // secs = 速记每题几秒（面板里可调，存进 cube-memcolor-v1）
+  var cBottom = 'white';          // 练哪一面在底（用户自己选，存进 cube-memcolor-v1）
+  var cOnlyWrong = false;         // 历史里只看错题
+  var cHist = [];                 // 题目历史 [{a: 题面, ok: 对错}]（错题就靠它 + 「只看错题」筛出来）
+
+  function cLoad() {
+    try {
+      var d = JSON.parse(localStorage.getItem(C_KEY) || '{}');
+      if (d && typeof d === 'object') {
+        cOpt.speed = !!d.speed;
+        if (+d.secs >= 1) cOpt.secs = Math.min(30, Math.round(+d.secs));
+        cRight = +d.right || 0; cAll = +d.all || 0;
+        cStreak = +d.streak || 0; cBestEver = +d.best || 0;
+        if (MemColor.ORDER.indexOf(d.bottom) >= 0) cBottom = d.bottom;
+        cOnlyWrong = !!d.onlyWrong;
+        if (Array.isArray(d.hist)) cHist = d.hist.slice(-40);
+      }
+    } catch (e) {}
+  }
+  function cSave() {
+    try {
+      localStorage.setItem(C_KEY, JSON.stringify({
+        speed: cOpt.speed, secs: cOpt.secs,
+        right: cRight, all: cAll, streak: cStreak, best: cBestEver,
+        bottom: cBottom, onlyWrong: cOnlyWrong,
+        hist: cHist.slice(-40)
+      }));
+    } catch (e) {}
+  }
+  function cStat() {
+    if (!cReady()) return;
+    var rate = cAll ? Math.round(cRight / cAll * 100) + '%' : '—';
+    var el = document.getElementById('cstat');
+    if (el) {
+      el.innerHTML =
+        '<div class="cell"><span class="k">正确率</span>' +
+          '<span class="vrow"><b class="v">' + rate + '</b>' +
+          '<i class="n">（' + cRight + '/' + cAll + '）</i></span>' +
+          (cOpt.speed ? '<span class="round">本轮 ' + (cRound / 10).toFixed(1) + ' 秒</span>' : '') +
+        '</div>' +
+        '<div class="cell"><span class="k">连对</span><span class="vrow"><b class="v">' + cStreak +
+          '</b></span></div>' +
+        '<div class="cell"><span class="k">最好</span><span class="vrow"><b class="v">' + cBestEver +
+          '</b></span></div>';
+    }
+    var h = document.getElementById('chist');
+    if (h) {
+      /* 每行一题，最新在最上面；「只看错题」开着就只列错的 */
+      var rows = cHist.slice().reverse();
+      if (cOnlyWrong) rows = rows.filter(function (r) { return !r.ok; });
+      h.innerHTML = rows.length
+        ? rows.map(function (r) {
+            return '<div class="row' + (r.ok ? '' : ' bad') + '">' +
+              (r.ok ? '✅' : '❌') + ' ' + cEsc(r.a) + '</div>';
+          }).join('')
+        : '<div class="none">' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2"/>' +
+            '<path d="M8 8h6M8 12h8M8 16h5"/><circle cx="17" cy="17" r="3.4"/><path d="M17 15.4V17l1.2.8"/>' +
+            '</svg>' + (cOnlyWrong ? '还没有错题' : '还没有做过题') + '</div>';
+    }
+    var bar = document.getElementById('cbottom');
+    if (bar) {
+      bar.innerHTML = '<span>底面：</span>' + MemColor.ORDER.map(function (c) {
+        return '<button type="button" data-bottom="' + c + '" class="' +
+          (c === cBottom ? 'on' : '') + '" style="background:' + MemColor.HEX[c] + '" ' +
+          'title="' + MemColor.ZH[c] + '底" aria-label="' + MemColor.ZH[c] + '底"></button>';
+      }).join('');
+      Array.prototype.forEach.call(bar.querySelectorAll('button'), function (b) {
+        b.addEventListener('click', function () {
+          cBottom = b.getAttribute('data-bottom');
+          cSave();
+          cStat();
+          cLock = false;
+          colorNext();
+        });
+      });
+    }
+  }
+  function cEsc(t) { return String(t).replace(/[&<>]/g, function (m) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m];
+  }); }
+  function cWord(c) {
+    var light = (c === 'white' || c === 'yellow') ? ' cw-light' : '';
+    return '<b class="cw' + light + '" style="color:' + MemColor.HEX[c] + '">' + MemColor.ZH[c] + '</b>';
+  }
+  function cLines(lines) {
+    /* 把句子里的颜色名挑出来**直接上色**（不用色块） */
+    return lines.map(function (t) {
+      return String(t).replace(new RegExp('(' + MemColor.ORDER.map(function (c) {
+        return MemColor.ZH[c];
+      }).join('|') + ')', 'g'), function (m) {
+        return cWord(MemColor.ORDER.filter(function (c) { return MemColor.ZH[c] === m; })[0]);
+      });
+    });
+  }
+  function cStopTimer() { if (cTimer) { clearInterval(cTimer); cTimer = 0; } }
+  function cReady() { return !!(cText && cSec); }        // 测试桩里没有这些节点 → 整块不启用
+  function cStartTimer() {
+    cStopTimer();
+    var box = document.getElementById('ctime');
+    if (!cOpt.speed) { box.hidden = true; return; }
+    box.hidden = false;
+    var ms = (cOpt.secs || 3) * 1000;          // 限时跟着面板里的秒数走
+    var fill = box.querySelector ? box.querySelector('.cfill') : null;
+    var paint = function (left) {              // 顶部进度条：剩下多少就留多长
+      if (fill) fill.style.transform = 'scaleX(' + (Math.max(0, left) / ms).toFixed(4) + ')';
+    };
+    cLeft = ms;
+    paint(cLeft);
+    var t0 = Date.now();
+    cTimer = setInterval(function () {
+      cLeft = ms - (Date.now() - t0);
+      if (cLeft <= 0) { paint(0); cStopTimer(); cJudge(null); return; }
+      paint(cLeft);
+    }, 16);                                    // 60FPS（用 transform 改宽度，不触发重排）
+  }
+  function colorNext() {
+    if (!cReady() || cLock) return;
+    cQ = MemColor.question(Math.random, { bottom: cBottom });
+    cShow();
+  }
+  function cShow() {
+    cLock = false;
+    document.getElementById('ctime').hidden = true;
+    /* 题面一句话说完（前面是什么 + 问什么），不再单起一行写底面 —— 底面在右边面板上选着呢 */
+    document.getElementById('cask').innerHTML = cLines([cQ.lines[cQ.lines.length - 1]])[0];
+    var why = document.getElementById('cwhy');
+    why.hidden = true; why.innerHTML = '';
+    var box = document.getElementById('canswers');
+    box.innerHTML = '';
+    cQ.choices.forEach(function (ch, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.title = '按 ' + (i + 1) + ' 键作答';
+      b.innerHTML = '<i class="no">' + (i + 1) + '</i>' +
+        (ch.color ? cWord(ch.key) : ch.label);
+      b.addEventListener('click', function () { cJudge(ch.key); });
+      box.appendChild(b);
+    });
+    cStat();
+    cStartTimer();
+  }
+  function cJudge(key) {
+    if (cLock) return;
+    cLock = true;
+    cStopTimer();
+    var good = MemColor.check(cQ, key);
+    cAll++;
+    if (good) { cRight++; cStreak++; if (cStreak > cBestEver) cBestEver = cStreak; }
+    else { cStreak = 0; }
+    cSave();
+    var btns = document.getElementById('canswers').children;
+    Array.prototype.forEach.call(btns, function (b, i) {
+      var ch = cQ.choices[i];
+      if (!ch) { b.disabled = true; return; }          // 防御：按钮数和选项数不一致时别炸
+      if (ch.key === cQ.answer) b.classList.add('right');
+      else if (ch.key === key) b.classList.add('wrong');
+      b.disabled = true;
+    });
+    var why = document.getElementById('cwhy');
+    why.innerHTML = (good ? '✅ ' : (key === null ? '⏱ 超时 —— ' : '❌ ')) + cQ.why;
+    why.hidden = false;
+    /* 题目历史（最新在上；错题整行标红，靠「只看错题」筛） */
+    var text = cQ.lines.join(' · ').replace(/<[^>]*>/g, '');
+    cHist.push({ a: text, ok: good });
+    if (cHist.length > 40) cHist = cHist.slice(-40);
+    cStat();
+    if (cOpt.speed) setTimeout(function () {
+      if (scope === 'color') { cLock = false; colorNext(); }     // 自动翻页要先解锁
+    }, 800);
+  }
+  function colorGiveUp() { if (!cLock) cJudge(null); }
+  function colorEnter() {
+    if (!cReady()) return;
+    var st = document.getElementById('stage');
+    if (st && st.classList) st.classList.add('memo');   // 藏魔方、只留文字（主题键留在原地）
+    document.getElementById('qsec').hidden = true;
+    cSec.hidden = false;
+    cRound = 0;
+    cStat();
+    colorNext();
+  }
+  function colorLeave() {
+    if (scope === 'color') return;      // 还在这一档就别收
+    cStopTimer();
+    if (!cReady()) return;
+    var st = document.getElementById('stage'), qsec = document.getElementById('qsec');
+    if (st && st.classList) st.classList.remove('memo');
+    if (qsec) qsec.hidden = false;
+    cSec.hidden = true;
+  }
+  var cNextBtn = document.getElementById('cnext2');
+  if (cNextBtn) cNextBtn.addEventListener('click', function () { cLock = false; colorNext(); });
+  var cGiveBtn = document.getElementById('cgiveup');
+  if (cGiveBtn) cGiveBtn.addEventListener('click', function () { colorGiveUp(); });
+  /* 键盘：1-9 选答案；空格 / 回车 下一题；Tab 看答案（只在「记颜色」这一档） */
+  if (document.addEventListener) {
+    document.addEventListener('keydown', function (e) {
+      if (scope !== 'color' || !cReady()) return;
+      var tag = ((e.target && e.target.tagName) || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea') return;      // 在输入框里别抢键
+      var k = e.key;
+      if (k === 'Tab') { e.preventDefault(); colorGiveUp(); return; }
+      if (k === 'q' || k === 'Q') { e.preventDefault(); cToggleSpeed(); return; }
+      if (k === ' ' || k === 'Spacebar' || k === 'Enter') {
+        e.preventDefault();
+        cLock = false;
+        colorNext();
+        return;
+      }
+      if (/^[1-9]$/.test(k)) {
+        var idx = +k - 1;
+        if (!cLock && cQ && cQ.choices && cQ.choices[idx]) {
+          e.preventDefault();
+          cJudge(cQ.choices[idx].key);
+        }
+      }
+    });
+  }
+  var cSecsInput = document.getElementById('csecs');
+  if (cSecsInput) {
+    cSecsInput.addEventListener('change', function () {
+      var v = Math.round(+cSecsInput.value);
+      if (!(v >= 1)) v = 3;
+      cOpt.secs = Math.min(30, Math.max(1, v));
+      cSecsInput.value = String(cOpt.secs);
+      cSave();
+      if (cOpt.speed && !cLock) cStartTimer();   // 正在答的这题按新秒数重新计时
+    });
+  }
+  var cOnlyBtn = document.getElementById('conlywrong');
+  if (cOnlyBtn) cOnlyBtn.addEventListener('click', function () {
+    cOnlyWrong = !cOnlyWrong;
+    cSyncSwitch(cOnlyBtn, cOnlyWrong, 'conlywrongst');
+    cSave(); cStat();
+  });
+  var cSpeedBtn = document.getElementById('cspeed');
+  var cClearBtn = document.getElementById('cclear');
+  /* 两个开关的显示同步（开关本体是 .on + 里面的 .st 文字） */
+  var cSyncSwitch = function (btn, on, stId) {
+    if (btn) {
+      btn.classList.toggle('on', !!on);
+      if (btn.setAttribute) btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    }
+    var st = document.getElementById(stId);
+    if (st) st.textContent = on ? '开' : '关';
+  };
+  var cToggleSpeed = function () {           // 按键和 Q 键共用这一份
+    cOpt.speed = !cOpt.speed;
+    cSyncSwitch(cSpeedBtn, cOpt.speed, 'cspeedst');
+    cSave(); cStat(); cStartTimer();
+  };
+  if (cSpeedBtn) cSpeedBtn.addEventListener('click', cToggleSpeed);
+  if (cClearBtn) cClearBtn.addEventListener('click', function () {
+    cRight = cAll = cStreak = cBestEver = 0;
+    cHist = [];
+    cSave(); cStat();
+  });
+  cLoad();
+  cSyncSwitch(cSpeedBtn, cOpt.speed, 'cspeedst');
+  if (cSecsInput) cSecsInput.value = String(cOpt.secs);
+  cSyncSwitch(cOnlyBtn, cOnlyWrong, 'conlywrongst');
 
   /* 拖拽转视角 */
   var drag = null;
   stageEl.addEventListener('pointerdown', function (e) {
-    if (e.target.closest && e.target.closest('.zoom button, .themebtn')) return;
+    if (e.target.closest && e.target.closest('.zoom button, .themebtn, .qtext button')) return;
     drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
     stageEl.classList.add('drag');
     if (stageEl.setPointerCapture) stageEl.setPointerCapture(e.pointerId);
@@ -602,7 +1050,7 @@ try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.data
   }
   var saved = null;
   try { saved = localStorage.getItem('cube-theme'); } catch (e) {}
-  applyTheme(saved === 'dark' ? 'dark' : 'light');
+  applyTheme(saved === 'light' ? 'light' : 'dark');
   btn.addEventListener('click', function () {
     applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
   });

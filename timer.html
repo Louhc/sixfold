@@ -100,7 +100,7 @@
   }
   @media print{ .themebtn,.pad,.bar,.modebar{display:none} }
 </style>
-<script>try{if(localStorage.getItem('cube-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+<script>try{if(localStorage.getItem('cube-theme')!=='light')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 </head>
 <body>
 
@@ -496,7 +496,7 @@
   }
   var saved = null;
   try { saved = localStorage.getItem('cube-theme'); } catch (e) {}
-  applyTheme(saved === 'dark' ? 'dark' : 'light');
+  applyTheme(saved === 'light' ? 'light' : 'dark');
   btn.addEventListener('click', function () {
     applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
   });
